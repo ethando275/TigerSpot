@@ -1,0 +1,96 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: orange;
+  border: 0.6vw solid black;
+  height: 100vh; /* Set height to fill the entire viewport */
+  box-sizing: border-box; /* Include border in the height calculation */
+}
+
+/* Header styles */
+header {
+  background-color: white;
+  color: white;
+  padding: 1vw;
+  text-align: center;
+  box-shadow: 0 1vw 1vw rgba(0, 0, 0, 0.1);
+  border-bottom: 0.6vw solid black;
+}
+
+/* Navigation styles */
+nav {
+  background-color: white;
+  text-align: right; /* Align navigation links to the right */
+}
+
+.nav-icons {
+  display: inline-block;
+  margin-right: 1vw; /* Add some space between the icon buttons */
+  max-width: 100%;
+  height: auto;
+}
+
+.nav-icons a {
+  margin-left: 1vw;
+  text-decoration: none;
+  color: white;
+}
+
+main {
+  margin: 0;
+  padding: 4vh 4vw;
+  background-color: orange;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.home {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  border: 0.6vw solid black;
+  border-radius: 1vh;
+  background: white;
+  padding: 7vh 1vw;
+}
+
+.logo {
+  width: 60vh;
+  max-height: 60vh; /* Adjusted max-height for vertical responsiveness */
+  padding: 1vh 1vw; /* Adjusted padding for responsiveness */
+}
+
+.text {
+  display: flex;
+  font-size: 4.5vh;
+  line-height: 1.5;
+  align-items: center;
+  padding: 0vh 8vw;
+}
+
+.button {
+  background-color: orange;
+  border: 0.6vw solid black;
+  border-radius: 1vw;
+  font-size: 8vh;
+  padding: 1vh 1vw;
+  transition-duration: 0.2s;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: rgb(219, 128, 16);
+}
+
+@media screen and (max-width: 800px) {
+  .page {
+    width: 100%; /* The width is 100%, when the viewport is 800px or smaller */
+  }
+  .home {
+    width: 100%;
+  }
+}
