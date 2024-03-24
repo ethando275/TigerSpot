@@ -18,18 +18,28 @@ header {
   border-bottom: 0.6vw solid black;
 }
 
+.home-icon {
+    max-width: 100%;
+    height: auto;
+    margin-right: auto;
+}
+
 /* Navigation styles */
 nav {
-  background-color: white;
-  text-align: right; /* Align navigation links to the right */
+    background-color: white;
+    display: flex; /* Use flexbox */
+    justify-content: right; /* Distribute items evenly along the main axis */
+    align-items: center; /* Center items vertically */
 }
 
 .nav-icons {
-  display: inline-block;
-  margin-right: 1vw; /* Add some space between the icon buttons */
-  max-width: 100%;
-  height: auto;
+    text-align: right;
+    max-width: 100%;
+    height: auto;
+    float: right; /* Add this line to float .nav-icons to the right */
+    margin-right: 1vw; 
 }
+
 
 .nav-icons a {
   margin-left: 1vw;
@@ -93,4 +103,160 @@ main {
   .home {
     width: 100%;
   }
+}
+
+/* Rules Page CSS*/
+
+.instructions {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    border: 0.6vw solid black;
+    border-radius: 1vh;
+    background: white;
+    padding: 0vh 1vw 8vh 1vw;
+}
+
+.instructions .title {
+    font-size: 10vh;
+    margin-bottom: 2vh;
+}
+
+.instructions ul {
+    padding: 0vh 5vw;
+    font-size: 4.5vh;
+    text-align: left;
+}
+
+/* Game Page CSS */
+header .game-text {
+    color: black;
+    font-size: 3vh;
+}
+
+.clear,
+.submit {
+    border: 0.4vw solid black;
+    border-radius: 1vw;
+    font-size: 2vh;
+    padding: 1vh 1vw;
+    transition-duration: 0.2s;
+    cursor: pointer;
+    margin-right: 0.75vw;
+}
+
+.clear {
+    background-color: rgb(228, 34, 34);
+}
+
+.submit {
+    text-decoration: none;
+    background-color: rgb(83, 219, 81);
+}
+
+.submit a {
+    text-decoration: none;
+}
+
+.clear:hover,
+.submit:hover {
+    background-color: rgb(255, 255, 255);
+}
+
+hr {
+    border: 1px solid black;
+}
+
+.game-btns {
+    text-decoration: none;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-end;
+    position: fixed;
+    width: 97%; /* Take up the full width */
+    bottom: 3vh; /* Position at the bottom of the viewport */
+}
+
+footer {
+    position: fixed;
+    width: 100%;
+    bottom: 10vh; /* Position at the bottom of the viewport */
+}
+
+
+
+/* Leaderboard styles */
+.leaderboard {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.top-players, .user-stats {
+    flex: 1;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.top-players {
+    margin-right: 20px;
+}
+
+.user-stats {
+    margin-left: 20px;
+}
+
+#container {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+.row.header {
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+}
+
+.row:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.name, .score, .label, .value {
+    flex: 1;
+}
+
+/* Scrollable container */
+.scrollable {
+    overflow-y: auto;
+}
+
+/* User stats styles */
+.user-stats h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.stats-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.label {
+    flex: 1;
+    font-weight: bold;
+}
+
+.value {
+    flex: 1;
+    text-align: right;
 }

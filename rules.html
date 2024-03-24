@@ -4,20 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rules Page</title>
-    <!-- Add any CSS or external libraries here -->
+    <link rel="stylesheet" href="styles.css" />
+
 </head>
 <body>
     <header>
-        <h1>Game Rules</h1>
-        <!-- Add navigation links here -->
+        <nav>
+            <div class="home-icon">
+                <a href="index.html"><img src="home.png" alt="Home Page"></a>
+            </div>
+            <div class="nav-icons">
+            <a href="rules.html"><img src="questionmark.png" alt="Rules" /></a>
+            <a href="leaderboard.html"
+              ><img src="trophy.png" alt="Leaderboard"/></a>
+          </div>
+        </nav>
     </header>
+
     <main>
-        <p>This is the rules page.</p>
-        <!-- Add the rules of the game here -->
+        <div class="instructions">
+          <b><p class="title">Instructions</p>
+          <ul>
+            <li>You will be given a picture taken somewhere on Princeton's campus</li>
+            <li>It is your job to zoom in on the map and place your marker on where you think this picture was taken</li>
+            <li>The closer you are, the more points you will receive!</li>
+          </ul></b>
+            <a href="gamepage.html">
+            <button class="button">
+            <b>Play Now!</b>
+            </button>
+          </a>
+        </div>
     </main>
-    <footer>
-        <p>Footer content goes here</p>
-    </footer>
     <!-- Add any scripts here -->
 </body>
 </html>
