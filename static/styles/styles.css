@@ -260,3 +260,8 @@ footer {
     flex: 1;
     text-align: right;
 }
+
+.game-image{
+    width: 150px;
+    height: 200px;
+}
