@@ -18,3 +18,16 @@ def game():
     html_code = flask.render_template('gamepage.html', link = link)
     response = flask.make_response(html_code)
     return response
+
+@app.route('/rules', methods=['GET'])
+def rules():
+    html_code = flask.render_template('rules.html')
+    response = flask.make_response(html_code)
+    return response
+
+@app.route('/leaderboard', methods=['GET'])
+def leaderboard():
+    html_code = flask.render_template('leaderboard.html')
+    response = flask.make_response(html_code)
+    return response
+

@@ -3,7 +3,6 @@ import admin
 import argparse
 
 def main():
-    #is this needed
     parser = argparse.ArgumentParser(
         description="TigerSpot"
     )
