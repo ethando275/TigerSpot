@@ -12,13 +12,12 @@ def create(cur):
     # query to create a database 
     cur.execute('''CREATE TABLE pictures (
         pictureID int,
-        longitude float,
-        latitude float,
+        coordinates float[2],
         link varchar(255), 
         chosen boolean);''')
 
-    cur.execute('''INSERT INTO pictures (pictureID, longitude, latitude, link, chosen) 
-    VALUES ('1', '40.34661', '74.65605', 'https://png.pngtree.com/png-vector/20191121/ourmid/pngtree-blue-bird-vector-or-color-illustration-png-image_2013004.jpg', 'False');''')
+    cur.execute('''INSERT INTO pictures (pictureID, coordinates, link, chosen) 
+    VALUES ('1', '{40.34805, 74.65570}', 'https://res.cloudinary.com/dmiaxw4rr/image/upload/c_pad,b_auto:predominant,fl_preserve_transparency/v1710781520/TigerSpot/IMG_9697_kf2cim.jpg?_s=public-apps', 'False');''')
 
     # Closing the connection
     # conn.close()

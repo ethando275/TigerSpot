@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leaderboard Page</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="{{url_for('static', filename = 'styles/styles.css')}}" />
 </head>
 <body>
     <header>
         <nav>
             <div class="home-icon">
-                <a href="index.html"><img src="home.png" alt="Home Page"></a>
+                <a href="/index"><img src="static\styles\home.png" alt="Home Page"></a>
             </div>
             <div class="nav-icons">
-                <a href="rules.html"><img src="questionmark.png" alt="Rules" /></a>
-                <a href="leaderboard.html"><img src="trophy.png" alt="Leaderboard"/></a>
+                <a href="/rules"><img src="static\styles\questionmark.png" alt="Rules" /></a>
+                <a href="/leaderboard"><img src="static\styles\trophy.png" alt="Leaderboard"/></a>
             </div>
         </nav>
     </header>
