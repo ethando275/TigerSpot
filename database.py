@@ -16,8 +16,8 @@ def create(cur):
         link varchar(255), 
         chosen boolean);''')
 
-    cur.execute('''INSERT INTO pictures (pictureID, longitude, latitude, link, chosen) 
-    VALUES ('1', ['40.34805', '74.65570'], 'https://asset.cloudinary.com/dmiaxw4rr/35bd4c9df9bb361b5c8c905f6c25e540', 'False');''')
+    cur.execute('''INSERT INTO pictures (pictureID, coordinates, link, chosen) 
+    VALUES ('1', '{40.34805, 74.65570}', 'https://res.cloudinary.com/dmiaxw4rr/image/upload/c_pad,b_auto:predominant,fl_preserve_transparency/v1710781520/TigerSpot/IMG_9697_kf2cim.jpg?_s=public-apps', 'False');''')
 
     # Closing the connection
     # conn.close()
