@@ -4,8 +4,8 @@ body {
   padding: 0;
   background-color: orange;
   border: 0.6vw solid black;
-  height: 100vh; /* Set height to fill the entire viewport */
-  box-sizing: border-box; /* Include border in the height calculation */
+  min-height: 100vh; 
+  box-sizing: border-box; 
 }
 
 /* Header styles */
@@ -27,16 +27,16 @@ header {
 /* Navigation styles */
 nav {
     background-color: white;
-    display: flex; /* Use flexbox */
-    justify-content: right; /* Distribute items evenly along the main axis */
-    align-items: center; /* Center items vertically */
+    display: flex; 
+    justify-content: right; 
+    align-items: center;
 }
 
 .nav-icons {
     text-align: right;
     max-width: 100%;
     height: auto;
-    float: right; /* Add this line to float .nav-icons to the right */
+    float: right; 
     margin-right: 1vw; 
 }
 
@@ -175,14 +175,14 @@ hr {
     align-items: flex-end;
     justify-content: flex-end;
     position: fixed;
-    width: 97%; /* Take up the full width */
-    bottom: 3vh; /* Position at the bottom of the viewport */
+    width: 97%;
+    bottom: 3vh;
 }
 
 footer {
     position: fixed;
     width: 100%;
-    bottom: 10vh; /* Position at the bottom of the viewport */
+    bottom: 10vh;
 }
 
 
@@ -191,64 +191,86 @@ footer {
 .leaderboard {
     display: flex;
     justify-content: space-between;
-    padding: 20px;
+    padding: 1vh 4vw 1vh 4vw;
 }
 
 .top-players, .user-stats {
     flex: 1;
     background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    border-radius: 1vh;
+    border: 1vh solid black;
+    box-shadow: 0 1vh 2vw rgba(0, 0, 0, 0.1);
+    padding: 2vh 2vw;
+    margin: 0vh 2vw;
 }
 
 .top-players {
-    margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+    margin-right: 1.5vh;
+    max-height: calc(100vh - 6vh);
+    width: 50vw;
+    overflow: hidden; /* Hide overflow content */
+    padding-bottom: 1vh;
 }
 
 .user-stats {
-    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 1.5vh;
 }
 
 #container {
-    max-height: 300px;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(80vh - 6vh); 
+    border-right: 0.25vh solid black;
+    border-left: 0.25vh solid black;
+    border-top: 0.25vh solid black;
 }
 
 .row {
+    font-size: 2vh;
+    font-weight: bold;
     display: flex;
     justify-content: space-between;
-    padding: 10px 0;
+    padding: 2vh 2vw;
+    border-bottom: 0.25vh solid black;
 }
 
-.row.header {
-    font-weight: bold;
-    border-bottom: 1px solid #ccc;
+.top-players h2 {
+    margin-top: 0;
+    margin-bottom: 2vh;
+    text-align: center;
+    font-size: 6vh;
 }
 
 .row:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: orange;
 }
 
-.name, .score, .label, .value {
+.rank, .name, .score, .label, .value {
     flex: 1;
 }
 
-/* Scrollable container */
-.scrollable {
-    overflow-y: auto;
+.score {
+    text-align: right;
 }
 
 /* User stats styles */
 .user-stats h2 {
     margin-top: 0;
-    margin-bottom: 20px;
+    margin-bottom: 2vh;
+    text-align: center;
+    font-size: 6vh;
 }
 
 .stats-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    margin-bottom: 1vh;
+    padding-top: 1vh;
+    font-size: 4vh;
 }
 
 .label {
@@ -259,4 +281,13 @@ footer {
 .value {
     flex: 1;
     text-align: right;
+}
+
+.person-icon {
+    display: flex;
+    max-width: 15vh;
+    height: auto;
+    padding-bottom: 5vh;
+    margin-left: auto;
+    margin-right: auto;
 }
