@@ -79,11 +79,11 @@
       var map = L.map('map', {
           center: [40.3509, -74.6528], // Example center point
           zoom: 15, // Initial zoom level
-          minZoom: 11, // Minimum allowed zoom level
+          minZoom: 13, // Minimum allowed zoom level
           maxZoom: 20 // Maximum allowed zoom level
       });
-      var southwest = L.latLng(40.339165, -74.660600),
-          northeast = L.latLng(40.353583, -74.646810),
+      var southwest = L.latLng(40.339507, -74.662073),
+          northeast = L.latLng(40.352450, -74.650139),
           bounds = L.latLngBounds(southwest, northeast);
 
       map.setMaxBounds(bounds);
