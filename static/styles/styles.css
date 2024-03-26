@@ -187,21 +187,22 @@ footer {
 .main-content {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: flex-start;
-  width: 100%; /* Ensure the container takes up the full width */
+  width: 90%; /* Ensure the container takes up the full width */
+  max-height: 90%;
 }
 
 .game-image {
-  width: 50%; /* Adjusted width */
-  height: auto;
-  margin-right: 2%; /* Add some space between the elements */
+  width: auto; /* Adjusted width */
+  height: 65vh;
+  padding: 1vh 1vw;
 }
 
 .map {
-  width: 48%; /* Adjusted width to accommodate the margin */
-  height: 70vh; /* Adjusted height to ensure better visibility */
-  position: relative; /* Ensure relative positioning for proper map display */
+  width: 48%; 
+  height: 70vh; 
+  position: relative; 
 }
 
 /* Leaderboard styles */
