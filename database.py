@@ -20,9 +20,14 @@ def create_user_table(cur):
         cur.execute('''CREATE TABLE users (
         userID int,
         points int);''')
-
         cur.execute('''INSERT INTO users (userID, points) 
             VALUES ('1', '123');''')
+
+def update_user_table(userID, points, cur):
+        cur.execute('''UPDATE users
+            SET points = %d
+            WHERE userID = %s);
+            ''', (points, userID))
 
 def query(cur):
     create_pic_table(cur)
@@ -34,7 +39,6 @@ def query(cur):
 
     link = rows[0][0]
     return link
-    
     
 def main():
     # connection establishment
