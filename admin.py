@@ -14,9 +14,11 @@ def index():
 @app.route('/game', methods=['GET'])
 def game():
     # get link from database
-    link = database.main()
+    link = database.query()
 
     # get user input using flask.request.args.get('')
+    #once user clicks submit then get coordinates 
+    # coor = flask.request.args.get('coordinates')
     html_code = flask.render_template('gamepage.html', link = link)
     response = flask.make_response(html_code)
     return response
