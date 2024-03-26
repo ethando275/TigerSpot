@@ -3,10 +3,9 @@ import psycopg2
 
 DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
 
-
 def create_pic_table(cur):
     # query to create a database 
-    cur.execute('''CREATE TABLE pictures (
+    cur.execute('''CREATE TABLE IF NOT EXISTS pictures (
         pictureID int,
         coordinates float[2],
         link varchar(255), 
