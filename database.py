@@ -2,13 +2,9 @@ import psycopg2
 
 
 DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
-# connection establishment
 
-def create(cur):
-    # conn = psycopg2.connect(DATABASE_URL)
 
-    # Creating a cursor object
-    # cur = conn.cursor()
+def create_pic_table(cur):
     # query to create a database 
     cur.execute('''CREATE TABLE pictures (
         pictureID int,
@@ -17,19 +13,21 @@ def create(cur):
         chosen boolean);''')
 
     cur.execute('''INSERT INTO pictures (pictureID, coordinates, link, chosen) 
-    VALUES ('1', '{40.34805, 74.65570}', 'https://res.cloudinary.com/dmiaxw4rr/image/upload/c_pad,b_auto:predominant,fl_preserve_transparency/v1710781520/TigerSpot/IMG_9697_kf2cim.jpg?_s=public-apps', 'False');''')
+    VALUES ('1', '{40.34805, 74.65570}', 
+    'https://res.cloudinary.com/dmiaxw4rr/image/upload/c_pad,b_auto:predominant,fl_preserve_transparency/v1710781520/TigerSpot/IMG_9697_kf2cim.jpg?_s=public-apps', 
+    'False');''')
 
-    # Closing the connection
-    # conn.close()
-    #{40.34661,74.65605}
-    #"https://tinyurl.com/mvetxvex"
-def query():
-    conn = psycopg2.connect(DATABASE_URL)
+def create_user_table(cur):
+        cur.execute('''CREATE TABLE users (
+        userID int,
+        points int);''')
 
-    # Creating a cursor object
-    
-    cur = conn.cursor()
-    create(cur)
+        cur.execute('''INSERT INTO users (userID, points) 
+            VALUES ('1', '123');''')
+
+def query(cur):
+    create_pic_table(cur)
+    # create_user_table(cur)
 
     cur.execute("SELECT link FROM pictures")
 
@@ -37,11 +35,17 @@ def query():
 
     link = rows[0][0]
     return link
-    conn.close()
+    
     
 def main():
-    print(query())
-    
+    # connection establishment
+    conn = psycopg2.connect(DATABASE_URL)
+    # Creating a cursor object
+    cur = conn.cursor()
+    return query(cur)
 
-if __name__ == '__main__':
-    main()
+    # Closing the connection
+    conn.close()
+
+    # print(query())
+    
