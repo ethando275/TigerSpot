@@ -3,12 +3,13 @@ import psycopg2
 
 DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
 
+
 #already has been called dont need to call again
 def create_pic_table():
     # query to create a database 
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
-    cur.execute('''CREATE TABLE pictures (
+    cur.execute('''CREATE TABLE IF NOT EXISTS pictures (
         pictureID int,
         coordinates float[2],
         link varchar(255), 
