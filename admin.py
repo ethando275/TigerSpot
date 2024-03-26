@@ -15,13 +15,20 @@ def index():
 def game():
     # get link from database
     link = database.query()
-
-    # get user input using flask.request.args.get('')
-    #once user clicks submit then get coordinates 
-    # coor = flask.request.args.get('coordinates')
     html_code = flask.render_template('gamepage.html', link = link)
     response = flask.make_response(html_code)
     return response
+
+@app.route('/submit', methods=['GET'])
+def submit():
+    # get user input using flask.request.args.get('')
+    #once user clicks submit then get coordinates 
+    coor = flask.request.args.get('distance')
+
+    html_code = flask.render_template('submit.html', coor = coor)
+    response = flask.make_response(html_code)
+    return response
+
 
 @app.route('/rules', methods=['GET'])
 def rules():
