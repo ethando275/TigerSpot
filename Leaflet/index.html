@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <style>
+       #map{
+            height: 100vh;
+            width: 50%; /* Adjusted width */
+            float: left; /* Make it align to the left */
+        }
+        #coordinates {
+            height: 100vh;
+            width: 30%; /* New container takes up remaining space */
+            float: right; /* Align to the right */
+            overflow: auto; /* In case of overflow */
+            padding: 20px; /* Add some padding */
+        }
+        #distance {
+            height: 100vh;
+            width: 30%; /* New container takes up remaining space */
+            float: right; /* Align to the right */
+            overflow: auto; /* In case of overflow */
+            padding: 20px; /* Add some padding */
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="coordinates"></div>
+</body>
+</html>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+
+function haversineDistance(lat1, lon1, lat2, lon2) {
+    // Radius of the Earth in meters
+    var R = 6371000;
+    // Convert degrees to radians
+    var radLat1 = lat1 * Math.PI / 180;
+    var radLat2 = lat2 * Math.PI / 180;
+    // Difference in coordinates
+    var deltaLat = (lat2 - lat1) * Math.PI / 180;
+    var deltaLon = (lon2 - lon1) * Math.PI / 180;
+    // Haversine formula
+    var a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+            Math.cos(radLat1) * Math.cos(radLat2) *
+            Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var distance = R * c;
+    return distance;
+}
+
+var markersCount = 2;
+var map = L.map('map', {
+    center: [40.3509, -74.6528], // Example center point
+    zoom: 13, // Initial zoom level
+    minZoom: 13, // Minimum allowed zoom level
+    maxZoom: 20 // Maximum allowed zoom level
+});
+var southwest = L.latLng(40.339165, -74.660600),
+    northeast = L.latLng(40.353583, -74.646810),
+    bounds = L.latLngBounds(southwest, northeast);
+
+map.setMaxBounds(bounds);
+
+L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+maxZoom: 20,
+subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+}).addTo(map);
+var coordinates;
+
+// a layer group, used here like a container for markers
+var markersGroup = L.layerGroup();
+map.addLayer(markersGroup);
+var marker;
+var distance;
+
+map.on('click', function(e) {
+    // clears map on every click
+    markersGroup.clearLayers();
+    // add a marker to the map on click
+    marker = L.marker(e.latlng).addTo(markersGroup);
+    coordinates = document.getElementById('coordinates').innerHTML = "Coordinates: " + marker.getLatLng().lat + ", " + marker.getLatLng().lng;
+    return;
+    
+});
+</script>
+
+
