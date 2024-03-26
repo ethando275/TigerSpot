@@ -39,6 +39,11 @@
         <!-- Add map ad-->
         <div id="map"></div>
         <div id="distance"></div>
+        <form id = "disForm" method = "post" action="/submit">
+          <input type = "hidden" id="currLat" name = "currLat" value = "">
+          <input type = "hidden" id="currLon" name = "currLon" value ="">
+        </form>
+        
       </div>
     </main>
       
@@ -106,7 +111,11 @@
           markersGroup.clearLayers();
           // add a marker to the map on click
           marker = L.marker(e.latlng).addTo(markersGroup);
-          distance = document.getElementById('distance').innerHTML = "Distance: " + haversineDistance(marker.getLatLng().lat, marker.getLatLng().lng, 40.34805, -74.65570)+" meters";
+          document.getElementById('currLat').value = marker.getLatLng().lat;
+          document.getElementById('currLon').value = marker.getLatLng().lng;
+          //var dis_num = haversineDistance(marker.getLatLng().lat, marker.getLatLng().lng, 40.34805, -74.65570)
+         // distance = document.getElementById('distance').innerHTML = "Distance: " + dis_num + " meters";
+        //  document.getElementById('distance').value = dis_num;
           return;
           
       });
