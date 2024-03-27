@@ -37,16 +37,16 @@ def create_pic_table():
         link varchar(255), 
         chosen boolean);''')
 
-    pictureID = 0
+    # pictureID = 0
 
-    with open('picturedata.txt', 'r') as file:
-        link = file.readline().strip()
-        coordinates = {file.readline().strip, file.readline().strip}
-        pictureID += 1
-        chosen = False
-        cur.execute('''INSERT INTO pictures (pictureID, coordinates, link, chosen) 
-        VALUES (?, ?, ?, ? );''',
-        (pictureID, link, coordinates, chosen))
+    # with open('picturedata.txt', 'r') as file:
+    #     link = file.readline().strip()
+    #     coordinates = {file.readline().strip, file.readline().strip}
+    #     pictureID += 1
+    #     chosen = False
+    #     cur.execute('''INSERT INTO pictures (pictureID, coordinates, link, chosen) 
+    #     VALUES (?, ?, ?, ? );''',
+    #     (pictureID, link, coordinates, chosen))
     conn.commit()
     cur.close()
     conn.close()
@@ -66,7 +66,7 @@ def create_pic_table():
 def create_user_table():
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
-    cur.execute('''CREATE TABLE users (
+    cur.execute('''CREATE TABLE IF NOT EXISTS users (
     username varchar(255),
     points int);''')
 
@@ -84,10 +84,10 @@ def insert():
 
 
    #this is alr inserted into table so change before executing so we dont have duplicates
-   # cur.execute('''INSERT INTO pictures (pictureID, coordinates, link, chosen)
-   # VALUES ('1', '{40.34805, 74.65570}',
-   # 'https://res.cloudinary.com/dmiaxw4rr/image/upload/c_pad,b_auto:predominant,fl_preserve_transparency/v1710781520/TigerSpot/IMG_9697_kf2cim.jpg?_s=public-apps',
-   # 'False');''')
+   cur.execute('''INSERT INTO pictures (pictureID, coordinates, link, chosen)
+   VALUES ('1', '{40.34805, -74.65570}',
+   'https://res.cloudinary.com/dmiaxw4rr/image/upload/c_pad,b_auto:predominant,fl_preserve_transparency/v1710781520/TigerSpot/IMG_9697_kf2cim.jpg?_s=public-apps',
+   'False');''')
 
 
    conn.commit()
@@ -111,9 +111,11 @@ def update():
    cur.close()
    conn.close()
 
-def query(cur):
-    create_pic_table(cur)
-    # create_user_table(cur)
+def query():
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+    # create_pic_table()
+    # create_user_table()
 
     cur.execute("SELECT link FROM pictures")
 
@@ -148,7 +150,7 @@ def show_rows():
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
 
-    cur.execute("SELECT * FROM pictures")
+    cur.execute("SELECT * FROM users")
     rows = cur.fetchall()
     for row in rows:
         print(row)
@@ -222,9 +224,12 @@ def get_points(username):
    return points
 
     
-def main():
+# def main():
     # update()
-    show_rows()
+    # create_pic_table()
+    # create_user_table()
+    # show_rows()
+    # insert()
     # connection establishment
     # Creating a cursor object
     # return query(cur)
