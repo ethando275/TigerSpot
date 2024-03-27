@@ -43,7 +43,7 @@
           <input type = "hidden" id="currLat" name = "currLat" value ="">
           <input type = "hidden" id="currLon" name = "currLon" value ="">
           <button type="submit" class="submit"><b>Submit</b></button>
-          <button class="clear"><b>Clear</b></button>
+          <button type = "button" class="clear" onclick ="clearForm()"><b>Clear</b></button>
         </form>
         
       </div>
@@ -111,5 +111,11 @@
           return;
           
       });
+
+      function clearForm(){
+        markersGroup.clearLayers();
+        document.getElementById('currLat').value = "";
+        document.getElementById('currLon').value = "";
+      }
       </script>
 

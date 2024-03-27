@@ -1,6 +1,7 @@
 import flask
 import database
 
+
 app = flask.Flask(__name__, template_folder='.')
 
 @app.route('/', methods=['GET'])
@@ -24,9 +25,15 @@ def submit():
     # get user input using flask.request.args.get('')
     #once user clicks submit then get coordinates 
     currLat = flask.request.form.get('currLat')  # Use .get for safe retrieval
+    print(currLat)
     currLon = flask.request.form.get('currLon')
+    print(currLon)
+    coor = database.get_distance()
+    print(coor)
 
-    html_code = flask.render_template('submit.html', lat = currLat, lon = currLon )
+    distance = database.calc_distance(currLat, currLon, coor)
+
+    html_code = flask.render_template('submit.html', dis = distance )
     response = flask.make_response(html_code)
     return response
 
