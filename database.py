@@ -16,12 +16,35 @@ def create_pic_table():
         link varchar(255), 
         chosen boolean);''')
 
-    cur.execute('''INSERT INTO pictures (pictureID, coordinates, link, chosen) 
-    VALUES ('1', '{40.34805, 74.65570}', 
-    'https://res.cloudinary.com/dmiaxw4rr/image/upload/c_pad,b_auto:predominant,fl_preserve_transparency/v1710781520/TigerSpot/IMG_9697_kf2cim.jpg?_s=public-apps', 
-    'False');''')
+     pictureID = 0
 
-def create_user_table(cur):
+    with open('picturedata.txt', 'r') as file:
+        link = file.readline().strip()
+        coordinates = {file.readline().strip, file.readline().strip}
+        pictureID += 1
+        chosen = False
+        cur.execute('''INSERT INTO pictures (pictureID, coordinates, link, chosen) 
+        VALUES (?, ?, ?, ? );''',
+        (pictureID, link, coordinates, chosen))
+    conn.commit()
+    cur.close()
+    conn.close()
+# def update_user_table(userID, distance, cur):
+#         if distance - 3 >= 0:
+#             points = 100
+#         elif distance - 10 >= 0:
+#             points = 80
+#         elif distance - 25 >= 0:
+#             points = 50
+#         else
+#             points = 0
+#         cur.execute('''UPDATE users
+#             SET points = %d
+#             WHERE userID = %s);
+#             ''', (points, userID))
+def create_user_table():
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
         cur.execute('''CREATE TABLE users (
         userID int,
         points int);''')
