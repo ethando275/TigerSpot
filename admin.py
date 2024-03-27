@@ -19,13 +19,12 @@ def game():
     response = flask.make_response(html_code)
     return response
 
-@app.route('/submit', methods=['GET'])
+@app.route('/submit', methods=['POST'])
 def submit():
     # get user input using flask.request.args.get('')
     #once user clicks submit then get coordinates 
-    currLat = flask.request.form['currLat']
-    currLon = flask.request.form['currLon']
-
+    currLat = flask.request.form.get('currLat')  # Use .get for safe retrieval
+    currLon = flask.request.form.get('currLon')
 
     html_code = flask.render_template('submit.html', lat = currLat, lon = currLon )
     response = flask.make_response(html_code)
