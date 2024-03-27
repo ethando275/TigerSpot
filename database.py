@@ -16,61 +16,21 @@ def create_pic_table():
         link varchar(255), 
         chosen boolean);''')
 
-    conn.commit()
-    cur.close()
-    conn.close()
+    cur.execute('''INSERT INTO pictures (pictureID, coordinates, link, chosen) 
+    VALUES ('1', '{40.34805, 74.65570}', 
+    'https://res.cloudinary.com/dmiaxw4rr/image/upload/c_pad,b_auto:predominant,fl_preserve_transparency/v1710781520/TigerSpot/IMG_9697_kf2cim.jpg?_s=public-apps', 
+    'False');''')
 
-#already has been called dont need to call again
-def create_user_table():
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
+def create_user_table(cur):
+        cur.execute('''CREATE TABLE users (
+        userID int,
+        points int);''')
 
+        cur.execute('''INSERT INTO users (userID, points) 
+            VALUES ('1', '123');''')
 
-    cur.execute('''CREATE TABLE users (
-    userID int,
-    points int);''')
-
-    # cur.execute('''INSERT INTO users (userID, points) 
-    #     VALUES ('1', '123');''')
-
-    conn.commit()
-    cur.close()
-    conn.close()
-
-def insert():
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
-
-    #this is alr inserted into table so change before executing so we dont have duplicates 
-    # cur.execute('''INSERT INTO pictures (pictureID, coordinates, link, chosen) 
-    # VALUES ('1', '{40.34805, 74.65570}', 
-    # 'https://res.cloudinary.com/dmiaxw4rr/image/upload/c_pad,b_auto:predominant,fl_preserve_transparency/v1710781520/TigerSpot/IMG_9697_kf2cim.jpg?_s=public-apps', 
-    # 'False');''')
-
-    conn.commit()
-    cur.close()
-    conn.close()
-
-def update():
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
-    # cur.execute("UPDATE pictures SET coordinates = [40.34805, -74.65570] WHERE pictureID = 1;")
-    sql = """UPDATE pictures 
-    SET coordinates = '{40.34805, -74.65570}' 
-    WHERE pictureID = 1;"""
-    cur.execute(sql)
-    # cur.execute('''UPDATE pictures
-    # SET coordinates = {40.34805, -74.65570}
-    # WHERE pictureID = 1;''')
-
-    conn.commit()
-    cur.close()
-    conn.close()
-
-def query():
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
-    # create_pic_table(cur)
+def query(cur):
+    create_pic_table(cur)
     # create_user_table(cur)
 
     cur.execute("SELECT link FROM pictures")
