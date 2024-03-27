@@ -50,11 +50,11 @@ def submit():
     # get user input using flask.request.args.get('')
     #once user clicks submit then get coordinates 
     currLat = flask.request.form.get('currLat')  # Use .get for safe retrieval
-    print(currLat)
+    # print(currLat)
     currLon = flask.request.form.get('currLon')
-    print(currLon)
+    # print(currLon)
     coor = database.get_distance()
-    print(coor)
+    # print(coor)
 
     distance = database.calc_distance(currLat, currLon, coor)
 
