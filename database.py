@@ -84,10 +84,10 @@ def insert():
 
 
    #this is alr inserted into table so change before executing so we dont have duplicates
-   cur.execute('''INSERT INTO pictures (pictureID, coordinates, link, chosen)
-   VALUES ('1', '{40.34805, -74.65570}',
-   'https://res.cloudinary.com/dmiaxw4rr/image/upload/c_pad,b_auto:predominant,fl_preserve_transparency/v1710781520/TigerSpot/IMG_9697_kf2cim.jpg?_s=public-apps',
-   'False');''')
+#    cur.execute('''INSERT INTO pictures (pictureID, coordinates, link, chosen)
+#    VALUES ('1', '{40.34805, -74.65570}',
+#    'https://res.cloudinary.com/dmiaxw4rr/image/upload/c_pad,b_auto:predominant,fl_preserve_transparency/v1710781520/TigerSpot/IMG_9697_kf2cim.jpg?_s=public-apps',
+#    'False');''')
 
 
    conn.commit()
@@ -98,9 +98,9 @@ def update():
    conn = psycopg2.connect(DATABASE_URL)
    cur = conn.cursor()
    # cur.execute("UPDATE pictures SET coordinates = [40.34805, -74.65570] WHERE pictureID = 1;")
-   sql = """UPDATE pictures
-   SET coordinates = '{40.34805, -74.65570}'
-   WHERE pictureID = 1;"""
+    #sql = """UPDATE pictures
+    # SET coordinates = '{40.34805, -74.65570}'
+    #WHERE pictureID = 1;"""
    cur.execute(sql)
    # cur.execute('''UPDATE pictures
    # SET coordinates = {40.34805, -74.65570}
@@ -123,7 +123,7 @@ def query():
 
     link = rows[0][0]
     return link
-    conn.commit()
+    # conn.commit()
     cur.close()
     conn.close()
 
@@ -136,7 +136,7 @@ def get_distance():
 
     coor = rows[0][0]
     return coor
-    conn.commit()
+    # conn.commit()
     cur.close()
     conn.close()
 
@@ -155,7 +155,7 @@ def show_rows():
     for row in rows:
         print(row)
 
-    conn.commit()
+    # conn.commit()
     cur.close()
     conn.close()
     
