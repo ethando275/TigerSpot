@@ -10,11 +10,18 @@ def create_pic_table(cur):
         coordinates float[2],
         link varchar(255), 
         chosen boolean);''')
+    
+    pictureID = 0
 
-    cur.execute('''INSERT INTO pictures (pictureID, coordinates, link, chosen) 
-    VALUES ('1', '{40.34805, 74.65570}', 
-    'https://res.cloudinary.com/dmiaxw4rr/image/upload/c_pad,b_auto:predominant,fl_preserve_transparency/v1710781520/TigerSpot/IMG_9697_kf2cim.jpg?_s=public-apps', 
-    'False');''')
+    with open('picturedata.txt', 'r') as file:
+        link = file.readline().strip()
+        coordinates = {file.readline().strip, file.readline().strip}
+        pictureID += 1
+        chosen = False
+
+        cur.execute('''INSERT INTO pictures (pictureID, coordinates, link, chosen) 
+        VALUES (?, ?, ?, ? );''',
+        (pictureID, link, coordinates, chosen))
 
 def create_user_table(cur):
         cur.execute('''CREATE TABLE users (
@@ -23,11 +30,19 @@ def create_user_table(cur):
         cur.execute('''INSERT INTO users (userID, points) 
             VALUES ('1', '123');''')
 
-def update_user_table(userID, points, cur):
-        cur.execute('''UPDATE users
-            SET points = %d
-            WHERE userID = %s);
-            ''', (points, userID))
+# def update_user_table(userID, distance, cur):
+#         if distance - 3 >= 0:
+#             points = 100
+#         elif distance - 10 >= 0:
+#             points = 80
+#         elif distance - 25 >= 0:
+#             points = 50
+#         else
+#             points = 0
+#         cur.execute('''UPDATE users
+#             SET points = %d
+#             WHERE userID = %s);
+#             ''', (points, userID))
 
 def query(cur):
     create_pic_table(cur)

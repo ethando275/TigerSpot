@@ -15,10 +15,11 @@ def index():
 def game():
     # get link from database
     link = database.main()
-
     # get user input using flask.request.args.get('')
     html_code = flask.render_template('gamepage.html', link = link)
     response = flask.make_response(html_code)
+    distance = flask.request.args.get('distance')
+    print('Distance: ' + distance)
     return response
 
 @app.route('/rules', methods=['GET'])
