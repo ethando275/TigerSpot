@@ -1,4 +1,5 @@
 import psycopg2
+from geopy.distance import geodesic
 
 
 DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
@@ -16,6 +17,7 @@ def create_pic_table():
         chosen boolean);''')
 
     conn.commit()
+    cur.close()
     conn.close()
 
 #already has been called dont need to call again
@@ -32,6 +34,7 @@ def create_user_table():
     #     VALUES ('1', '123');''')
 
     conn.commit()
+    cur.close()
     conn.close()
 
 def insert():
@@ -45,6 +48,23 @@ def insert():
     # 'False');''')
 
     conn.commit()
+    cur.close()
+    conn.close()
+
+def update():
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+    # cur.execute("UPDATE pictures SET coordinates = [40.34805, -74.65570] WHERE pictureID = 1;")
+    sql = """UPDATE pictures 
+    SET coordinates = '{40.34805, -74.65570}' 
+    WHERE pictureID = 1;"""
+    cur.execute(sql)
+    # cur.execute('''UPDATE pictures
+    # SET coordinates = {40.34805, -74.65570}
+    # WHERE pictureID = 1;''')
+
+    conn.commit()
+    cur.close()
     conn.close()
 
 def query():
@@ -60,12 +80,44 @@ def query():
     link = rows[0][0]
     return link
     conn.commit()
+    cur.close()
     conn.close()
+
+def get_distance():
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+    cur.execute("SELECT coordinates FROM pictures")
+    rows = cur.fetchall()
+
+    coor = rows[0][0]
+    return coor
+    conn.commit()
+    cur.close()
+    conn.close()
+
+def calc_distance(lat1, lon1, coor2):
+    coor1 = (lat1, lon1)
+    distance = geodesic(coor1, coor2).meters
+    return distance
     
 # def calc_points():
+def show_rows():
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
 
+    cur.execute("SELECT * FROM pictures")
+    rows = cur.fetchall()
+    for row in rows:
+        print(row)
+
+    conn.commit()
+    cur.close()
+    conn.close()
     
-# def main():
+def main():
+    # update()
+    show_rows()
     # connection establishment
     # Creating a cursor object
     # return query(cur)
@@ -75,7 +127,9 @@ def query():
     # return link
 
     # Closing the connection
-    
+if __name__=="__main__": 
+    main()
 
     # print(query())
+
     
