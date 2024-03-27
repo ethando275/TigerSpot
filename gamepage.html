@@ -40,46 +40,38 @@
         <div id="map"></div>
         <div id="distance"></div>
         <form id = "disForm" method = "post" action="/submit">
-          <input type = "hidden" id="currLat" name = "currLat" value = "">
+          <input type = "hidden" id="currLat" name = "currLat" value ="">
           <input type = "hidden" id="currLon" name = "currLon" value ="">
+          <button type="submit" class="submit"><b>Submit</b></button>
+          <button class="clear"><b>Clear</b></button>
         </form>
         
       </div>
     </main>
-      
-    <footer>
-
-      <div class="game-btns">
-        <button class="clear"><b>Clear</b></button>
-        <a href="/submit">
-          <button class="submit" ><b>Submit</b>
-        </a>
-      </div>
-    </footer>
   </body>
 </html>
       <!-- Add any scripts here -->
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
       <script>
 
-      function haversineDistance(lat1, lon1, lat2, lon2) {
-          // Radius of the Earth in meters
-          var R = 6371000;
-          // Convert degrees to radians
-          var radLat1 = lat1 * Math.PI / 180;
-          var radLat2 = lat2 * Math.PI / 180;
-          // Difference in coordinates
-          var deltaLat = (lat2 - lat1) * Math.PI / 180;
-          var deltaLon = (lon2 - lon1) * Math.PI / 180;
-          // Haversine formula
-          var a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
-                  Math.cos(radLat1) * Math.cos(radLat2) *
-                  Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
-          var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-          var distance = R * c;
-          decimalFormat = distance.toFixed(5);
-          return decimalFormat;
-      }
+      // function haversineDistance(lat1, lon1, lat2, lon2) {
+      //     // Radius of the Earth in meters
+      //     var R = 6371000;
+      //     // Convert degrees to radians
+      //     var radLat1 = lat1 * Math.PI / 180;
+      //     var radLat2 = lat2 * Math.PI / 180;
+      //     // Difference in coordinates
+      //     var deltaLat = (lat2 - lat1) * Math.PI / 180;
+      //     var deltaLon = (lon2 - lon1) * Math.PI / 180;
+      //     // Haversine formula
+      //     var a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+      //             Math.cos(radLat1) * Math.cos(radLat2) *
+      //             Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
+      //     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      //     var distance = R * c;
+      //     decimalFormat = distance.toFixed(5);
+      //     return decimalFormat;
+      // }
 
       var markersCount = 2;
       var map = L.map('map', {
@@ -111,8 +103,8 @@
           markersGroup.clearLayers();
           // add a marker to the map on click
           marker = L.marker(e.latlng).addTo(markersGroup);
-          document.getElementById('currLat').value = marker.getLatLng().lat;
-          document.getElementById('currLon').value = marker.getLatLng().lng;
+          document.getElementById('currLat').value = marker.getLatLng().lat.toFixed(5);
+          document.getElementById('currLon').value = marker.getLatLng().lng.toFixed(5);
           //var dis_num = haversineDistance(marker.getLatLng().lat, marker.getLatLng().lng, 40.34805, -74.65570)
          // distance = document.getElementById('distance').innerHTML = "Distance: " + dis_num + " meters";
         //  document.getElementById('distance').value = dis_num;
