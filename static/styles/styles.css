@@ -132,6 +132,8 @@ main {
 header .game-text {
   color: black;
   font-size: 3vh;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .clear,

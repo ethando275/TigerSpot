@@ -58,7 +58,7 @@ def submit():
 
     distance = database.calc_distance(currLat, currLon, coor)
 
-    html_code = flask.render_template('submit.html', dis = distance )
+    html_code = flask.render_template('results.html', dis = distance, lat = currLat, lon = currLon)
     response = flask.make_response(html_code)
     return response
 
