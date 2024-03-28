@@ -155,11 +155,7 @@ def insert_player(username, points):
     conn.commit()
     conn.close()
 
-def update_player(username, distance):
-
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
-
+def calculate_points(username, distance):
     if distance - 3 <= 0:
         points = 100
     elif distance - 10 <= 0:
@@ -168,6 +164,15 @@ def update_player(username, distance):
         points = 50
     else:
         points = 0
+
+    points = points + get_points(username)[0]
+
+    return points
+
+def update_player(username, points):
+
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
 
     cur.execute("UPDATE users SET points=%s WHERE username=%s;", (points, username))
 
