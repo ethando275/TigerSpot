@@ -1,8 +1,6 @@
-#!/usr/bin/env python
 
 #-----------------------------------------------------------------------
 # auth.py
-# Authors: Alex Halderman, Scott Karlin, Brian Kernighan, Bob Dondero
 #-----------------------------------------------------------------------
 
 import urllib.request
