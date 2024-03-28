@@ -22,7 +22,7 @@ app.secret_key = os.environ['APP_SECRET_KEY']
 @app.route('/index', methods=['GET'])
 def index():
     username = auth.authenticate()
-    database.insert_or_update_player(username, 0)
+    database.insert_player(username, 0)
     
     html_code = flask.render_template('index.html', username = username)
     # html_code = flask.render_template('index.html')
@@ -57,6 +57,10 @@ def submit():
     # print(coor)
 
     distance = database.calc_distance(currLat, currLon, coor)
+    username = auth.authenticate()
+
+    points = database.calculate_points(username, distance)
+    database.update_player(username, points)
 
     html_code = flask.render_template('results.html', dis = distance, lat = currLat, lon = currLon)
     response = flask.make_response(html_code)

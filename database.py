@@ -4,27 +4,21 @@ from geopy.distance import geodesic
 
 DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
 
-
 def drop_pic_table():
    # query to create a database
    conn = psycopg2.connect(DATABASE_URL)
    cur = conn.cursor()
    cur.execute('''DROP TABLE pictures; ''')
-   
    conn.commit()
    conn.close()
-   
 
 def drop_user_table():
    # query to create a database
    conn = psycopg2.connect(DATABASE_URL)
    cur = conn.cursor()
    cur.execute('''DROP TABLE users; ''')
-
-
    conn.commit()
    conn.close()
-
 
 #already has been called dont need to call again
 def create_pic_table():
@@ -50,19 +44,7 @@ def create_pic_table():
     conn.commit()
     cur.close()
     conn.close()
-# def update_user_table(userID, distance, cur):
-#         if distance - 3 >= 0:
-#             points = 100
-#         elif distance - 10 >= 0:
-#             points = 80
-#         elif distance - 25 >= 0:
-#             points = 50
-#         else
-#             points = 0
-#         cur.execute('''UPDATE users
-#             SET points = %d
-#             WHERE userID = %s);
-#             ''', (points, userID))
+
 def create_user_table():
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
@@ -82,13 +64,11 @@ def insert():
    conn = psycopg2.connect(DATABASE_URL)
    cur = conn.cursor()
 
-
    #this is alr inserted into table so change before executing so we dont have duplicates
 #    cur.execute('''INSERT INTO pictures (pictureID, coordinates, link, chosen)
 #    VALUES ('1', '{40.34805, -74.65570}',
 #    'https://res.cloudinary.com/dmiaxw4rr/image/upload/c_pad,b_auto:predominant,fl_preserve_transparency/v1710781520/TigerSpot/IMG_9697_kf2cim.jpg?_s=public-apps',
 #    'False');''')
-
 
    conn.commit()
    cur.close()
@@ -105,7 +85,6 @@ def update():
    # cur.execute('''UPDATE pictures
    # SET coordinates = {40.34805, -74.65570}
    # WHERE pictureID = 1;''')
-
 
    conn.commit()
    cur.close()
@@ -159,8 +138,7 @@ def show_rows():
     cur.close()
     conn.close()
     
-def insert_or_update_player(username, points):
-
+def insert_player(username, points):
 
    # Connect to database
     conn = psycopg2.connect(DATABASE_URL)
@@ -172,21 +150,40 @@ def insert_or_update_player(username, points):
 
     if result is None:
         cur.execute("INSERT INTO users (username, points) VALUES (%s, %s);", (username, 0))
-    else:
-        cur.execute("UPDATE users SET points=%s WHERE username=%s;", (points, username))
-
 
     # Commit change and disconnect
+    conn.commit()
+    conn.close()
+
+def calculate_points(username, distance):
+    if distance - 3 <= 0:
+        points = 100
+    elif distance - 10 <= 0:
+        points = 80
+    elif distance - 25 <= 0:
+        points = 50
+    else:
+        points = 0
+
+    points = points + get_points(username)[0]
+
+    return points
+
+def update_player(username, points):
+
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+    cur.execute("UPDATE users SET points=%s WHERE username=%s;", (points, username))
+
     conn.commit()
     conn.close()
    
 def get_top_players():
 
-
     # Connect to database
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
-
 
     top_players = []
     cur.execute("SELECT username, points FROM users ORDER BY points DESC LIMIT 10;")
@@ -196,28 +193,22 @@ def get_top_players():
         player_stats = {'username': username, 'points': points}
         top_players.append(player_stats)
 
-
    # Disconnect
     conn.close()
-
 
     return top_players
 
 def get_points(username):
 
-
    # Connect to database
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
 
-
     cur.execute('''SELECT points FROM users WHERE username=%s;''', (username,))
     points = cur.fetchone()
 
-
     # Disconnect
     conn.close()
-
 
     return points
 
