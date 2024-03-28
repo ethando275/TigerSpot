@@ -31,17 +31,26 @@
     </style>
   </head>
   <body>
-    <header>
-      <b><p class="game-text">Your Result<br>Click a marker to see coordinates </p></b>
-      
-    </header>
+      <header>
+        <nav>
+          <div class="home-icon">
+              <a href="/index"><img src="static\styles\home.png" alt="Home Page"></a>
+          </div>
+          <b><p class="game-text">Your Result<br>Click a marker to see coordinates </p></b>
+          <div class="nav-icons">
+          <a href="/rules"><img src="static\styles\questionmark.png" alt="Rules" /></a>
+          <a href="/leaderboard"
+            ><img src="static\styles\trophy.png" alt="Leaderboard"/></a>
+        </div>
+        </nav>
+      </header>
     <main class="main-content">
       <div class="map">
         <!-- Add map ad-->
         <div id="map"></div>
         <div id="distance"></div>
       </div>
-    </main>xs
+    </main>
   </body>
 </html>
     <!-- Add any scripts here -->

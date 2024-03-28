@@ -132,6 +132,7 @@ main {
 header .game-text {
   color: black;
   font-size: 3vh;
+  text-align: center;
   margin-left: auto;
   margin-right: auto;
 }
