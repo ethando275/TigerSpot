@@ -76,6 +76,5 @@ def rules():
 def leaderboard():
     top_players = database.get_top_players()
     html_code = flask.render_template('leaderboard.html', top_players = top_players)
-    html_code = flask.render_template('leaderboard.html')
     response = flask.make_response(html_code)
     return response

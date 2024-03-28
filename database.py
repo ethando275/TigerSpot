@@ -165,17 +165,15 @@ def insert_or_update_player(username, points):
    # Connect to database
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
-
-
+    
     # Check if username exists
-    cur.execute('''SELECT points FROM users WHERE username=%s;''', (username,))
-    result = cur.fetchone
-
+    cur.execute("SELECT points FROM users WHERE username=%s;", (username,))
+    result = cur.fetchone()
 
     if result is None:
-        cur.execute('''INSERT INTO users (username, points) VALUES (%s, %s);''', (username, 0))
+        cur.execute("INSERT INTO users (username, points) VALUES (%s, %s);", (username, 0))
     else:
-        cur.execute('''UPDATE users SET points=%s WHERE username=%s;''', (points, username))
+        cur.execute("UPDATE users SET points=%s WHERE username=%s;", (points, username))
 
 
     # Commit change and disconnect
@@ -191,8 +189,8 @@ def get_top_players():
 
 
     top_players = []
-    cur.execute('''SELECT username, points FROM users ORDER BY points DESC LIMIT 10;''')
-    table = cur.fetchall
+    cur.execute("SELECT username, points FROM users ORDER BY points DESC LIMIT 10;")
+    table = cur.fetchall()
     for row in table:
         username, points = row
         player_stats = {'username': username, 'points': points}
@@ -214,7 +212,7 @@ def get_points(username):
 
 
     cur.execute('''SELECT points FROM users WHERE username=%s;''', (username,))
-    points = cur.fetchone
+    points = cur.fetchone()
 
 
     # Disconnect
@@ -222,6 +220,18 @@ def get_points(username):
 
 
     return points
+
+def remove_from_user_table(username):
+   # Connect to database
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+
+    cur.execute("DELETE FROM users WHERE username=%s;", (username,))
+    conn.commit()
+
+    # Disconnect
+    conn.close()
 
     
 def main():
