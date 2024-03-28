@@ -78,6 +78,28 @@ def create_user_table():
     cur.close()
     conn.close()
 
+# def update_user_table(username, distance):
+#     conn = psycopg2.connect(DATABASE_URL)
+#     cur = conn.cursor()
+
+#     if distance - 3 >= 0:
+#         points = 100
+#     elif distance - 10 >= 0:
+#         points = 80
+#     elif distance - 25 >= 0:
+#         points = 50
+#     else
+#         points = 0
+#     cur.execute('''UPDATE users
+#         SET points = %d
+#         WHERE username = %s);
+#         ''', (points, userID))
+
+#     conn.commit()
+#     cur.close()
+#     conn.close()
+
+
 def insert():
    conn = psycopg2.connect(DATABASE_URL)
    cur = conn.cursor()
@@ -161,7 +183,6 @@ def show_rows():
     
 def insert_or_update_player(username, points):
 
-
    # Connect to database
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
@@ -182,7 +203,6 @@ def insert_or_update_player(username, points):
    
 def get_top_players():
 
-
     # Connect to database
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
@@ -200,24 +220,19 @@ def get_top_players():
    # Disconnect
     conn.close()
 
-
     return top_players
 
 def get_points(username):
-
 
    # Connect to database
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
 
-
     cur.execute('''SELECT points FROM users WHERE username=%s;''', (username,))
     points = cur.fetchone()
 
-
     # Disconnect
     conn.close()
-
 
     return points
 
