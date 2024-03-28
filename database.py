@@ -96,21 +96,38 @@ def update():
    cur.close()
    conn.close()
 
-def query():
+def query(col, table):
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
     # create_pic_table()
     # create_user_table()
 
-    cur.execute("SELECT link FROM pictures")
+    cur.execute(f"SELECT {col} FROM {table}")
 
     rows = cur.fetchall()
 
-    link = rows[0][0]
-    return link
+    row = rows[0][0]
+    return row
     # conn.commit()
     cur.close()
     conn.close()
+
+def get_pic_info(col, id):
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+    # create_pic_table()
+    # create_user_table()
+
+    cur.execute(f"SELECT {col} FROM pictures WHERE pictureID = {id}")
+
+    rows = cur.fetchall()
+
+    row = rows[0][0]
+    return row
+    # conn.commit()
+    cur.close()
+    conn.close()
+
 
 def get_distance():
     conn = psycopg2.connect(DATABASE_URL)

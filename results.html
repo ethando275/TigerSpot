@@ -98,7 +98,7 @@
     var distance = "{{ dis }}";
     distance = parseFloat(distance).toFixed(5); // Formats the distance to 2 decimal places
     document.getElementById('distance').innerHTML =  "Distance from actual point: "+ distance + " meters";
-    var marker1 = L.marker([40.34805, -74.65570], {icon: new L.Icon({
+    var marker1 = L.marker(["{{coor[0]}}", "{{coor[1]}}"], {icon: new L.Icon({
     iconUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers/img/marker-icon-2x-green.png',
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
     iconSize: [25, 41],
@@ -106,11 +106,12 @@
     popupAnchor: [1, -34],
     shadowSize: [41, 41]
     })}).addTo(markersGroup);
-    marker1.bindPopup("Image Location: "+ "[40.34805, -74.65570]").openPopup()
+    marker1.bindPopup("Image Location: "+ "{{ coor }}").openPopup()
+    // marker1.bindPopup("Image Location: "+ "[40.34805, -74.65570]").openPopup()
     var marker2 = L.marker([lat, lon]).addTo(markersGroup);
     marker2.bindPopup("Your Guess: " + "[" + lat + ", " + lon + "]").openPopup();
     var latlngs = [
-    [40.34805, -74.65570],
+    ["{{coor[0]}}", "{{coor[1]}}"],
     [lat, lon]
     ];
 
