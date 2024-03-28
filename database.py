@@ -31,16 +31,22 @@ def create_pic_table():
         link varchar(255), 
         chosen boolean);''')
 
-    # pictureID = 0
+    pictureID = 0
 
-    # with open('picturedata.txt', 'r') as file:
-    #     link = file.readline().strip()
-    #     coordinates = {file.readline().strip, file.readline().strip}
-    #     pictureID += 1
-    #     chosen = False
-    #     cur.execute('''INSERT INTO pictures (pictureID, coordinates, link, chosen) 
-    #     VALUES (?, ?, ?, ? );''',
-    #     (pictureID, link, coordinates, chosen))
+    with open('picturedata.txt', 'r') as file:
+        while True:
+            link = file.readline().strip()
+
+            if not link:
+                break 
+            coordinates = [float(file.readline().strip()), float(file.readline().strip())]
+            pictureID += 1
+            chosen = False
+            cur.execute(''' INSERT INTO pictures (pictureID, coordinates, link, chosen) 
+            VALUES (%s, %s, %s, %s);
+            ''', (pictureID, coordinates, link, chosen))
+        # cur.execute(f'''INSERT INTO pictures (pictureID, coordinates, link, chosen) 
+        # VALUES ({pictureID}, {coordinates}, '{link}', {chosen});''')
     conn.commit()
     cur.close()
     conn.close()
@@ -90,21 +96,38 @@ def update():
    cur.close()
    conn.close()
 
-def query():
+def query(col, table):
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
     # create_pic_table()
     # create_user_table()
 
-    cur.execute("SELECT link FROM pictures")
+    cur.execute(f"SELECT {col} FROM {table}")
 
     rows = cur.fetchall()
 
-    link = rows[0][0]
-    return link
+    row = rows[0][0]
+    return row
     # conn.commit()
     cur.close()
     conn.close()
+
+def get_pic_info(col, id):
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+    # create_pic_table()
+    # create_user_table()
+
+    cur.execute(f"SELECT {col} FROM pictures WHERE pictureID = {id}")
+
+    rows = cur.fetchall()
+
+    row = rows[0][0]
+    return row
+    # conn.commit()
+    cur.close()
+    conn.close()
+
 
 def get_distance():
     conn = psycopg2.connect(DATABASE_URL)
@@ -130,6 +153,11 @@ def show_rows():
     cur = conn.cursor()
 
     cur.execute("SELECT * FROM users;")
+    rows = cur.fetchall()
+    for row in rows:
+        print(row)
+    
+    cur.execute("SELECT * FROM pictures;")
     rows = cur.fetchall()
     for row in rows:
         print(row)
@@ -239,6 +267,8 @@ def main():
     # link = query()
     # return link
     #print(get_points('fl9971'))
+    #drop_pic_table()
+    #create_pic_table()
     show_rows()
     
 
