@@ -6,13 +6,13 @@ import flask
 import database
 import os 
 import auth
-#import dotenv
+import dotenv
 
 #-----------------------------------------------------------------------
 
 app = flask.Flask(__name__, template_folder='.')
-#dotenv.load_dotenv()
-#app.secret_key = os.environ['APP_SECRET_KEY']
+dotenv.load_dotenv()
+app.secret_key = os.environ['APP_SECRET_KEY']
 
 #-----------------------------------------------------------------------
 
@@ -21,11 +21,11 @@ app = flask.Flask(__name__, template_folder='.')
 @app.route('/', methods=['GET'])
 @app.route('/index', methods=['GET'])
 def index():
-    # username = auth.authenticate()
-    # database.insert_or_update_player(username, 0)
+    username = auth.authenticate()
+    database.insert_or_update_player(username, 0)
     
-    # html_code = flask.render_template('index.html', username = username)
-    html_code = flask.render_template('index.html')
+    html_code = flask.render_template('index.html', username = username)
+    # html_code = flask.render_template('index.html')
     response = flask.make_response(html_code)
     return response
 
@@ -74,8 +74,8 @@ def rules():
 
 @app.route('/leaderboard', methods=['GET'])
 def leaderboard():
-    # top_players = database.get_top_players()
-    # html_code = flask.render_template('leaderboard.html', top_players = top_players)
+    top_players = database.get_top_players()
+    html_code = flask.render_template('leaderboard.html', top_players = top_players)
     html_code = flask.render_template('leaderboard.html')
     response = flask.make_response(html_code)
     return response

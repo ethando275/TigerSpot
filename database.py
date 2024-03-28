@@ -185,46 +185,46 @@ def insert_or_update_player(username, points):
 def get_top_players():
 
 
-   # Connect to database
-   conn = psycopg2.connect(DATABASE_URL)
-   cur = conn.cursor()
+    # Connect to database
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
 
 
-   top_players = []
-   cur.execute('''SELECT username, points FROM users ORDER BY points DESC LIMIT 10;''')
-   table = cur.fetchall
-   for row in table:
-       username, points = row
-       player_stats = {'username': username, 'points': points}
-       top_players.append(player_stats)
+    top_players = []
+    cur.execute('''SELECT username, points FROM users ORDER BY points DESC LIMIT 10;''')
+    table = cur.fetchall
+    for row in table:
+        username, points = row
+        player_stats = {'username': username, 'points': points}
+        top_players.append(player_stats)
 
 
    # Disconnect
-   conn.close()
+    conn.close()
 
 
-   return top_players
+    return top_players
 
 def get_points(username):
 
 
    # Connect to database
-   conn = psycopg2.connect(DATABASE_URL)
-   cur = conn.cursor()
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
 
 
-   cur.execute('''SELECT points FROM users WHERE username=%s;''', (username,))
-   points = cur.fetchone
+    cur.execute('''SELECT points FROM users WHERE username=%s;''', (username,))
+    points = cur.fetchone
 
 
-   # Disconnect
-   conn.close()
+    # Disconnect
+    conn.close()
 
 
-   return points
+    return points
 
     
-# def main():
+def main():
     # update()
     # create_pic_table()
     # create_user_table()
@@ -237,6 +237,7 @@ def get_points(username):
     # create_pic_table()
     # link = query()
     # return link
+    print(get_points('fl9971'))
 
     # Closing the connection
 if __name__=="__main__":
