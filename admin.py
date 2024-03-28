@@ -35,7 +35,11 @@ def index():
 @app.route('/game', methods=['GET'])
 def game():
     # get link from database
-    link = database.query()
+    # link = database.query()
+    id = 3
+    # coor = database.get_pic_info("coordinates", id)
+    link = database.get_pic_info("link", id)
+
     # get user input using flask.request.args.get('')
     html_code = flask.render_template('gamepage.html', link = link)
     response = flask.make_response(html_code)
@@ -53,7 +57,9 @@ def submit():
     # print(currLat)
     currLon = flask.request.form.get('currLon')
     # print(currLon)
-    coor = database.get_distance()
+    # coor = database.get_distance()
+    id = 3
+    coor = database.get_pic_info("coordinates", id)
     # print(coor)
 
     distance = database.calc_distance(currLat, currLon, coor)
@@ -62,7 +68,7 @@ def submit():
     points = database.calculate_points(username, distance)
     database.update_player(username, points)
 
-    html_code = flask.render_template('results.html', dis = distance, lat = currLat, lon = currLon)
+    html_code = flask.render_template('results.html', dis = distance, lat = currLat, lon = currLon, coor=coor)
     response = flask.make_response(html_code)
     return response
 
