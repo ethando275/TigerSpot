@@ -1,12 +1,3 @@
-http://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781259/TigerSpot/IMG_2992_saqtml.jpg
-1.0
-1.0
-http://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781260/TigerSpot/IMG_2993_hkkse7.jpg
-1.0
-1.0
-http://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781260/TigerSpot/IMG_3007_pug42w.jpg
-1.0
-1.0
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781489/TigerSpot/IMG_9693_hwhknx.jpg
 40.34625
 -74.65636

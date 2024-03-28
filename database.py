@@ -31,16 +31,22 @@ def create_pic_table():
         link varchar(255), 
         chosen boolean);''')
 
-    # pictureID = 0
+    pictureID = 0
 
-    # with open('picturedata.txt', 'r') as file:
-    #     link = file.readline().strip()
-    #     coordinates = {file.readline().strip, file.readline().strip}
-    #     pictureID += 1
-    #     chosen = False
-    #     cur.execute('''INSERT INTO pictures (pictureID, coordinates, link, chosen) 
-    #     VALUES (?, ?, ?, ? );''',
-    #     (pictureID, link, coordinates, chosen))
+    with open('picturedata.txt', 'r') as file:
+        while True:
+            link = file.readline().strip()
+
+            if not link:
+                break 
+            coordinates = [float(file.readline().strip()), float(file.readline().strip())]
+            pictureID += 1
+            chosen = False
+            cur.execute(''' INSERT INTO pictures (pictureID, coordinates, link, chosen) 
+            VALUES (%s, %s, %s, %s);
+            ''', (pictureID, coordinates, link, chosen))
+        # cur.execute(f'''INSERT INTO pictures (pictureID, coordinates, link, chosen) 
+        # VALUES ({pictureID}, {coordinates}, '{link}', {chosen});''')
     conn.commit()
     cur.close()
     conn.close()
@@ -130,6 +136,11 @@ def show_rows():
     cur = conn.cursor()
 
     cur.execute("SELECT * FROM users;")
+    rows = cur.fetchall()
+    for row in rows:
+        print(row)
+    
+    cur.execute("SELECT * FROM pictures;")
     rows = cur.fetchall()
     for row in rows:
         print(row)
@@ -239,6 +250,8 @@ def main():
     # link = query()
     # return link
     #print(get_points('fl9971'))
+    #drop_pic_table()
+    #create_pic_table()
     show_rows()
     
 
