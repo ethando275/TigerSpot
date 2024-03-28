@@ -44,16 +44,16 @@
             <div class="top-players">
                 <h2>Top Players</h2>
                 <div id="container">
-                    {% for player in top_players: %}
+                    {% for player in top_players %}
                     <div class="row">
-                        <div class="row">
-                            <div class="rank">{{loop.index}}. </div><div class="name">{{player['username']}}</div><div class="score">{{player['points']}}</div>
-                        </div>
+                        <div class="rank">{{ loop.index }}</div>
+                        <div class="name">{{ player['username'] }}</div>
+                        <div class="score">{{ player['points'] }}</div>
                     </div>
                     {% endfor %}
                 </div>
             </div>
-        </div>
+            
     </main>
     <!-- Add any scripts here -->
 </body>
