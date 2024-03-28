@@ -23,8 +23,9 @@
         }
         #distance {
             height: 50vh;
-            width: 50%; /* New container takes up remaining space */
-            float: right; /* Align to the right */
+            width: 50.5%; /* New container takes up remaining space */
+            margin-left: auto;
+            margin-right: auto;
             padding: 2vh 2vw; /* Add some padding */
         }
     </style>
@@ -86,6 +87,7 @@
     var lat = "{{ lat }}";
     var lon = "{{ lon }}";
     var distance = "{{ dis }}";
+    distance = parseFloat(distance).toFixed(5); // Formats the distance to 2 decimal places
     document.getElementById('distance').innerHTML =  "Distance from actual point: "+ distance + " meters";
     var marker1 = L.marker([40.34805, -74.65570], {icon: new L.Icon({
     iconUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers/img/marker-icon-2x-green.png',
