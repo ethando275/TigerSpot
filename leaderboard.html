@@ -45,7 +45,7 @@
                 <h2>Top Players</h2>
                 <div id="container">
                     <div class="row">
-                        { % for player in top_players % }
+                    {% for player in top_players: %}
                         <div class="row">
                             <div class="rank">1</div><div class="name">{{player['username']}}</div><div class="score">{{player[points]}}</div>
                         </div>
