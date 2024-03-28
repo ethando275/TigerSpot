@@ -150,7 +150,7 @@ def show_rows():
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
 
-    cur.execute("SELECT * FROM users")
+    cur.execute("SELECT * FROM users;")
     rows = cur.fetchall()
     for row in rows:
         print(row)
@@ -163,24 +163,24 @@ def insert_or_update_player(username, points):
 
 
    # Connect to database
-   conn = psycopg2.connect(DATABASE_URL)
-   cur = conn.cursor()
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
 
 
-   # Check if username exists
-   cur.execute('''SELECT points FROM users WHERE username=%s;''', (username,))
-   result = cur.fetchone
+    # Check if username exists
+    cur.execute('''SELECT points FROM users WHERE username=%s;''', (username,))
+    result = cur.fetchone
 
 
-   if result is None:
-       cur.execute('''INSERT INTO users (username, points) VALUES (%s, %s);''', (username, 0))
-   else:
-       cur.execute('''UPDATE users SET points=%s WHERE username=%s;''', (points, username))
+    if result is None:
+        cur.execute('''INSERT INTO users (username, points) VALUES (%s, %s);''', (username, 0))
+    else:
+        cur.execute('''UPDATE users SET points=%s WHERE username=%s;''', (points, username))
 
 
-   # Commit change and disconnect
-   conn.commit()
-   conn.close()
+    # Commit change and disconnect
+    conn.commit()
+    conn.close()
    
 def get_top_players():
 
@@ -237,7 +237,9 @@ def main():
     # create_pic_table()
     # link = query()
     # return link
-    print(get_points('fl9971'))
+    #print(get_points('fl9971'))
+    show_rows()
+    
 
     # Closing the connection
 if __name__=="__main__":
