@@ -1,5 +1,5 @@
 flask
-database
+databases=0.9.0
 os 
 auth
 dotenv
