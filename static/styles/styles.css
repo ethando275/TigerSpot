@@ -28,7 +28,7 @@ header {
 nav {
   background-color: white;
   display: flex;
-  justify-content: space-between; /* Ensure .home-icon and .nav-icons take up space */
+  justify-content: right;
   align-items: center;
 }
 
@@ -128,23 +128,25 @@ main {
   text-align: left;
 }
 
-/* Game Page CSS */
- .game-text {
+/* Results Page CSS */
+.game-result {
   color: black;
-  font-size: 2.5vh;
+  font-size: 2vw;
   text-align: center;
+  margin: 0;
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  margin: 1vh 2vw;
-  padding: 1vh 1vw;
-  white-space: nowrap; /* Prevent text from wrapping */
-  overflow: hidden; /* Hide overflow text */
-  text-overflow: ellipsis; /* Show ellipsis for overflow text */
-  flex-shrink: 1; /* Allow text to shrink */  
+  left: 50%; /* Move the text to the middle horizontally */
+  transform: translateX(-50%); /* Center the text exactly in the middle */
 }
 
-
+/* Game Page CSS */
+header .game-text {
+  color: black;
+  font-size: 3vh;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 .clear,
 .submit {
@@ -327,23 +329,3 @@ footer {
   margin-right: auto;
 }
 
-/* #map {
-  float: right; 
-  width: 50%;
-  height: 100vh; 
-}
-
-#coordinates {
-    height: 100vh;
-    width: 30%; 
-    float: right;
-    overflow: auto;
-    padding: 20px;
-}
-#distance {
-    height: 100vh;
-    width: 30%; 
-    float: right; 
-    overflow: auto;
-    padding: 20px; 
-} */
