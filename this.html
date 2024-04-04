@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Challenges</title>
+</head>
+<body>
+    <h1>My Challenges</h1>
+
+    <h2>Challenges I've Initiated</h2>
+    {% if challenges.initiated %}
+        <ul>
+            {% for challenge in challenges.initiated %}
+                <li>
+                    Challenge ID: {{ challenge.id }}, Challengee ID: {{ challenge.challengee_id }}, Status: {{ challenge.status }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No initiated challenges.</p>
+    {% endif %}
+
+    <h2>Challenges I've Received</h2>
+    {% if challenges.received %}
+        <ul>
+            {% for challenge in challenges.received %}
+                <li>
+                    Challenge ID: {{ challenge.id }}, Challenger ID: {{ challenge.challenger_id }}, Status: {{ challenge.status }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No received challenges.</p>
+    {% endif %}
+</body>
+</html>
