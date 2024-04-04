@@ -21,7 +21,7 @@ app.secret_key = os.environ['APP_SECRET_KEY']
 #-----------------------------------------------------------------------
 id = database.get_pic_id()
 # database.update("pictures", "chosen", True, "pictureID", id)
-
+versusList = [database.get_pic_info("link", 1), database.get_pic_info("link", 2), database.get_pic_info("link", 3)]
 #-----------------------------------------------------------------------
 
 
@@ -172,15 +172,52 @@ def decline_challenge_route():
 @app.route('/play_challenge', methods=['POST'])
 def play_game():
     challenge_id = flask.request.form.get('challenge_id')
-    html_code = flask.render_template('match.html', challenge_id=challenge_id)
-    response = flask.make_response(html_code)
-    return response
+    index = int(flask.request.form.get('index', 0))
+
+    if index < len(versusList):
+        link = versusList[index]
+        html_code = flask.render_template('versusgame.html', challenge_id=challenge_id, index=index, link=link)
+        response = flask.make_response(html_code)
+        return response
+    else:
+        html_code = flask.render_template('match.html', challenge_id=challenge_id)
+        response = flask.make_response(html_code)
+        return response
 
 @app.route('/end_challenge', methods=['POST'])
 def end_challenge():
     challenge_id = flask.request.form.get('challenge_id')
-    database.complete_match(challenge_id, "ed8205", 10, 5)
-    return redirect(url_for('index'))
+    user = auth.authenticate()
+    database.update_finish_status(challenge_id, user)
+    status = database.check_finish_status(challenge_id)
+    if status == "finished":
+        database.complete_match(challenge_id, "ed8205", 10, 5)
+        return redirect(url_for('index'))
+    else:
+        return redirect(url_for('index'))
     
+@app.route('/submit2', methods=['POST'])
+def submit2():
+    # get user input using flask.request.args.get('')
+    #once user clicks submit then get coordinates 
+    currLat = flask.request.form.get('currLat')  # Use .get for safe retrieval
+    # print(currLat)
+    currLon = flask.request.form.get('currLon')
+    # print(currLon)
+    # coor = database.get_distance()
+    if not currLat or not currLon:
+        return 
+    
+    # id = flask.request.form.get('id')
+    coor = database.get_pic_info("coordinates", id)
+    # print(coor)
 
+    distance = database.calc_distance(currLat, currLon, coor)
+    challenge_id = flask.request.form.get('challenge_id')
+    index = flask.request.form.get('index')
+    index = int(index) + 1
+
+    html_code = flask.render_template('versusresults.html', dis = distance, lat = currLat, lon = currLon, coor=coor, index=index, challenge_id=challenge_id)
+    response = flask.make_response(html_code)
+    return response
 
