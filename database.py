@@ -593,13 +593,13 @@ def update_finish_status(challenge_id, user_id):
             cur.execute('''
                 UPDATE challenges 
                 SET challenger_finished = TRUE 
-                WHERE challenge_id = %s;
+                WHERE id = %s;
             ''', (challenge_id,))
         elif user_id == challengee_id:
             cur.execute('''
                 UPDATE challenges
                 SET challengee_finished = TRUE 
-                WHERE challenge_id = %s;
+                WHERE id = %s;
             ''', (challenge_id,))
         else:
             print("User is not part of this challenge.")
@@ -625,7 +625,7 @@ def check_finish_status(challenge_id):
         cur.execute('''
             SELECT challenger_finished, challengee_finished
             FROM challenges
-            WHERE challenge_id = %s;
+            WHERE id = %s;
         ''', (challenge_id,))
         
         result = cur.fetchone()
