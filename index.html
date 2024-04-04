@@ -6,6 +6,15 @@
     <title>Index Page</title>
     <!-- Link to external CSS file -->
     <link rel="stylesheet" href="{{url_for('static', filename = 'styles/styles.css')}}" />
+    <style>
+      #username {
+            height: 50vh;
+            width: 50.5%; /* New container takes up remaining space */
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2vh 2vw; /* Add some padding */
+        }
+    </style>
   </head>
   <body>
     <div class="page">
@@ -16,10 +25,12 @@
             <a href="/rules"><img src="static\styles\questionmark.png" alt="Rules" /></a>
             <a href="/leaderboard"><img src="static\styles\trophy.png" alt="Leaderboard"/></a>
             <a href="/loggedout"><img src="static\styles\logout.png" alt="Logout" /></a>
+            <a href="/versus"><img src = "static\styles\versus.png" alt="Versus"/><a>
+            <a href="/requests"><img src = "static\styles\requests.png" alt="Requests"/><a>
           </div>
         </nav>
       </header>
-
+      <input type = "hidden" id="username" name = "username" value ="{{username}}">
       <main>
         <div class="home">
           <img class="logo" src="static\styles\logo.png" alt="Logo" />
@@ -41,3 +52,6 @@
     </div>
   </body>
 </html>
+<script>
+  document.getElementById("username").value = "{{username}}";
+</script>

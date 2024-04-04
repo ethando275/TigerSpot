@@ -161,6 +161,10 @@ def show_rows():
     rows = cur.fetchall()
     for row in rows:
         print(row)
+    
+    cur.execute("SELECT * FROM challenges;")
+    for row in cur.fetchall():
+        print(row)
 
     # conn.commit()
     cur.close()
@@ -252,6 +256,217 @@ def remove_from_user_table(username):
     # Disconnect
     conn.close()
 
+def create_challenge(challenger_id, challengee_id):
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+
+        # Check for existing challenge between the two users
+        cur.execute("""
+            SELECT id FROM challenges 
+            WHERE 
+                ((challenger_id = %s AND challengee_id = %s) OR 
+                (challenger_id = %s AND challengee_id = %s)) 
+                AND status IN ('pending', 'accepted')
+            """, (challenger_id, challengee_id, challengee_id, challenger_id))
+
+        existing_challenge = cur.fetchone()
+
+        if existing_challenge:
+            # An existing challenge was found
+            return {'error': 'Challenge already exists', 'challenge_id': existing_challenge[0]}
+
+        # No existing challenge found, proceed to create a new one
+        cur.execute("""
+            INSERT INTO challenges (challenger_id, challengee_id, status) 
+            VALUES (%s, %s, 'pending') RETURNING id;
+            """, (challenger_id, challengee_id))
+        
+        challenge_id = cur.fetchone()[0]
+        conn.commit()
+
+        return {'success': 'Challenge created successfully', 'challenge_id': challenge_id}
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return {'error': 'Database error occurred'}
+    finally:
+        if conn is not None:
+            conn.close()
+
+
+
+# Accept a challenge
+def accept_challenge(challenge_id):
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        cur.execute("UPDATE challenges SET status = 'accepted', updated_at = NOW() WHERE id = %s;", (challenge_id,))
+        conn.commit()
+        cur.close()
+        print("Challenge accepted.")
+        status = "accepted"
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+    return status
+
+
+# Decline a challenge
+def decline_challenge(challenge_id):
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        cur.execute("UPDATE challenges SET status = 'declined', updated_at = NOW() WHERE id = %s;", (challenge_id,))
+        conn.commit()
+        cur.close()
+        print("Challenge declined.")
+        status = "declined"
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+
+    return status
+
+# Complete a match
+def complete_match(challenge_id, winner_id, challenger_score, challengee_score):
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        cur.execute("UPDATE challenges SET status = 'completed', updated_at = NOW() WHERE id = %s;", (challenge_id,))
+        cur.execute("INSERT INTO matches (challenge_id, winner_id, challenger_score, challengee_score) VALUES (%s, %s, %s, %s) RETURNING id;", (challenge_id, winner_id, challenger_score, challengee_score))
+        match_id = cur.fetchone()[0]
+        conn.commit()
+        cur.close()
+        print(f"Match completed with ID: {match_id}")
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+
+def get_players():
+    # Connect to database
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+    # Execute query to fetch user IDs
+    cur.execute("SELECT username FROM users;")
+    table = cur.fetchall()
+    user_ids = [row[0] for row in table]
+    # Disconnect
+    conn.close()
+
+    return user_ids
+
+#dont run again
+def create_challenges_table():
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+    cur.execute('''CREATE TABLE IF NOT EXISTS challenges(
+    id SERIAL PRIMARY KEY,
+    challenger_id VARCHAR(255),
+    challengee_id VARCHAR(255),
+    status VARCHAR(50));''')
+    conn.commit()
+    cur.close()
+    conn.close()
+
+#dont run again
+def create_matches_table():
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+    cur.execute('''CREATE TABLE IF NOT EXISTS matches (
+    id SERIAL PRIMARY KEY,
+    challenge_id INTEGER,
+    winner_id VARCHAR(255),
+    challenger_score INTEGER,
+    challengee_score INTEGER);''')
+    conn.commit()
+    cur.close()
+    conn.close()
+
+def clear_challenges_table():
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        # Deletes all records from the challenges table
+        cur.execute("DELETE FROM challenges;")
+        conn.commit()  # Commit the transaction to make changes permanent
+        print("Challenges table cleared.")
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error clearing challenges table: {error}")
+    finally:
+        if conn is not None:
+            conn.close()
+
+def clear_matches_table():
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        # Deletes all records from the matches table
+        cur.execute("DELETE FROM matches;")
+        conn.commit()  # Commit the transaction to make changes permanent
+        print("Matches table cleared.")
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error clearing matches table: {error}")
+    finally:
+        if conn is not None:
+            conn.close()
+
+def reset_challenges_id_sequence():
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        # Assuming the sequence name is 'challenges_id_seq'
+        cur.execute("ALTER SEQUENCE challenges_id_seq RESTART WITH 1;")
+        conn.commit()  # Commit the change to make it permanent
+        print("Challenges id sequence reset.")
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error resetting challenges id sequence: {error}")
+    finally:
+        if conn is not None:
+            conn.close()
+
+def get_user_challenges(user_id):
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+    # Query for both challenges initiated by the user and challenges where the user is the challengee
+    cur.execute("""
+        SELECT id, challenger_id, challengee_id, status 
+        FROM challenges 
+        WHERE (challenger_id = %s OR challengee_id = %s) AND status = 'pending';
+        """, (user_id, user_id))
+    challenges = cur.fetchall()
+    cur.close()
+    conn.close()
+    
+    # Initialize dictionaries to hold the two types of challenges
+    user_challenges = {'initiated': [], 'received': []}
+    
+    # Iterate through the results and categorize each challenge
+    for challenge in challenges:
+        challenge_dict = {"id": challenge[0], "challenger_id": challenge[1], "challengee_id": challenge[2], "status": challenge[3]}
+        if challenge[1] == user_id:  # User is the challenger
+            user_challenges['initiated'].append(challenge_dict)
+        else:  # User is the challengee
+            user_challenges['received'].append(challenge_dict)
+    
+    return user_challenges
+
+
+
     
 def main():
     # update()
@@ -270,6 +485,10 @@ def main():
     #drop_pic_table()
     #create_pic_table()
     show_rows()
+    #print()
+    #clear_challenges_table()
+    #clear_matches_table()
+    #reset_challenges_id_sequence()
     
 
     # Closing the connection
