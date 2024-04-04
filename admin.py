@@ -20,6 +20,21 @@ app.secret_key = os.environ['APP_SECRET_KEY']
 id = database.get_pic_id()
 # database.update("pictures", "chosen", True, "pictureID", id)
 
+#-----------------------------------------------------------------------
+
+
+# Routes for authentication.
+
+@app.route('/logoutapp', methods=['GET'])
+def logoutapp():
+    return auth.logoutapp()
+
+@app.route('/logoutcas', methods=['GET'])
+def logoutcas():
+    return auth.logoutcas()
+
+#-----------------------------------------------------------------------
+
 @app.route('/', methods=['GET'])
 @app.route('/index', methods=['GET'])
 def index():
@@ -78,6 +93,7 @@ def submit():
 
     points = database.calculate_points(username, distance)
     database.update_player(username, points)
+    database.update_player_daily(username, points)
 
     html_code = flask.render_template('results.html', dis = distance, lat = currLat, lon = currLon, coor=coor)
     response = flask.make_response(html_code)
@@ -96,9 +112,14 @@ def rules():
 @app.route('/leaderboard', methods=['GET'])
 def leaderboard():
     top_players = database.get_top_players()
-    html_code = flask.render_template('leaderboard.html', top_players = top_players)
+    username = auth.authenticate()
+    points = database.get_points(username)
+    daily_points = database.get_daily_points(username)
+    html_code = flask.render_template('leaderboard.html', top_players = top_players, points = points, daily_points = daily_points)
     response = flask.make_response(html_code)
     return response
+
+#-----------------------------------------------------------------------
 
 @app.route('/versus', methods=['GET'])
 def versus():
