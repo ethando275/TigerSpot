@@ -8,6 +8,7 @@ import os
 import auth
 import dotenv
 import random
+import datetime
 from flask import Flask, flash, redirect, url_for, request, render_template
 
 
@@ -59,6 +60,7 @@ def requests():
 
 @app.route('/game', methods=['GET'])
 def game():
+
     # get link from database
     # link = database.query()
     

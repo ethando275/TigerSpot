@@ -1,6 +1,7 @@
 import sys
 import admin
 import argparse
+import timer
 
 def main():
     parser = argparse.ArgumentParser(
@@ -18,7 +19,10 @@ def main():
         sys.exit(2)
 
     try:
+        timer.reset_players()
         admin.app.run(host='0.0.0.0', port=args.port, debug=True)
+        
+
     except Exception as ex:
         print(ex, file=sys.stderr)
         sys.exit(1)
