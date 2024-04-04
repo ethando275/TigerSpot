@@ -50,16 +50,23 @@
                 {% if challenges.received %}
                     {% for challenge in challenges.received %}
                     <div class="row">
-                        <div class="rank">{{ challenge.challengee_id }}</div>
+                        <div class="rank">{{ challenge.challenger_id }}</div>
                         <div class="name">{{ challenge.status }}</div>
-                        <form id="accept" method="post" action="/accept_challenge">
-                            <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
-                            <button type="submit" class="submit"><b>Accept</b></button>
-                          </form>
-                          <form id="decline" method="post" action="/decline_challenge">
-                            <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
-                            <button type="submit" class="submit"><b>Decline</b></button>
-                          </form>
+                        {% if challenge.status == 'accepted' %}
+                            <form method="post" action="/play_challenge">
+                                <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+                                <button type="submit" class="submit"><b>Play</b></button>
+                            </form>
+                        {% elif challenge.status != 'completed' %}
+                            <form id="accept" method="post" action="/accept_challenge">
+                                <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+                                <button type="submit" class="submit"><b>Accept</b></button>
+                            </form>
+                            <form id="decline" method="post" action="/decline_challenge">
+                                <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+                                <button type="submit" class="submit"><b>Decline</b></button>
+                            </form>
+                        {% endif %}
                     </div>
                     {% endfor %}
                 {% else %}
