@@ -567,8 +567,154 @@ def reset_pic():
     cur.close()
     conn.close()
 
+def update_finish_status(challenge_id, user_id):
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        
+        # First, determine if the user is the challenger or the challengee for this challenge
+        cur.execute('''
+            SELECT challenger_id, challengee_id 
+            FROM challenges 
+            WHERE id = %s;
+        ''', (challenge_id,))
+        
+        result = cur.fetchone()
+        if result is None:
+            print("Challenge not found.")
+            return
+        
+        challenger_id, challengee_id = result
+        
+        # Depending on whether the user is the challenger or the challengee,
+        # update the corresponding finished column in the matches table
+        if user_id == challenger_id:
+            cur.execute('''
+                UPDATE challenges 
+                SET challenger_finished = TRUE 
+                WHERE challenge_id = %s;
+            ''', (challenge_id,))
+        elif user_id == challengee_id:
+            cur.execute('''
+                UPDATE challenges
+                SET challengee_finished = TRUE 
+                WHERE challenge_id = %s;
+            ''', (challenge_id,))
+        else:
+            print("User is not part of this challenge.")
+            return
+        
+        conn.commit()
+        print("Finish status updated successfully.")
+        
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error: {error}")
+    finally:
+        if conn is not None:
+            conn.close()
 
+def check_finish_status(challenge_id):
+    conn = None
+    status = {"status": "unfinished"}  # Default status
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        
+        # Query to check the finish status for both challenger and challengee
+        cur.execute('''
+            SELECT challenger_finished, challengee_finished
+            FROM challenges
+            WHERE challenge_id = %s;
+        ''', (challenge_id,))
+        
+        result = cur.fetchone()
+        if result:
+            challenger_finished, challengee_finished = result
+            if challenger_finished and challengee_finished:
+                status = {"status": "finished"}
+        else:
+            print("No match found with the given challenge_id.")
+        
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error checking finish status: {error}")
+    finally:
+        if conn is not None:
+            conn.close()
     
+    return status
+
+def get_challenge_participants(challenge_id):
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        
+        # SQL query to select challenger_id and challengee_id from the challenges table
+        cur.execute('''
+            SELECT challenger_id, challengee_id
+            FROM challenges
+            WHERE id = %s;
+        ''', (challenge_id,))
+        
+        result = cur.fetchone()
+        if result:
+            # Unpack the result
+            challenger_id, challengee_id = result
+            participants = {
+                "challenger_id": challenger_id,
+                "challengee_id": challengee_id
+            }
+            return participants
+        else:
+            print("No challenge found with the given ID.")
+            return None
+            
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Database error: {error}")
+        return None
+    finally:
+        if conn is not None:
+            conn.close()
+
+def insert_challenge_record():
+    conn = None
+    try:
+        # Connect to your database
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+
+        # SQL INSERT statement
+        insert_sql = '''
+        INSERT INTO challenges (challenger_id, challengee_id, status)
+        VALUES (%s, %s, %s);
+        '''
+
+        # Execute the INSERT statement
+        cur.execute(insert_sql, ("fl9971", "ed8205", "pending"))
+
+        # Commit the transaction
+        conn.commit()
+
+        print("Challenge record inserted successfully.")
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error: {error}")
+        # Optionally, roll back the transaction if something goes wrong
+        if conn:
+            conn.rollback()
+    finally:
+        if conn:
+            conn.close()
+
+# Example usage
+# add_finished_columns_to_matches()
+
+
+# Example usage:
+# insert_challenge_record('user123', 'user456', 'active')
+
+
+
 def main():
     # update()
     # create_pic_table()
@@ -587,6 +733,7 @@ def main():
     #create_pic_table()
     # print(has_pic_been_chosen(4))
     # reset_pic()
+    #insert_challenge_record()
     show_rows()
     #print()
     #clear_challenges_table()
