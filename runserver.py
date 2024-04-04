@@ -19,7 +19,7 @@ def main():
         sys.exit(2)
 
     try:
-        timer.reset_players()
+        #timer.reset_players()
         admin.app.run(host='0.0.0.0', port=args.port, debug=True)
         
 
