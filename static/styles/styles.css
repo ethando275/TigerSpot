@@ -188,8 +188,8 @@ hr {
   align-items: flex-end;
   justify-content: flex-end;
   position: fixed;
-  width: 97%;
   bottom: 3vh;
+  right: 15vw;
 }
 
 footer {
