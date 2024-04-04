@@ -7,7 +7,8 @@ import database
 import os 
 import auth
 import dotenv
-import random
+
+
 
 #-----------------------------------------------------------------------
 
@@ -16,8 +17,8 @@ dotenv.load_dotenv()
 app.secret_key = os.environ['APP_SECRET_KEY']
 
 #-----------------------------------------------------------------------
-
-
+id = database.get_pic_id()
+database.update("pictures", "chosen", True, "pictureID", id)
 
 @app.route('/', methods=['GET'])
 @app.route('/index', methods=['GET'])
@@ -43,7 +44,7 @@ def requests():
 def game():
     # get link from database
     # link = database.query()
-    id = random.randint(1, 5)
+    
     # coor = database.get_pic_info("coordinates", id)
     link = database.get_pic_info("link", id)
 
@@ -68,7 +69,7 @@ def submit():
     if not currLat or not currLon:
         return 
     
-    id = flask.request.form.get('id')
+    # id = flask.request.form.get('id')
     coor = database.get_pic_info("coordinates", id)
     # print(coor)
 
