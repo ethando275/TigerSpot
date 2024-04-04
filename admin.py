@@ -7,6 +7,7 @@ import database
 import os 
 import auth
 import dotenv
+import random
 
 #-----------------------------------------------------------------------
 
@@ -31,17 +32,23 @@ def index():
 
 #-----------------------------------------------------------------------
 
+@app.route('/requests', methods=['GET'])
+def requests():
+    pending_challenges = database.get_user_challenges(auth.authenticate())
+    html_code = flask.render_template('this.html', challenges=pending_challenges)
+    response = flask.make_response(html_code)
+    return response
 
 @app.route('/game', methods=['GET'])
 def game():
     # get link from database
     # link = database.query()
-    id = 3
+    id = random.randint(1, 5)
     # coor = database.get_pic_info("coordinates", id)
     link = database.get_pic_info("link", id)
 
     # get user input using flask.request.args.get('')
-    html_code = flask.render_template('gamepage.html', link = link)
+    html_code = flask.render_template('gamepage.html', link = link, id = id)
     response = flask.make_response(html_code)
     # distance = flask.request.args.get('distance')
     # print('Distance: ' + distance)
@@ -58,7 +65,10 @@ def submit():
     currLon = flask.request.form.get('currLon')
     # print(currLon)
     # coor = database.get_distance()
-    id = 3
+    if not currLat or not currLon:
+        return 
+    
+    id = flask.request.form.get('id')
     coor = database.get_pic_info("coordinates", id)
     # print(coor)
 
@@ -88,3 +98,30 @@ def leaderboard():
     html_code = flask.render_template('leaderboard.html', top_players = top_players)
     response = flask.make_response(html_code)
     return response
+
+@app.route('/versus', methods=['GET'])
+def versus():
+    users = database.get_players()
+    username = flask.request.args.get('username')
+    html_code = flask.render_template('versus.html', users=flask.json.dumps(users), username=username)
+    response = flask.make_response(html_code)
+    return response
+
+@app.route('/create-challenge', methods=['POST'])
+def create_challenge_route():
+    challengee_id = flask.request.form['challengee_id'].strip()  # Trim whitespace
+    users = database.get_players()  # Assuming this returns a list of usernames
+    
+    # Ensure challengee_id is not empty and exists in the users list
+    if challengee_id == None or challengee_id not in users:
+        response = {'status': 'error', 'message': 'Invalid challengee ID'}
+        return flask.jsonify(response), 400  # Including a 400 Bad Request status code
+    else:
+        result = database.create_challenge(auth.authenticate(), challengee_id)
+    
+    # Handle the response from the database function
+    if 'error' in result:
+        return flask.jsonify({'status': 'error', 'message': result['error']}), 400  # Consider adding appropriate status codes
+    else:
+        return flask.jsonify({'status': 'success', 'message': result['success'], 'challenge_id': result['challenge_id']}), 200
+
