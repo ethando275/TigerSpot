@@ -1,3 +1,4 @@
+import datetime
 import psycopg2
 from geopy.distance import geodesic
 
@@ -56,7 +57,8 @@ def create_user_table():
     cur = conn.cursor()
     cur.execute('''CREATE TABLE IF NOT EXISTS users (
     username varchar(255),
-    points int);''')
+    points int,
+    played boolean);''')
 
         # cur.execute('''INSERT INTO users (userID, points) 
         #     VALUES ('1', '123');''')
@@ -177,7 +179,7 @@ def insert_player(username, points):
     result = cur.fetchone()
 
     if result is None:
-        cur.execute("INSERT INTO users (username, points) VALUES (%s, %s);", (username, 0))
+        cur.execute("INSERT INTO users (username, points, played) VALUES (%s, %s, %s);", (username, 0, False))
 
     # Commit change and disconnect
     conn.commit()
@@ -193,8 +195,6 @@ def calculate_points(username, distance):
     else:
         points = 0
 
-    points = points + get_points(username)[0]
-
     return points
 
 def update_player(username, points):
@@ -202,10 +202,23 @@ def update_player(username, points):
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
 
-    cur.execute("UPDATE users SET points=%s WHERE username=%s;", (points, username))
+    points = points + get_points(username)[0]
+
+    cur.execute("UPDATE users SET points=%s, played=%s WHERE username=%s;", (points, True, username))
 
     conn.commit()
     conn.close()
+
+def reset_players():
+
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+    cur.execute("UPDATE users SET played=%s;", (False, ))
+
+    conn.commit()
+    conn.close()
+
    
 def get_top_players():
 
@@ -269,6 +282,15 @@ def main():
     #print(get_points('fl9971'))
     #drop_pic_table()
     #create_pic_table()
+    #drop_user_table()
+    #create_user_table()
+    # insert_player('wn4759', 0)
+    # insert_player('ed8205', 0)
+    # insert_player('fl9971', 0)
+    # insert_player('cl7359', 0)
+    # insert_player('ys6592', 0)
+    # insert_player('jy3107', 0)
+
     show_rows()
     
 
