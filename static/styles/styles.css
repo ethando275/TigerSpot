@@ -28,7 +28,7 @@ header {
 nav {
   background-color: white;
   display: flex;
-  justify-content: right;
+  justify-content: space-between; /* Ensure .home-icon and .nav-icons take up space */
   align-items: center;
 }
 
@@ -129,13 +129,22 @@ main {
 }
 
 /* Game Page CSS */
-header .game-text {
+ .game-text {
   color: black;
-  font-size: 3vh;
+  font-size: 2.5vh;
   text-align: center;
-  margin-left: auto;
-  margin-right: auto;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 1vh 2vw;
+  padding: 1vh 1vw;
+  white-space: nowrap; /* Prevent text from wrapping */
+  overflow: hidden; /* Hide overflow text */
+  text-overflow: ellipsis; /* Show ellipsis for overflow text */
+  flex-shrink: 1; /* Allow text to shrink */  
 }
+
+
 
 .clear,
 .submit {
