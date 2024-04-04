@@ -208,14 +208,15 @@ footer {
 }
 
 .game-image {
-  width: auto; /* Adjusted width */
+  width: 30vw; /* Adjusted width */
   height: 65vh;
   padding: 1vh 1vw;
 }
 
 .map {
-  width: 48%; 
-  height: 70vh; 
+  width: 40vw; 
+  height: 65vh; 
+  padding: 1vh 1vw;
   position: relative; 
 }
 
