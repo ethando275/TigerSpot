@@ -190,7 +190,7 @@ def end_challenge():
     user = auth.authenticate()
     database.update_finish_status(challenge_id, user)
     status = database.check_finish_status(challenge_id)
-    if status == "finished":
+    if status['status'] == "finished":
         database.complete_match(challenge_id, "ed8205", 10, 5)
         return redirect(url_for('index'))
     else:
