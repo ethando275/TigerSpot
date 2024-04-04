@@ -58,7 +58,8 @@ def create_user_table():
     cur = conn.cursor()
     cur.execute('''CREATE TABLE IF NOT EXISTS users (
     username varchar(255),
-    points int);''')
+    points int,
+    played boolean);''')
 
         # cur.execute('''INSERT INTO users (userID, points) 
         #     VALUES ('1', '123');''')
@@ -205,7 +206,7 @@ def insert_player(username, points): # can remove this points parameter
     result = cur.fetchone()
 
     if result is None:
-        cur.execute("INSERT INTO users (username, points) VALUES (%s, %s);", (username, 0))
+        cur.execute("INSERT INTO users (username, points, played) VALUES (%s, %s, %s);", (username, 0, False))
 
     # Commit change and disconnect
     conn.commit()
@@ -230,7 +231,19 @@ def update_player(username, points):
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
 
-    cur.execute("UPDATE users SET points=%s WHERE username=%s;", (points, username))
+    cur.execute("UPDATE users SET points=%s, played=%s WHERE username=%s;", (points, True, username))
+
+    conn.commit()
+    conn.close()
+
+def reset_players():
+
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+    print("INSIDE DATABASE")
+
+    cur.execute("UPDATE users SET played=%s;", (False, ))
 
     conn.commit()
     conn.close()
