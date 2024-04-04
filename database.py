@@ -52,6 +52,7 @@ def create_pic_table():
     cur.close()
     conn.close()
 
+# already executed
 def create_user_table():
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
@@ -66,6 +67,19 @@ def create_user_table():
     conn.commit()
     cur.close()
     conn.close()
+
+# already executed
+def create_daily_points_table():
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+    cur.execute('''CREATE TABLE IF NOT EXISTS usersDaily (
+    username varchar(255),
+    points int);''')
+
+    conn.commit()
+    cur.close()
+    conn.close()
+    
 
 def insert():
    conn = psycopg2.connect(DATABASE_URL)
@@ -157,6 +171,11 @@ def show_rows():
     rows = cur.fetchall()
     for row in rows:
         print(row)
+        
+    cur.execute("SELECT * FROM usersDaily;")
+    rows = cur.fetchall()
+    for row in rows:
+        print(row)
     
     cur.execute("SELECT * FROM pictures;")
     rows = cur.fetchall()
@@ -171,7 +190,7 @@ def show_rows():
     cur.close()
     conn.close()
     
-def insert_player(username, points):
+def insert_player(username, points): # can remove this points parameter
 
    # Connect to database
     conn = psycopg2.connect(DATABASE_URL)
@@ -198,7 +217,7 @@ def calculate_points(username, distance):
     else:
         points = 0
 
-    points = points + get_points(username)[0]
+    points = points + get_points(username)
 
     return points
 
@@ -211,7 +230,36 @@ def update_player(username, points):
 
     conn.commit()
     conn.close()
-   
+
+def update_player_daily(username, points): 
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+    cur.execute("SELECT points FROM usersDaily WHERE username=%s;", (username,))
+    result = cur.fetchone()
+
+    if result is None:
+        cur.execute("INSERT INTO usersDaily (username, points) VALUES (%s, %s);", (username, points))
+
+    conn.commit()
+    conn.close()
+    
+def get_daily_points(username):
+
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+    cur.execute('''SELECT points FROM usersDaily WHERE username=%s;''', (username,))
+    points = cur.fetchone()
+    
+    # Disconnect
+    conn.close()
+    
+    if points is None:
+        return 0
+    
+    return points[0]
+
 def get_top_players():
 
     # Connect to database
@@ -243,7 +291,7 @@ def get_points(username):
     # Disconnect
     conn.close()
 
-    return points
+    return points[0]
 
 def remove_from_user_table(username):
    # Connect to database
