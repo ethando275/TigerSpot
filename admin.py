@@ -8,6 +8,8 @@ import os
 import auth
 import dotenv
 import random
+from flask import Flask, flash, redirect, url_for, request, render_template
+
 
 #-----------------------------------------------------------------------
 
@@ -124,4 +126,39 @@ def create_challenge_route():
         return flask.jsonify({'status': 'error', 'message': result['error']}), 400  # Consider adding appropriate status codes
     else:
         return flask.jsonify({'status': 'success', 'message': result['success'], 'challenge_id': result['challenge_id']}), 200
+
+@app.route('/accept_challenge', methods=['POST'])
+def accept_challenge_route():
+    challenge_id = flask.request.form.get('challenge_id')
+    result = database.accept_challenge(challenge_id)  # Assuming this returns some result
+    if result == "accepted":
+        flash('Challenge accepted successfully.')
+    else:
+        flash('Error accepting challenge.')
+    return redirect(url_for('requests'))  # Assuming this is your route name
+
+@app.route('/decline_challenge', methods=['POST'])
+def decline_challenge_route():
+    challenge_id = flask.request.form.get('challenge_id')
+    result = database.decline_challenge(challenge_id)  # Assuming this returns some result
+    if result == "declined":
+        flash('Challenge declined successfully.')
+    else:
+        flash('Error declining challenge.')
+    return redirect(url_for('requests'))
+
+@app.route('/play_challenge', methods=['POST'])
+def play_game():
+    challenge_id = flask.request.form.get('challenge_id')
+    html_code = flask.render_template('match.html', challenge_id=challenge_id)
+    response = flask.make_response(html_code)
+    return response
+
+@app.route('/end_challenge', methods=['POST'])
+def end_challenge():
+    challenge_id = flask.request.form.get('challenge_id')
+    database.complete_match(challenge_id, "ed8205", 10, 5)
+    return redirect(url_for('index'))
+    
+
 

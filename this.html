@@ -4,34 +4,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Challenges</title>
+    <link rel="stylesheet" href="{{url_for('static', filename = 'styles/styles.css')}}" />
 </head>
 <body>
-    <h1>My Challenges</h1>
-
-    <h2>Challenges I've Initiated</h2>
-    {% if challenges.initiated %}
-        <ul>
-            {% for challenge in challenges.initiated %}
-                <li>
-                    Challenge ID: {{ challenge.id }}, Challengee ID: {{ challenge.challengee_id }}, Status: {{ challenge.status }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No initiated challenges.</p>
-    {% endif %}
-
-    <h2>Challenges I've Received</h2>
-    {% if challenges.received %}
-        <ul>
-            {% for challenge in challenges.received %}
-                <li>
-                    Challenge ID: {{ challenge.id }}, Challenger ID: {{ challenge.challenger_id }}, Status: {{ challenge.status }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No received challenges.</p>
-    {% endif %}
+    <header>
+        <nav>
+            <div class="home-icon">
+                <a href="/index"><img src="static/styles/home.png" alt="Home Page"></a>
+            </div>
+            <div class="nav-icons">
+                <a href="/rules"><img src="static\styles\questionmark.png" alt="Rules" /></a>
+                <a href="/leaderboard"><img src="static\styles\trophy.png" alt="Leaderboard"/></a>
+                <a href="/versus"><img src = "static\styles\versus.png" alt="Versus"/><a>
+                <a href="/requests"><img src = "static\styles\requests.png" alt="Requests"/><a>
+            </div>
+        </nav>
+    </header>
+    
+    <main class="main-content">
+        <section class="challenges-section">
+            <h2>Challenges I've Initiated</h2>
+            <div class="challenges-list">
+                {% if challenges.initiated %}
+                    {% for challenge in challenges.initiated %}
+                    <div class="row">
+                        <div class="rank">{{ challenge.challengee_id }}</div>
+                        <div class="name">{{ challenge.status }}</div>
+                        {% if challenge.status == 'accepted' %}
+                            <form method="post" action="/play_challenge">
+                                <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+                                <button type="submit" class="submit"><b>Play</b></button>
+                            </form>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No initiated challenges.</p>
+                {% endif %}
+            </div>
+        </section>
+        
+        <section class="challenges-section">
+            <h2>Challenges I've Received</h2>
+            <div class="challenges-list">
+                {% if challenges.received %}
+                    {% for challenge in challenges.received %}
+                    <div class="row">
+                        <div class="rank">{{ challenge.challengee_id }}</div>
+                        <div class="name">{{ challenge.status }}</div>
+                        <form id="accept" method="post" action="/accept_challenge">
+                            <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+                            <button type="submit" class="submit"><b>Accept</b></button>
+                          </form>
+                          <form id="decline" method="post" action="/decline_challenge">
+                            <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+                            <button type="submit" class="submit"><b>Decline</b></button>
+                          </form>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No received challenges.</p>
+                {% endif %}
+            </div>
+        </section>
+    </main>
 </body>
 </html>
+<script>
+    function alert()
+    {
+        alert(document.getElementById("challenge_id").value);
+        return false;
+    }
+</script>
