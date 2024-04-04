@@ -27,6 +27,7 @@
             padding: 2vh 2vw; /* Add some padding */
         }
     </style>
+    
   </head>
   <body>
     <header>
@@ -39,9 +40,10 @@
         <!-- Add map ad-->
         <div id="map"></div>
         <div id="distance"></div>
-        <form id = "disForm" method = "post" action="/submit">
+        <form id="disForm" method="post" action="/submit" onsubmit="return checkCoordinates()">
           <input type = "hidden" id="currLat" name = "currLat" value ="">
           <input type = "hidden" id="currLon" name = "currLon" value ="">
+          <input type = "hidden" id="id" name = "id" value ="">
           <button type="submit" class="submit"><b>Submit</b></button>
           <button type = "button" class="clear" onclick ="clearForm()"><b>Clear</b></button>
         </form>
@@ -52,6 +54,7 @@
 </html>
       <!-- Add any scripts here -->
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
       <script>
 
       // function haversineDistance(lat1, lon1, lat2, lon2) {
@@ -72,7 +75,7 @@
       //     decimalFormat = distance.toFixed(5);
       //     return decimalFormat;
       // }
-
+      
       var markersCount = 2;
       var map = L.map('map', {
           center: [40.3509, -74.6528], // Example center point
@@ -97,6 +100,7 @@
       map.addLayer(markersGroup);
       var marker;
       var distance;
+      document.getElementById('id').value = "{{id}}";
 
       map.on('click', function(e) {
           // clears map on every click
@@ -117,5 +121,16 @@
         document.getElementById('currLat').value = "";
         document.getElementById('currLon').value = "";
       }
+
+      function checkCoordinates() {
+      var currLat = document.getElementById('currLat').value;
+      var currLon = document.getElementById('currLon').value;
+      if (!currLat || !currLon) {
+          alert('Please click on the map to select a location before submitting.');
+          return false; // Prevents form submission
+      }
+      return true; // Allows form submission
+  }
+
       </script>
 
