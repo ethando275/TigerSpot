@@ -21,7 +21,7 @@
             padding: 2vh 2vw; /* Add some padding */
         }
         #distance {
-            height: 50vh;
+            height: 5vh;
             width: 50%; /* New container takes up remaining space */
             float: right; /* Align to the right */
             padding: 2vh 2vw; /* Add some padding */
@@ -44,8 +44,10 @@
           <input type = "hidden" id="currLat" name = "currLat" value ="">
           <input type = "hidden" id="currLon" name = "currLon" value ="">
           <input type = "hidden" id="id" name = "id" value ="">
-          <button type="submit" class="submit"><b>Submit</b></button>
-          <button type = "button" class="clear" onclick ="clearForm()"><b>Clear</b></button>
+          <div class="game-btns">
+            <button type="submit" class="submit"><b>Submit</b></button>
+            <button type = "button" class="clear" onclick ="clearForm()"><b>Clear</b></button>
+          </div>
         </form>
         
       </div>
