@@ -18,7 +18,7 @@ app.secret_key = os.environ['APP_SECRET_KEY']
 
 #-----------------------------------------------------------------------
 id = database.get_pic_id()
-database.update("pictures", "chosen", True, "pictureID", id)
+# database.update("pictures", "chosen", True, "pictureID", id)
 
 @app.route('/', methods=['GET'])
 @app.route('/index', methods=['GET'])
