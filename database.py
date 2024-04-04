@@ -1,5 +1,6 @@
 import psycopg2
 from geopy.distance import geodesic
+import random
 
 
 DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
@@ -80,14 +81,14 @@ def insert():
    cur.close()
    conn.close()
 
-def update():
+def update(table, col, value, id_type, id_num):
    conn = psycopg2.connect(DATABASE_URL)
    cur = conn.cursor()
-   # cur.execute("UPDATE pictures SET coordinates = [40.34805, -74.65570] WHERE pictureID = 1;")
+   cur.execute(f"UPDATE {table} SET {col} = {value} WHERE {id_type} = {id_num};")
     #sql = """UPDATE pictures
     # SET coordinates = '{40.34805, -74.65570}'
     #WHERE pictureID = 1;"""
-   cur.execute(sql)
+#    cur.execute(sql)
    # cur.execute('''UPDATE pictures
    # SET coordinates = {40.34805, -74.65570}
    # WHERE pictureID = 1;''')
@@ -465,6 +466,52 @@ def get_user_challenges(user_id):
     
     return user_challenges
 
+#Returns the number of rows from pictures table
+def get_table_size():
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+    cur.execute("SELECT COUNT(*) FROM pictures;")
+    result = cur.fetchone()
+
+    pic_num = result[0]
+
+    return pic_num
+
+    conn.close()
+
+#given an pictureID, check to see if it has already been chosen
+def has_pic_been_chosen(id):
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+    cur.execute(f"SELECT chosen FROM pictures WHERE pictureID = {id};")
+    result = cur.fetchone()
+
+    chosen = result[0]
+
+    return chosen
+
+    conn.close()
+
+#gets a random pictureID
+def get_pic_id():
+    chosen = True
+    while(chosen):
+        num = random.randint(1, get_table_size())
+        chosen = has_pic_been_chosen(num)
+    return num
+
+#For Admin: reset all pictures to False, meaning they haven't been chosen
+def reset_pic():
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+    for i in range(get_table_size()+1):
+        update("pictures", "chosen", False, "pictureID", i)
+
+    conn.commit()
+    cur.close()
+    conn.close()
 
 
     
@@ -484,6 +531,8 @@ def main():
     #print(get_points('fl9971'))
     #drop_pic_table()
     #create_pic_table()
+    # print(has_pic_been_chosen(4))
+    # reset_pic()
     show_rows()
     #print()
     #clear_challenges_table()
