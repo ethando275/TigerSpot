@@ -166,6 +166,10 @@ def show_rows():
     for row in cur.fetchall():
         print(row)
 
+    cur.execute("SELECT * FROM matches;")
+    for row in cur.fetchall():
+        print(row)
+
     # conn.commit()
     cur.close()
     conn.close()
@@ -299,41 +303,43 @@ def create_challenge(challenger_id, challengee_id):
 
 # Accept a challenge
 def accept_challenge(challenge_id):
+    status = "failed"  # Default status in case of error
     conn = None
     try:
         conn = psycopg2.connect(DATABASE_URL)
         cur = conn.cursor()
-        cur.execute("UPDATE challenges SET status = 'accepted', updated_at = NOW() WHERE id = %s;", (challenge_id,))
+        cur.execute("UPDATE challenges SET status = 'accepted' WHERE id = %s;", (challenge_id,))
         conn.commit()
         cur.close()
-        print("Challenge accepted.")
-        status = "accepted"
+        status = "accepted"  # Update status on success
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
+        # Optionally, handle different types of exceptions differently
     finally:
         if conn is not None:
             conn.close()
     return status
+
 
 
 # Decline a challenge
 def decline_challenge(challenge_id):
+    status = "failed"  # Default status in case of error
     conn = None
     try:
         conn = psycopg2.connect(DATABASE_URL)
         cur = conn.cursor()
-        cur.execute("UPDATE challenges SET status = 'declined', updated_at = NOW() WHERE id = %s;", (challenge_id,))
+        cur.execute("UPDATE challenges SET status = 'declined' WHERE id = %s;", (challenge_id,))
         conn.commit()
         cur.close()
-        print("Challenge declined.")
-        status = "declined"
+        status = "declined"  # Update status on success
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
     finally:
         if conn is not None:
             conn.close()
-
     return status
+
 
 # Complete a match
 def complete_match(challenge_id, winner_id, challenger_score, challengee_score):
@@ -341,7 +347,7 @@ def complete_match(challenge_id, winner_id, challenger_score, challengee_score):
     try:
         conn = psycopg2.connect(DATABASE_URL)
         cur = conn.cursor()
-        cur.execute("UPDATE challenges SET status = 'completed', updated_at = NOW() WHERE id = %s;", (challenge_id,))
+        cur.execute("UPDATE challenges SET status = 'completed' WHERE id = %s;", (challenge_id,))
         cur.execute("INSERT INTO matches (challenge_id, winner_id, challenger_score, challengee_score) VALUES (%s, %s, %s, %s) RETURNING id;", (challenge_id, winner_id, challenger_score, challengee_score))
         match_id = cur.fetchone()[0]
         conn.commit()
@@ -446,7 +452,7 @@ def get_user_challenges(user_id):
     cur.execute("""
         SELECT id, challenger_id, challengee_id, status 
         FROM challenges 
-        WHERE (challenger_id = %s OR challengee_id = %s) AND status = 'pending';
+        WHERE (challenger_id = %s OR challengee_id = %s);
         """, (user_id, user_id))
     challenges = cur.fetchall()
     cur.close()
