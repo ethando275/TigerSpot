@@ -30,7 +30,7 @@
                     <div class="row">
                         <div class="rank">{{ challenge.challengee_id }}</div>
                         <div class="name">{{ challenge.status }}</div>
-                        {% if challenge.status == 'accepted' %}
+                        {% if challenge.status == 'accepted' and not challenge.challenger_finished %}
                             <form method="post" action="/play_challenge">
                                 <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
                                 <button type="submit" class="submit"><b>Play</b></button>
@@ -43,7 +43,6 @@
                 {% endif %}
             </div>
         </section>
-        
         <section class="challenges-section">
             <h2>Challenges I've Received</h2>
             <div class="challenges-list">
@@ -52,7 +51,7 @@
                     <div class="row">
                         <div class="rank">{{ challenge.challenger_id }}</div>
                         <div class="name">{{ challenge.status }}</div>
-                        {% if challenge.status == 'accepted' %}
+                        {% if challenge.status == 'accepted' and not challenge.challengee_finished %}
                             <form method="post" action="/play_challenge">
                                 <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
                                 <button type="submit" class="submit"><b>Play</b></button>
@@ -74,6 +73,7 @@
                 {% endif %}
             </div>
         </section>
+        
     </main>
 </body>
 </html>
