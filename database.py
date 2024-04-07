@@ -358,7 +358,7 @@ def accept_challenge(challenge_id):
         cur.execute("""
             UPDATE challenges 
             SET status = 'accepted', 
-                versusList = array_append(versusList, %s)
+                versusList = %s
             WHERE id = %s;
         """, (create_random_versus(), challenge_id))
         conn.commit()
