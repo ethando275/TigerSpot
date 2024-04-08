@@ -792,7 +792,7 @@ def create_random_versus():
     row_count = get_table_size()
     
     # Generate 5 unique pseudo-random integers from 1 to row_count
-    random_indices = random.sample(range(1, row_count + 1), 16)
+    random_indices = random.sample(range(1, row_count + 1), 5)
     
     return random_indices
         
