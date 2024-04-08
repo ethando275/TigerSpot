@@ -136,7 +136,7 @@ def create_challenge_route():
     users = database.get_players()  # Assuming this returns a list of usernames
     
     # Ensure challengee_id is not empty and exists in the users list
-    if challengee_id == None or challengee_id not in users:
+    if challengee_id == None or challengee_id not in users or challengee_id = auth.authenticate():
         response = {'status': 'error', 'message': 'Invalid challengee ID'}
         return flask.jsonify(response), 400  # Including a 400 Bad Request status code
     else:
