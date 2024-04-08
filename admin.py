@@ -220,6 +220,6 @@ def submit2():
     index = flask.request.form.get('index')
     index = int(index) + 1
 
-    html_code = flask.render_template('versusresults.html', dis = distance, lat = currLat, lon = currLon, coor=coor, index=index, challenge_id=challenge_id)
+    html_code = flask.render_template('versusresults.html', dis = distance, lat = currLat, lon = currLon, coor=coor, index=index, challenge_id=challenge_id, points=points)
     response = flask.make_response(html_code)
     return response
