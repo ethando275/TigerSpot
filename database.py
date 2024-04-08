@@ -792,7 +792,7 @@ def create_random_versus():
     row_count = get_table_size()
     
     # Generate 5 unique pseudo-random integers from 1 to row_count
-    random_indices = random.sample(range(1, row_count + 1), 5)
+    random_indices = random.sample(range(1, row_count + 1), 16)
     
     return random_indices
         
@@ -874,9 +874,51 @@ def update_picture_coordinates():
         if conn is not None:
             conn.close()
 
-# Example usage
-# DATABASE_URL = "dbname='your_dbname' user='your_username' host='your_host' password='your_password'"
-# update_picture_coordinates(1, 'new_coordinates_here')
+def insert_picture(pictureID, coordinates, link, chosen):
+    conn = None
+    try:
+        # Creating a cursor object using the connection object
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        # SQL statement for inserting data
+        insert_sql = '''INSERT INTO pictures (pictureID, coordinates, link, chosen) 
+                        VALUES (%s, %s, %s, %s)'''
+        # Executing the SQL statement with the provided values
+        cur.execute(insert_sql, (pictureID, coordinates, link, chosen))
+        # Committing the transaction
+        conn.commit()
+        print("Row inserted successfully.")
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error in insert operation: {error}")
+    finally:
+        # Closing the cursor
+        if cur is not None:
+            cur.close()
+
+def update_picture_id_by_coordinates(new_pictureID, coordinates):
+    conn = None
+    try:
+        # Creating a cursor object using the connection object
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        # SQL statement for updating the pictureID
+        update_sql = '''UPDATE pictures SET pictureID = %s WHERE coordinates = ARRAY[%s, %s]::float[]'''
+        # Executing the SQL statement with the provided values
+        cur.execute(update_sql, (new_pictureID, coordinates[0], coordinates[1]))
+        # Committing the transaction
+        conn.commit()
+        # Check if the update was successful
+        if cur.rowcount == 0:
+            print("No rows were updated.")
+        else:
+            print(f"{cur.rowcount} row(s) updated successfully.")
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error in update operation: {error}")
+    finally:
+        # Closing the cursor
+        if cur is not None:
+            cur.close()
+
 
 
 def main():
@@ -897,6 +939,20 @@ def main():
     #create_pic_table()
     # print(has_pic_been_chosen(4))
     # reset_pic()
+    #insert_picture(4, [40.349020, -74.653282], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594813/IMG_8918_o7x9nv.jpg", False)
+    #insert_picture(5, [40.35014, -74.65285], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594815/IMG_0010_a2xd92.jpg", False)
+    #insert_picture(6, [40.34855, -74.65622], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594815/IMG_0011_epzjfx.jpg", False)
+    #insert_picture(7, [40.34785, -74.65410], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594813/IMG_0016_pvpuan.jpg", False)
+    #insert_picture(8, [40.34952, -74.65760], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594814/IMG_0012_gyeoc8.jpg", False)
+    #insert_picture(9, [40.34661, -74.65605], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594814/IMG_0013_a2lgwj.jpg", False)
+    #insert_picture(10, [40.35020, -74.65503], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594814/IMG_0014_mhbsia.jpg", False)
+    #insert_picture(11, [40.34201, -74.65450], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594813/IMG_0018_jkycga.jpg", False)
+    #insert_picture(12, [40.34789, -74.65794], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594813/IMG_0017_gp6byj.jpg", False)
+    #insert_picture(13, [40.34597, -74.65759], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781259/TigerSpot/IMG_2992_saqtml.jpg", False)
+    #insert_picture(13, [40.34868, -74.65508], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781260/TigerSpot/IMG_3007_pug42w.jpg", False)
+    #update_picture_id_by_coordinates(14, [40.34902, -74.653282])
+    #update_picture_id_by_coordinates(15, [40.35014, -74.65285])
+    #update_picture_id_by_coordinates(16, [40.34868, -74.65508])
     show_rows()
     #update_picture_coordinates()
     #insert_into_challenges()
