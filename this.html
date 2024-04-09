@@ -32,68 +32,72 @@
         </form>
         <section class="top-players">
             <h2>Challenges I've Initiated</h2>
-            <div class="row">
-                <div class="rank">Opponent</div>
-                <div class="name">Status</div>
-                <div class="score">Winner</div>
-            </div>
-                {% if challenges.initiated %}
-                    {% for challenge in challenges.initiated %}
-                    <div class="row">
-                        <div class="rank">{{ challenge.challengee_id }}</div>
-                        <div class="name">{{ challenge.status }}</div>
-                        {% if challenges.winner_id != None %}
-                            <div class="score">{{ challenge.winner_id }}</div>
-                        {% endif %}
-                        {% if challenge.status == 'accepted' and not challenge.challenger_finished %}
-                            <form method="post" action="/play_challenge">
-                                <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
-                                <button type="submit" class="submit"><b>Play</b></button>
-                            </form>
-                        {% endif %}
-                    </div>
-                    {% endfor %}
-                {% else %}
-                    <p>No initiated challenges.</p>
-                {% endif %}
+            <div id="container">
+                <div class="row">
+                    <div class="rank"><u>Opponent</u></div>
+                    <div class="name"><u>Status</u></div>
+                    <div class="score"><u>Winner</u></div>
+                </div>
+                    {% if challenges.initiated %}
+                        {% for challenge in challenges.initiated %}
+                        <div class="row">
+                            <div class="rank">{{ challenge.challengee_id }}</div>
+                            <div class="name">{{ challenge.status }}</div>
+                            {% if challenges.winner_id != None %}
+                                <div class="score">{{ challenge.winner_id }}</div>
+                            {% endif %}
+                            {% if challenge.status == 'accepted' and not challenge.challenger_finished %}
+                                <form method="post" action="/play_challenge">
+                                    <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+                                    <button type="submit" class="submit"><b>Play</b></button>
+                                </form>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No initiated challenges.</p>
+                    {% endif %}
+                </div>
             </div>
         </section>
         <section class="top-players">
             <h2>Challenges I've Received</h2>
-            <div class="row">
-                <div class="rank">Opponent</div>
-                <div class="name">Status</div>
-                <div class="score">Winner</div>
-            </div>
-            <div class="challenges-list">
-                {% if challenges.received %}
-                    {% for challenge in challenges.received %}
-                    <div class="row">
-                        <div class="rank">{{ challenge.challenger_id }}</div>
-                        <div class="name">{{ challenge.status }}</div>
-                        {% if challenges.winner_id != None %}
-                        <div class="score">{{ challenge.winner_id }}</div>
-                        {% endif %}
-                        {% if challenge.status == 'accepted' and not challenge.challengee_finished %}
-                            <form method="post" action="/play_challenge">
-                                <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
-                                <button type="submit" class="submit"><b>Play</b></button>
-                            </form>
-                        {% elif challenge.status != 'completed' and not challenge.challengee_finished %}
-                            <form id="accept" method="post" action="/accept_challenge">
-                                <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
-                                <button type="submit" class="submit"><b>Accept</b></button>
-                            </form>
-                            <form id="decline" method="post" action="/decline_challenge">
-                                <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
-                                <button type="submit" class="submit"><b>Decline</b></button>
-                            </form>
+            <div id="container">
+                <div class="row">
+                    <div class="rank"><u>Opponent</u></div>
+                    <div class="name"><u>Status</u></div>
+                    <div class="score"><u>Winner</u></div>
+                </div>
+                    <div class="challenges-list">
+                        {% if challenges.received %}
+                            {% for challenge in challenges.received %}
+                            <div class="row">
+                                <div class="rank">{{ challenge.challenger_id }}</div>
+                                <div class="name">{{ challenge.status }}</div>
+                                {% if challenges.winner_id != None %}
+                                <div class="score">{{ challenge.winner_id }}</div>
+                                {% endif %}
+                                {% if challenge.status == 'accepted' and not challenge.challengee_finished %}
+                                    <form method="post" action="/play_challenge">
+                                        <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+                                        <button type="submit" class="submit"><b>Play</b></button>
+                                    </form>
+                                {% elif challenge.status != 'completed' and not challenge.challengee_finished %}
+                                    <form id="accept" method="post" action="/accept_challenge">
+                                        <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+                                        <button type="submit" class="submit"><b>Accept</b></button>
+                                    </form>
+                                    <form id="decline" method="post" action="/decline_challenge">
+                                        <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+                                        <button type="submit" class="submit"><b>Decline</b></button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p>No received challenges.</p>
                         {% endif %}
                     </div>
-                    {% endfor %}
-                {% else %}
-                    <p>No received challenges.</p>
-                {% endif %}
             </div>
         </section>
         
