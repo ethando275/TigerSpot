@@ -52,7 +52,10 @@ def index():
 @app.route('/requests', methods=['GET'])
 def requests():
     pending_challenges = database.get_user_challenges(auth.authenticate())
-    html_code = flask.render_template('this.html', challenges=pending_challenges, user=auth.authenticate())
+    users = database.get_players()
+    username = flask.request.args.get('username')
+
+    html_code = flask.render_template('this.html', challenges=pending_challenges, user=auth.authenticate(), users=flask.json.dumps(users), username=username)
     response = flask.make_response(html_code)
     return response
 

@@ -501,9 +501,9 @@ def get_user_challenges(user_id):
     # Query for both challenges initiated by the user and challenges where the user is the challengee,
     # including whether each side has finished the challenge.
     cur.execute("""
-        SELECT id, challenger_id, challengee_id, status, challenger_finished, challengee_finished
-        FROM challenges 
-        WHERE (challenger_id = %s OR challengee_id = %s);
+        SELECT challenges.id, challenger_id, challengee_id, status, challenger_finished, challengee_finished
+        FROM challenges
+        WHERE (challenges.challenger_id = %s OR challenges.challengee_id = %s);
         """, (user_id, user_id))
     challenges = cur.fetchall()
     cur.close()
@@ -515,14 +515,26 @@ def get_user_challenges(user_id):
     # Iterate through the results and categorize each challenge
     for challenge in challenges:
         # Add challenger_finished and challengee_finished to the dictionary
-        challenge_dict = {
-            "id": challenge[0], 
-            "challenger_id": challenge[1], 
-            "challengee_id": challenge[2], 
-            "status": challenge[3],
-            "challenger_finished": challenge[4],
-            "challengee_finished": challenge[5]
-        }
+        if get_winner(challenge[0]) is not None:
+            challenge_dict = {
+                "id": challenge[0], 
+                "challenger_id": challenge[1], 
+                "challengee_id": challenge[2], 
+                "status": challenge[3],
+                "challenger_finished": challenge[4],
+                "challengee_finished": challenge[5],
+                "winner_id": get_winner(challenge[0])
+            }
+        else:
+            challenge_dict = {
+                "id": challenge[0], 
+                "challenger_id": challenge[1], 
+                "challengee_id": challenge[2], 
+                "status": challenge[3],
+                "challenger_finished": challenge[4],
+                "challengee_finished": challenge[5],
+                "winner_id": None
+            }
         if challenge[1] == user_id:  # User is the challenger
             user_challenges['initiated'].append(challenge_dict)
         else:  # User is the challengee
@@ -754,7 +766,7 @@ def get_challenge_results(challenge_id):
         
         # Query to get challenger and challengee points for the given challenge ID
         cur.execute('''
-            SELECT challenger_id, challengee_id, challenger_points, challengee_points
+            SELECT challenger_id, challengee_id, challenger_points, challengee_points, status
             FROM challenges
             WHERE id = %s;
         ''', (challenge_id,))
@@ -763,8 +775,18 @@ def get_challenge_results(challenge_id):
         if result is None:
             print("Challenge not found.")
             return {"error": "Challenge not found"}
-        
-        challenger_id, challengee_id, challenger_points, challengee_points = result
+
+        challenger_id, challengee_id, challenger_points, challengee_points, status = result
+
+        if status != "completed":
+            print("Challenge is not yet completed.")
+            return {
+            "winner": None,
+            "challenger_points": None,
+            "challengee_points": None,
+            "challenge_id": None
+        }
+
         
         # Determine the winner or if it's a tie
         if challenger_points > challengee_points:
@@ -778,7 +800,8 @@ def get_challenge_results(challenge_id):
         return {
             "winner": winner,
             "challenger_points": challenger_points,
-            "challengee_points": challengee_points
+            "challengee_points": challengee_points,
+            "challenge_id": challenge_id
         }
         
     except (Exception, psycopg2.DatabaseError) as error:
@@ -919,7 +942,23 @@ def update_picture_id_by_coordinates(new_pictureID, coordinates):
         if cur is not None:
             cur.close()
 
-
+def get_winner(challenge_id):
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        cur.execute("SELECT winner_id FROM matches WHERE challenge_id = %s;", (challenge_id,))
+        result = cur.fetchone()
+        if result is None:
+            return None
+        else:
+            return result[0]
+        
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error: {error}")
+    finally:
+        if conn is not None:
+            conn.close()
 
 def main():
     # update()
