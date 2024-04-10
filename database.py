@@ -297,6 +297,26 @@ def get_points(username):
 
     return points[0]
 
+def get_rank(username):
+    
+   # Connect to database
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+    
+    try: 
+        cur.execute("SELECT username, points, DENSE_RANK() OVER (ORDER BY points DESC) as rank FROM users;")
+        players = cur.fetchall()
+        
+        for player in players: 
+            if player[0] == username:
+                return player[2]
+        return "Player not found"
+    
+    finally:
+        conn.close()
+
+    
+
 def remove_from_user_table(username):
    # Connect to database
     conn = psycopg2.connect(DATABASE_URL)
