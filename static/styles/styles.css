@@ -194,12 +194,9 @@ hr {
 .game-btns {
   text-decoration: none;
   display: flex;
-  flex-direction: row;
-  align-items: flex-end;
   justify-content: flex-end;
-  position: fixed;
-  bottom: 3vh;
-  right: 15vw;
+  position: relative;
+  bottom: -65vh;
 }
 
 footer {
