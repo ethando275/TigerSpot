@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Index Page</title>
+    <!-- Link to external CSS file -->
+    <link rel="stylesheet" href="{{url_for('static', filename = 'styles/styles.css')}}" />
+    <style>
+      #username {
+            height: 50vh;
+            width: 50.5%; /* New container takes up remaining space */
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2vh 2vw; /* Add some padding */
+        }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+
+    <header>
+        <nav>
+            <div class="home-icon">
+                <a href="/index"><img src="static\styles\home.png" alt="Home Page"></a>
+            </div>
+            <div class="nav-icons">
+                <a href="/rules"><img src="static\styles\questionmark.png" alt="Rules" /></a>
+                <a href="/requests"><img src = "static\styles\requests.png" alt="Requests"/></a>
+                <a href="/leaderboard"><img src="static\styles\trophy.png" alt="Leaderboard"/></a>
+                <a href="logoutcas"><img src="static\styles\logout.png" alt="Logout" /></a>
+            </div>
+        </nav>
+    </header>
+
+      <input type = "hidden" id="username" name = "username" value ="{{username}}">
+      <main>
+        <div class="home">
+          <img class="logo" src="static\styles\logo.png" alt="Logo" />
+          <p>
+            <b class="text">
+              Oops, looks like you've already made your daily guess! 
+              Please wait until tomorrow to play again. 
+              In the meantime, play a 1v1 game with a friend instead!
+            </b>
+          </p>
+          <p>
+            <b class="text">
+                <!-- REPLACE DAILY_SCORE VAR WITH WHATEVER IT'S CALLED -->
+                Your Today's Score is: {{daily_score}}. 
+                Your distance from the actual point was {{distance_score}} meters away.
+            </b>
+          </p>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
+<script>
+  document.getElementById("username").value = "{{username}}";
+</script>
