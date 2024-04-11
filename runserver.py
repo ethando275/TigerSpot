@@ -14,6 +14,8 @@ def timer():
         if now.hour == 0 and now.minute == 0 and now.second == 0 and not pic_changed:
             database.reset_players()
             admin.pic_of_day()
+            database.drop_daily_points_table()
+            database.create_daily_points_table()
             print('here')
             pic_changed = True
             time.sleep(60)
