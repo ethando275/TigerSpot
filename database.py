@@ -850,7 +850,7 @@ def get_challenge_results(challenge_id):
         
         # Query to get challenger and challengee points for the given challenge ID
         cur.execute('''
-            SELECT challenger_id, challengee_id, challenger_points, challengee_points, status
+            SELECT challenger_id, challengee_id, challenger_points, challengee_points
             FROM challenges
             WHERE id = %s;
         ''', (challenge_id,))
@@ -860,17 +860,7 @@ def get_challenge_results(challenge_id):
             print("Challenge not found.")
             return {"error": "Challenge not found"}
 
-        challenger_id, challengee_id, challenger_points, challengee_points, status = result
-
-        if status != "completed":
-            print("Challenge is not yet completed.")
-            return {
-            "winner": None,
-            "challenger_points": None,
-            "challengee_points": None,
-            "challenge_id": None
-        }
-
+        challenger_id, challengee_id, challenger_points, challengee_points = result
         
         # Determine the winner or if it's a tie
         if challenger_points > challengee_points:
