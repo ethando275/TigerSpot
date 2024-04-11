@@ -47,10 +47,12 @@
           <p>
             <b class="text">
                 <!-- REPLACE DAILY_SCORE VAR WITH WHATEVER IT'S CALLED -->
-                Your Today's Score is: {{daily_score}}. 
-                Your distance from the actual point was {{distance_score}} meters away.
+                Your Today's Score is: {{ today_points }}. 
+                <br>
+                Your distance from the actual point was {{ today_distance }} meters away.
             </b>
           </p>
+          <button id='share' onclick="copyTextToClipboard('Tiger Spot {{today_points}} points | {{today_distance}} away')">Share</button>
         </div>
       </main>
     </div>
@@ -58,4 +60,15 @@
 </html>
 <script>
   document.getElementById("username").value = "{{username}}";
+
+  function copyTextToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        // Success feedback
+        alert('Copied results to clipboard');
+    }).catch(err => {
+        // Error handling
+        console.error('Failed to copy text: ', err);
+    });
+}
+
 </script>

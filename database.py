@@ -24,6 +24,14 @@ def drop_user_table():
    conn.commit()
    conn.close()
 
+def drop_daily_points_table():
+   # query to create a database
+   conn = psycopg2.connect(DATABASE_URL)
+   cur = conn.cursor()
+   cur.execute('''DROP TABLE usersDaily; ''')
+   conn.commit()
+   conn.close()
+
 #already has been called dont need to call again
 def create_pic_table():
     # query to create a database 
@@ -89,7 +97,8 @@ def create_daily_points_table():
     cur = conn.cursor()
     cur.execute('''CREATE TABLE IF NOT EXISTS usersDaily (
     username varchar(255),
-    points int);''')
+    points int,
+    distance int);''')
 
     conn.commit()
     cur.close()
@@ -289,8 +298,7 @@ def reset_picture(id):
     conn.close()
 
 
-
-def update_player_daily(username, points): 
+def update_player_daily(username, points, distance):
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
 
@@ -298,7 +306,7 @@ def update_player_daily(username, points):
     result = cur.fetchone()
 
     if result is None:
-        cur.execute("INSERT INTO usersDaily (username, points) VALUES (%s, %s);", (username, points))
+        cur.execute("INSERT INTO usersDaily (username, points, distance) VALUES (%s, %s, %s);", (username, points, distance))
 
     conn.commit()
     conn.close()
@@ -318,6 +326,23 @@ def get_daily_points(username):
         return 0
     
     return points[0]
+
+def get_daily_distance(username):
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+    cur.execute('''SELECT distance FROM usersDaily WHERE username=%s;''', (username,))
+    distance = cur.fetchone()
+    
+    # Disconnect
+    conn.close()
+    
+    if distance is None:
+        return 0
+    
+    return distance[0]
+    
+
 
 def get_top_players():
 
@@ -1188,7 +1213,6 @@ def get_versus_bool(challenge_id, user_id, index):
 
 def main():
 
-# def main():
     # update()
     # create_pic_table()
     # create_user_table()
@@ -1227,11 +1251,12 @@ def main():
     #clear_challenges_table()
     #clear_matches_table()
     #reset_challenges_id_sequence()
-   
+    #drop_daily_points_table()
+    #create_daily_points_table()
     # Closing the connection
     
-# if __name__=="__main__":
-#     main()
+if __name__=="__main__":
+    main()
 
     # print(query())
 
