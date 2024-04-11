@@ -3,50 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index Page</title>
+    <title>Login Page</title>
     <!-- Link to external CSS file -->
     <link rel="stylesheet" href="{{url_for('static', filename = 'styles/styles.css')}}" />
-    <style>
-      #username {
-            height: 50vh;
-            width: 50.5%; /* New container takes up remaining space */
-            margin-left: auto;
-            margin-right: auto;
-            padding: 2vh 2vw; /* Add some padding */
-        }
-    </style>
   </head>
   <body>
     <div class="page">
-
-    <header>
-        <nav>
-            <div class="home-icon">
-                <a href="/index"><img src="static\styles\home.png" alt="Home Page"></a>
-            </div>
-            <div class="nav-icons">
-                <a href="/rules"><img src="static\styles\questionmark.png" alt="Rules" /></a>
-                <a href="/requests"><img src = "static\styles\requests.png" alt="Requests"/></a>
-                <a href="/leaderboard"><img src="static\styles\trophy.png" alt="Leaderboard"/></a>
-                <a href="logoutcas"><img src="static\styles\logout.png" alt="Logout" /></a>
-            </div>
-        </nav>
-    </header>
-
-      <input type = "hidden" id="username" name = "username" value ="{{username}}">
       <main>
         <div class="home">
           <img class="logo" src="static\styles\logo.png" alt="Logo" />
-          <p>
-            <b class="text">
-              Hello {{username}}. Think you have what it takes to “spot” where a Princeton landmark
-              is? Test your skills with Tiger Spot and land yourself at the top
-              of the leaderboard!
-            </b>
-          </p>
-          <a href="/game">
+          <a href="/menu">
           <button class="button">
-            <b>Let's Go!</b>
+            <b>Log In!</b>
           </button>
           </a>
         </div>
@@ -55,6 +23,3 @@
     </div>
   </body>
 </html>
-<script>
-  document.getElementById("username").value = "{{username}}";
-</script>
