@@ -230,25 +230,19 @@ def end_challenge():
     
 @app.route('/submit2', methods=['POST'])
 def submit2():
-    # get user input using flask.request.args.get('')
-    #once user clicks submit then get coordinates 
-    currLat = flask.request.form.get('currLat')  # Use .get for safe retrieval
-    # print(currLat)
+    currLat = flask.request.form.get('currLat')  
     currLon = flask.request.form.get('currLon')
-    # print(currLon)
-    # coor = database.get_distance()
     if not currLat or not currLon:
         return 
     index = int(flask.request.form.get('index'))
     challenge_id = flask.request.form.get('challenge_id')
+    database.update_versus_pic_status(challenge_id, auth.authenticate(), index)
     versusList = database.get_random_versus(challenge_id)
     coor = database.get_pic_info("coordinates", versusList[index])
-    index = int(index) + 1
-
     distance = database.calc_distance(currLat, currLon, coor)
     points = database.calculate_versus(distance)
+    database.store_versus_pic_points(challenge_id, auth.authenticate(), index, points)
     database.update_versus_points(challenge_id, auth.authenticate(), points)
-    index = flask.request.form.get('index')
     index = int(index) + 1
 
     html_code = flask.render_template('versusresults.html', dis = distance, lat = currLat, lon = currLon, coor=coor, index=index, challenge_id=challenge_id, points=points)

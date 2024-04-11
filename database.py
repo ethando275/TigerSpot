@@ -426,6 +426,7 @@ def create_challenge(challenger_id, challengee_id):
 # Accept a challenge
 def accept_challenge(challenge_id):
     status = "failed"  # Default status in case of error
+    arr = [False, False, False, False, False]
     conn = None
     try:
         conn = psycopg2.connect(DATABASE_URL)
@@ -433,9 +434,11 @@ def accept_challenge(challenge_id):
         cur.execute("""
             UPDATE challenges 
             SET status = 'accepted', 
-                versusList = %s
+                versusList = %s,
+                    challenger_bool = %s,
+                    challengee_bool = %s
             WHERE id = %s;
-        """, (create_random_versus(), challenge_id))
+        """, (create_random_versus(), arr, arr, challenge_id))
         conn.commit()
         cur.close()
         status = "accepted"  # Update status on success
@@ -564,11 +567,15 @@ def reset_challenges_id_sequence():
         cur.execute("ALTER SEQUENCE challenges_id_seq RESTART WITH 1;")
         conn.commit()  # Commit the change to make it permanent
         print("Challenges id sequence reset.")
+        cur.execute("ALTER SEQUENCE matches_id_seq RESTART WITH 1;")
+        conn.commit()  # Commit the change to make it permanent
+        print("Matches id sequence reset.")
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error resetting challenges id sequence: {error}")
     finally:
         if conn is not None:
             conn.close()
+
 
 def get_user_challenges(user_id):
     conn = psycopg2.connect(DATABASE_URL)  # Ensure DATABASE_URL is properly configured
@@ -931,9 +938,9 @@ def insert_into_challenges():
         random = create_random_versus()
         # Insert a new row into the challenges table
         cur.execute('''
-            INSERT INTO challenges (challenger_id, challengee_id, status, versusList)
+            INSERT INTO challenges (challenger_id, challengee_id, status, versusList, challenger_bool, challengee_bool)
             VALUES (%s, %s, %s, %s);
-        ''', ("ed8205", "jon", "accepted", random))
+        ''', ("ed8205", "jon", "accepted", random,))
         
         # Commit the changes to the database
         conn.commit()
@@ -1034,6 +1041,153 @@ def get_winner(challenge_id):
         if conn is not None:
             conn.close()
 
+def store_versus_pic_points(challenge_id, user_id, index, points):
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        
+        # First, determine if the user is the challenger or the challengee for this challenge
+        cur.execute('''
+            SELECT challenger_id, challengee_id
+            FROM challenges
+            WHERE id = %s;
+        ''', (challenge_id,))
+        
+        result = cur.fetchone()
+        if result is None:
+            print("Challenge not found.")
+            return
+        
+        challenger_id, challengee_id = result
+        
+        # Depending on whether the user is the challenger or the challengee,
+        # update the corresponding points column in the challenges table
+        if user_id == challenger_id:
+            cur.execute('''
+                UPDATE challenges
+                SET challenger_points[%s] = %s
+                WHERE id = %s;
+            ''', (index, points, challenge_id))
+        elif user_id == challengee_id:
+            cur.execute('''
+                UPDATE challenges
+                SET challengee_pic_points[%s] = %s
+                WHERE id = %s;
+            ''', (index, points, challenge_id))
+        else:
+            print("User is not part of this challenge.")
+            return
+        
+        conn.commit()
+        print("Versus pic points updated successfully.")
+        
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error: {error}")
+    finally:
+        if conn is not None:
+            conn.close()
+
+def update_versus_pic_status(challenge_id, user_id, index):
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        
+        # First, determine if the user is the challenger or the challengee for this challenge
+        cur.execute('''
+            SELECT challenger_id, challengee_id
+            FROM challenges
+            WHERE id = %s;
+        ''', (challenge_id,))
+        
+        result = cur.fetchone()
+        if result is None:
+            print("Challenge not found.")
+            return
+        
+        challenger_id, challengee_id = result
+        
+        # Depending on whether the user is the challenger or the challengee,
+        # update the corresponding boolean value in the challenges table
+        if user_id == challenger_id:
+            cur.execute('''
+                UPDATE challenges
+                SET challenger_bool[%s] = TRUE
+                WHERE id = %s;
+            ''', (index, challenge_id))
+        elif user_id == challengee_id:
+            cur.execute('''
+                UPDATE challenges
+                SET challengee_bool[%s] = TRUE
+                WHERE id = %s;
+            ''', (index, challenge_id))
+        else:
+            print("User is not part of this challenge.")
+            return
+        
+        conn.commit()
+        print("Versus pic status updated successfully.")
+        
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error: {error}")
+    finally:
+        if conn is not None:
+            conn.close()
+
+def get_versus_bool(challenge_id, user_id, index):
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        
+        # First, determine if the user is the challenger or the challengee for this challenge
+        cur.execute('''
+            SELECT challenger_id, challengee_id
+            FROM challenges
+            WHERE id = %s;
+        ''', (challenge_id,))
+        
+        result = cur.fetchone()
+        if result is None:
+            print("Challenge not found.")
+            return None
+        
+        challenger_id, challengee_id = result
+        
+        # Depending on whether the user is the challenger or the challengee,
+        # get the corresponding boolean value from the challenges table
+        if user_id == challenger_id:
+            cur.execute('''
+                SELECT challenger_bool[%s]
+                FROM challenges
+                WHERE id = %s;
+            ''', (index, challenge_id))
+        elif user_id == challengee_id:
+            cur.execute('''
+                SELECT challengee_bool[%s]
+                FROM challenges
+                WHERE id = %s;
+            ''', (index, challenge_id))
+        else:
+            print("User is not part of this challenge.")
+            return None
+        
+        result = cur.fetchone()
+        if result is None:
+            print("No result found.")
+            return None
+        return result[0]
+        
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error: {error}")
+        return None
+    finally:
+        if conn is not None:
+            conn.close()
+
+def main():
+
 # def main():
     # update()
     # create_pic_table()
@@ -1051,8 +1205,25 @@ def get_winner(challenge_id):
     #drop_pic_table()
     #create_pic_table()
     # print(has_pic_been_chosen(4))
-
+    # reset_pic()
+    #insert_picture(4, [40.349020, -74.653282], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594813/IMG_8918_o7x9nv.jpg", False)
+    #insert_picture(5, [40.35014, -74.65285], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594815/IMG_0010_a2xd92.jpg", False)
+    #insert_picture(6, [40.34855, -74.65622], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594815/IMG_0011_epzjfx.jpg", False)
+    #insert_picture(7, [40.34785, -74.65410], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594813/IMG_0016_pvpuan.jpg", False)
+    #insert_picture(8, [40.34952, -74.65760], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594814/IMG_0012_gyeoc8.jpg", False)
+    #insert_picture(9, [40.34661, -74.65605], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594814/IMG_0013_a2lgwj.jpg", False)
+    #insert_picture(10, [40.35020, -74.65503], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594814/IMG_0014_mhbsia.jpg", False)
+    #insert_picture(11, [40.34201, -74.65450], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594813/IMG_0018_jkycga.jpg", False)
+    #insert_picture(12, [40.34789, -74.65794], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594813/IMG_0017_gp6byj.jpg", False)
+    #insert_picture(13, [40.34597, -74.65759], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781259/TigerSpot/IMG_2992_saqtml.jpg", False)
+    #insert_picture(13, [40.34868, -74.65508], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781260/TigerSpot/IMG_3007_pug42w.jpg", False)
+    #update_picture_id_by_coordinates(14, [40.34902, -74.653282])
+    #update_picture_id_by_coordinates(15, [40.35014, -74.65285])
+    #update_picture_id_by_coordinates(16, [40.34868, -74.65508])
+    show_rows()
+    #update_picture_coordinates()
     #print()
+    #create_challenge("jon", "ed8205")
     #clear_challenges_table()
     #clear_matches_table()
     #reset_challenges_id_sequence()
