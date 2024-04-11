@@ -83,9 +83,11 @@ def game():
     # link = database.query()
 
     user_played = database.player_played(username)
+    today_points = database.get_daily_points(username)
+    today_distance = database.get_daily_distance(username)
 
-    if user_played == True:
-        html_code = flask.render_template('alrplayed.html', username = username)
+    if user_played:
+        html_code = flask.render_template('alrplayed.html', username = username, today_points = today_points, today_distance = today_distance)
         response = flask.make_response(html_code)
         return response
 
@@ -124,9 +126,9 @@ def submit():
 
     points = database.calculate_points(username, distance)
     database.update_player(username, points)
-    database.update_player_daily(username, points)
+    database.update_player_daily(username, points, distance)
 
-    html_code = flask.render_template('results.html', dis = distance, lat = currLat, lon = currLon, coor=coor)
+    html_code = flask.render_template('results.html', dis = distance, lat = currLat, lon = currLon, coor=coor, points = points)
     response = flask.make_response(html_code)
     return response
 
