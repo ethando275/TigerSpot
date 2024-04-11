@@ -1043,7 +1043,7 @@ def get_winner(challenge_id):
         if conn is not None:
             conn.close()
 
-def main():
+# def main():
     # update()
     # create_pic_table()
     # create_user_table()
@@ -1067,8 +1067,9 @@ def main():
     #reset_challenges_id_sequence()
    
     # Closing the connection
-if __name__=="__main__":
-    main()
+    
+# if __name__=="__main__":
+#     main()
 
     # print(query())
 
