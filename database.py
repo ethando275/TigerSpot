@@ -231,12 +231,16 @@ def insert_player(username, points): # can remove this points parameter
     conn.close()
 
 def calculate_points(username, distance):
-    if distance - 3 <= 0:
-        points = 100
-    elif distance - 10 <= 0:
-        points = 80
+    if distance - 15 <= 0:
+        points = 1000
     elif distance - 25 <= 0:
-        points = 50
+        points = 750
+    elif distance - 35 <= 0:
+        points = 500
+    elif distance - 45 <= 0:
+        points = 250
+    elif distance - 50 <= 0:
+        points = 100
     else:
         points = 0
 
@@ -1044,11 +1048,12 @@ def get_winner(challenge_id):
         if conn is not None:
             conn.close()
 
-# def main():
+def main():
     # update()
     # create_pic_table()
     # create_user_table()
-    # show_rows()
+    reset_players()
+    show_rows()
     # insert()
     # connection establishment
     # Creating a cursor object
@@ -1069,8 +1074,8 @@ def get_winner(challenge_id):
    
     # Closing the connection
     
-# if __name__=="__main__":
-#     main()
+if __name__=="__main__":
+    main()
 
     # print(query())
 
