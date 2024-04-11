@@ -10,77 +10,129 @@
     <header>
         <nav>
             <div class="home-icon">
-                <a href="/index"><img src="static/styles/home.png" alt="Home Page"></a>
+                <a href="/menu"><img src="static\styles\home.png" alt="Home Page"></a>
             </div>
             <div class="nav-icons">
                 <a href="/rules"><img src="static\styles\questionmark.png" alt="Rules" /></a>
+                <a href="/requests"><img src = "static\styles\requests.png" alt="Requests"/></a>
                 <a href="/leaderboard"><img src="static\styles\trophy.png" alt="Leaderboard"/></a>
-                <a href="/versus"><img src = "static\styles\versus.png" alt="Versus"/><a>
-                <a href="/requests"><img src = "static\styles\requests.png" alt="Requests"/><a>
+                <a href="logoutcas"><img src="static\styles\logout.png" alt="Logout" /></a>
             </div>
         </nav>
     </header>
     
     <main class="main-content">
-        <section class="challenges-section">
+        <form id="versusForm" method="get" action="/create-challenge" onsubmit="">
+            <div class="form-group">
+                <label for="VersusID">Enter Opponent NetID</label>
+                <input type="text" name="opponentID" id="opponentID" value="">
+                <input type = "hidden" id="challengee_id" name = "challengee_id" value ="">
+            </div>
+            <button type="submit" class="submit"><b>Submit</b></button>
+        </form>
+        <section class="top-players">
             <h2>Challenges I've Initiated</h2>
-            <div class="challenges-list">
-                {% if challenges.initiated %}
-                    {% for challenge in challenges.initiated %}
-                    <div class="row">
-                        <div class="rank">{{ challenge.challengee_id }}</div>
-                        <div class="name">{{ challenge.status }}</div>
-                        {% if challenge.status == 'accepted' %}
-                            <form method="post" action="/play_challenge">
-                                <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
-                                <button type="submit" class="submit"><b>Play</b></button>
-                            </form>
+            <div id="container">
+                <div class="row">
+                    <div class="rank"><u>Opponent</u></div>
+                    <div class="name"><u>Status</u></div>
+                    <div class="score"><u>Winner</u></div>
+                </div>
+                    {% if challenges.initiated %}
+                        {% for challenge in challenges.initiated %}
+                        <div class="row">
+                            <div class="rank">{{ challenge.challengee_id }}</div>
+                            <div class="name">{{ challenge.status }}</div>
+                            {% if challenges.winner_id != None %}
+                                <div class="score">{{ challenge.winner_id }}</div>
+                            {% endif %}
+                            {% if challenge.status == 'accepted' and not challenge.challenger_finished %}
+                                <form method="post" action="/play_challenge">
+                                    <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+                                    <button type="submit" class="submit"><b>Play</b></button>
+                                </form>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No initiated challenges.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+        <section class="top-players">
+            <h2>Challenges I've Received</h2>
+            <div id="container">
+                <div class="row">
+                    <div class="rank"><u>Opponent</u></div>
+                    <div class="name"><u>Status</u></div>
+                    <div class="score"><u>Winner</u></div>
+                </div>
+                    <div class="challenges-list">
+                        {% if challenges.received %}
+                            {% for challenge in challenges.received %}
+                            <div class="row">
+                                <div class="rank">{{ challenge.challenger_id }}</div>
+                                <div class="name">{{ challenge.status }}</div>
+                                {% if challenges.winner_id != None %}
+                                <div class="score">{{ challenge.winner_id }}</div>
+                                {% endif %}
+                                {% if challenge.status == 'accepted' and not challenge.challengee_finished %}
+                                    <form method="post" action="/play_challenge">
+                                        <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+                                        <button type="submit" class="submit"><b>Play</b></button>
+                                    </form>
+                                {% elif challenge.status != 'completed' and not challenge.challengee_finished %}
+                                    <form id="accept" method="post" action="/accept_challenge">
+                                        <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+                                        <button type="submit" class="submit"><b>Accept</b></button>
+                                    </form>
+                                    <form id="decline" method="post" action="/decline_challenge">
+                                        <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+                                        <button type="submit" class="submit"><b>Decline</b></button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p>No received challenges.</p>
                         {% endif %}
                     </div>
-                    {% endfor %}
-                {% else %}
-                    <p>No initiated challenges.</p>
-                {% endif %}
             </div>
         </section>
         
-        <section class="challenges-section">
-            <h2>Challenges I've Received</h2>
-            <div class="challenges-list">
-                {% if challenges.received %}
-                    {% for challenge in challenges.received %}
-                    <div class="row">
-                        <div class="rank">{{ challenge.challenger_id }}</div>
-                        <div class="name">{{ challenge.status }}</div>
-                        {% if challenge.status == 'accepted' %}
-                            <form method="post" action="/play_challenge">
-                                <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
-                                <button type="submit" class="submit"><b>Play</b></button>
-                            </form>
-                        {% elif challenge.status != 'completed' %}
-                            <form id="accept" method="post" action="/accept_challenge">
-                                <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
-                                <button type="submit" class="submit"><b>Accept</b></button>
-                            </form>
-                            <form id="decline" method="post" action="/decline_challenge">
-                                <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
-                                <button type="submit" class="submit"><b>Decline</b></button>
-                            </form>
-                        {% endif %}
-                    </div>
-                    {% endfor %}
-                {% else %}
-                    <p>No received challenges.</p>
-                {% endif %}
-            </div>
-        </section>
     </main>
 </body>
 </html>
 <script>
-    function alert()
-    {
-        alert(document.getElementById("challenge_id").value);
-        return false;
-    }
+            var users = JSON.parse('{{ users | safe }}');
+            document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("versusForm").addEventListener("submit", function(event) {
+                event.preventDefault(); // Prevent the default form submission
+                
+                var challengerID = "{{username}}"// Assuming username is the challenger's ID
+                var challengeeID = document.getElementById("opponentID").value;
+                // Set up the AJAX request
+                fetch('/create-challenge', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `challenger_id=${encodeURIComponent(challengerID)}&challengee_id=${encodeURIComponent(challengeeID)}`
+                })
+                .then(response => response.json())
+                // Inside your fetch().then() response handling
+                .then(data => {
+                    if (data.status === 'error' || challengeeID == "") {
+                        // Notify the user that a match already exists
+                        document.getElementById("matchID").textContent = "";
+                        alert(data.message);
+                    } else {
+                        // Notify the user that a new match was created successfully
+                        alert("Match created successfully. Match ID: " + data.challenge_id + ". Refresh to see challenge updates.");
+                        
+                    }
+                })
+                });
+            });
 </script>

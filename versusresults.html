@@ -29,27 +29,36 @@
             margin-right: auto;
             padding: 2vh 2vw; /* Add some padding */
         }
+        #points {
+            height: 4vh;
+            text-align: center;
+            width: 50.5%; /* New container takes up remaining space */
+            margin-left: auto;
+            margin-right: auto;
+        }
     </style>
   </head>
   <body>
-      <header>
+    <header>
         <nav>
-          <div class="home-icon">
-              <a href="/index"><img src="static\styles\home.png" alt="Home Page"></a>
-          </div>
-          <p class="game-result"><b>Your Result<br>Click a marker to see coordinates</b></p>
-          <div class="nav-icons">
-          <a href="/rules"><img src="static\styles\questionmark.png" alt="Rules" /></a>
-          <a href="/leaderboard"><img src="static\styles\trophy.png" alt="Leaderboard"/></a>
-          <a href="logoutcas"><img src="static\styles\logout.png" alt="Logout" /></a>
-          </div>
+            <div class="home-icon">
+                <a href="/menu"><img src="static\styles\home.png" alt="Home Page"></a>
+            </div>
+            <div class="nav-icons">
+                <a href="/rules"><img src="static\styles\questionmark.png" alt="Rules" /></a>
+                <a href="/requests"><img src = "static\styles\requests.png" alt="Requests"/></a>
+                <a href="/leaderboard"><img src="static\styles\trophy.png" alt="Leaderboard"/></a>
+                <a href="logoutcas"><img src="static\styles\logout.png" alt="Logout" /></a>
+            </div>
         </nav>
-      </header>
+    </header>
+
     <main class="main-content">
       <div class="map">
         <!-- Add map ad-->
         <div id="map"></div>
         <div id="distance"></div>
+        <div id="points"> </div>
         
         <form id="next" method="post" action="/play_challenge">
             <input type = "hidden" id="challenge_id" name = "challenge_id" value ="{{challenge_id}}">
@@ -105,6 +114,7 @@
     var distance = "{{ dis }}";
     distance = parseFloat(distance).toFixed(5); // Formats the distance to 2 decimal places
     document.getElementById('distance').innerHTML =  "Distance from actual point: "+ distance + " meters";
+    document.getElementById('points').innerHTML =  "You earned: "+ "{{ points }}"+ " points";
     var marker1 = L.marker(["{{coor[0]}}", "{{coor[1]}}"], {icon: new L.Icon({
     iconUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers/img/marker-icon-2x-green.png',
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',

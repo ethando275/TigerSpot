@@ -351,6 +351,26 @@ def get_points(username):
 
     return points[0]
 
+def get_rank(username):
+    
+   # Connect to database
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+    
+    try: 
+        cur.execute("SELECT username, points, DENSE_RANK() OVER (ORDER BY points DESC) as rank FROM users;")
+        players = cur.fetchall()
+        
+        for player in players: 
+            if player[0] == username:
+                return player[2]
+        return "Player not found"
+    
+    finally:
+        conn.close()
+
+    
+
 def remove_from_user_table(username):
    # Connect to database
     conn = psycopg2.connect(DATABASE_URL)
@@ -402,8 +422,6 @@ def create_challenge(challenger_id, challengee_id):
         if conn is not None:
             conn.close()
 
-
-
 # Accept a challenge
 def accept_challenge(challenge_id):
     status = "failed"  # Default status in case of error
@@ -411,7 +429,12 @@ def accept_challenge(challenge_id):
     try:
         conn = psycopg2.connect(DATABASE_URL)
         cur = conn.cursor()
-        cur.execute("UPDATE challenges SET status = 'accepted' WHERE id = %s;", (challenge_id,))
+        cur.execute("""
+            UPDATE challenges 
+            SET status = 'accepted', 
+                versusList = %s
+            WHERE id = %s;
+        """, (create_random_versus(), challenge_id))
         conn.commit()
         cur.close()
         status = "accepted"  # Update status on success
@@ -422,8 +445,6 @@ def accept_challenge(challenge_id):
         if conn is not None:
             conn.close()
     return status
-
-
 
 # Decline a challenge
 def decline_challenge(challenge_id):
@@ -549,13 +570,14 @@ def reset_challenges_id_sequence():
             conn.close()
 
 def get_user_challenges(user_id):
-    conn = psycopg2.connect(DATABASE_URL)
+    conn = psycopg2.connect(DATABASE_URL)  # Ensure DATABASE_URL is properly configured
     cur = conn.cursor()
-    # Query for both challenges initiated by the user and challenges where the user is the challengee
+    # Query for both challenges initiated by the user and challenges where the user is the challengee,
+    # including whether each side has finished the challenge.
     cur.execute("""
-        SELECT id, challenger_id, challengee_id, status 
-        FROM challenges 
-        WHERE (challenger_id = %s OR challengee_id = %s);
+        SELECT challenges.id, challenger_id, challengee_id, status, challenger_finished, challengee_finished
+        FROM challenges
+        WHERE (challenges.challenger_id = %s OR challenges.challengee_id = %s);
         """, (user_id, user_id))
     challenges = cur.fetchall()
     cur.close()
@@ -566,7 +588,27 @@ def get_user_challenges(user_id):
     
     # Iterate through the results and categorize each challenge
     for challenge in challenges:
-        challenge_dict = {"id": challenge[0], "challenger_id": challenge[1], "challengee_id": challenge[2], "status": challenge[3]}
+        # Add challenger_finished and challengee_finished to the dictionary
+        if get_winner(challenge[0]) is not None:
+            challenge_dict = {
+                "id": challenge[0], 
+                "challenger_id": challenge[1], 
+                "challengee_id": challenge[2], 
+                "status": challenge[3],
+                "challenger_finished": challenge[4],
+                "challengee_finished": challenge[5],
+                "winner_id": get_winner(challenge[0])
+            }
+        else:
+            challenge_dict = {
+                "id": challenge[0], 
+                "challenger_id": challenge[1], 
+                "challengee_id": challenge[2], 
+                "status": challenge[3],
+                "challenger_finished": challenge[4],
+                "challengee_finished": challenge[5],
+                "winner_id": None
+            }
         if challenge[1] == user_id:  # User is the challenger
             user_challenges['initiated'].append(challenge_dict)
         else:  # User is the challengee
@@ -740,43 +782,266 @@ def get_challenge_participants(challenge_id):
         if conn is not None:
             conn.close()
 
-def insert_challenge_record():
+def update_versus_points(challenge_id, user_id, additional_points):
     conn = None
     try:
-        # Connect to your database
         conn = psycopg2.connect(DATABASE_URL)
         cur = conn.cursor()
-
-        # SQL INSERT statement
-        insert_sql = '''
-        INSERT INTO challenges (challenger_id, challengee_id, status)
-        VALUES (%s, %s, %s);
-        '''
-
-        # Execute the INSERT statement
-        cur.execute(insert_sql, ("fl9971", "ed8205", "pending"))
-
-        # Commit the transaction
+        
+        # First, determine if the user is the challenger or the challengee for this challenge
+        cur.execute('''
+            SELECT challenger_id, challengee_id
+            FROM challenges
+            WHERE id = %s;
+        ''', (challenge_id,))
+        
+        result = cur.fetchone()
+        if result is None:
+            print("Challenge not found.")
+            return
+        
+        challenger_id, challengee_id = result
+        
+        # Depending on whether the user is the challenger or the challengee,
+        # increment the corresponding points column for that user in the challenges table
+        if user_id == challenger_id:
+            cur.execute('''
+                UPDATE challenges
+                SET challenger_points = COALESCE(challenger_points, 0) + %s
+                WHERE id = %s;
+            ''', (additional_points, challenge_id))
+        elif user_id == challengee_id:
+            cur.execute('''
+                UPDATE challenges
+                SET challengee_points = COALESCE(challengee_points, 0) + %s
+                WHERE id = %s;
+            ''', (additional_points, challenge_id))
+        else:
+            print("User is not part of this challenge.")
+            return
+        
         conn.commit()
-
-        print("Challenge record inserted successfully.")
+        print("User points incremented successfully.")
+        
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
-        # Optionally, roll back the transaction if something goes wrong
-        if conn:
-            conn.rollback()
     finally:
-        if conn:
+        if conn is not None:
             conn.close()
 
-# Example usage
-# add_finished_columns_to_matches()
+def calculate_versus(distance):
+    if distance - 3 <= 0:
+        points = 100
+    elif distance - 10 <= 0:
+        points = 80
+    elif distance - 25 <= 0:
+        points = 50
+    else:
+        points = 0
 
+    return points
 
-# Example usage:
-# insert_challenge_record('user123', 'user456', 'active')
+def get_challenge_results(challenge_id):
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        
+        # Query to get challenger and challengee points for the given challenge ID
+        cur.execute('''
+            SELECT challenger_id, challengee_id, challenger_points, challengee_points, status
+            FROM challenges
+            WHERE id = %s;
+        ''', (challenge_id,))
+        
+        result = cur.fetchone()
+        if result is None:
+            print("Challenge not found.")
+            return {"error": "Challenge not found"}
 
+        challenger_id, challengee_id, challenger_points, challengee_points, status = result
 
+        if status != "completed":
+            print("Challenge is not yet completed.")
+            return {
+            "winner": None,
+            "challenger_points": None,
+            "challengee_points": None,
+            "challenge_id": None
+        }
+
+        
+        # Determine the winner or if it's a tie
+        if challenger_points > challengee_points:
+            winner = challenger_id
+        elif challengee_points > challenger_points:
+            winner = challengee_id
+        else:
+            winner = "Tie"
+        
+        # Return a dictionary with the results
+        return {
+            "winner": winner,
+            "challenger_points": challenger_points,
+            "challengee_points": challengee_points,
+            "challenge_id": challenge_id
+        }
+        
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error: {error}")
+        return {"error": str(error)}
+    finally:
+        if conn is not None:
+            conn.close()
+
+def create_random_versus():
+    row_count = get_table_size()
+    
+    # Generate 5 unique pseudo-random integers from 1 to row_count
+    random_indices = random.sample(range(1, row_count + 1), 5)
+    
+    return random_indices
+        
+def get_random_versus(challenge_id):
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        
+        # Query to get the versusList for the given challenge ID
+        cur.execute('''
+            SELECT versusList
+            FROM challenges
+            WHERE id = %s;
+        ''', (challenge_id,))
+        
+        result = cur.fetchone()
+        if result is None:
+            print("Challenge not found.")
+            return {"error": "Challenge not found"}
+        
+        versusList = result[0]
+        return versusList
+        
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error: {error}")
+        return {"error": str(error)}
+    finally:
+        if conn is not None:
+            conn.close()
+
+def insert_into_challenges():
+    
+    conn = None
+    try:
+        # Connect to the PostgreSQL database
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        random = create_random_versus()
+        # Insert a new row into the challenges table
+        cur.execute('''
+            INSERT INTO challenges (challenger_id, challengee_id, status, versusList)
+            VALUES (%s, %s, %s, %s);
+        ''', ("ed8205", "jon", "accepted", random))
+        
+        # Commit the changes to the database
+        conn.commit()
+        print("New challenge inserted successfully.")
+        
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    finally:
+        # Ensure the database connection is closed
+        if conn is not None:
+            conn.close()
+
+def update_picture_coordinates():
+    conn = None
+    try:
+        # Connect to the PostgreSQL database
+        conn = psycopg2.connect(DATABASE_URL)  # Make sure DATABASE_URL is properly configured
+        cur = conn.cursor()
+        
+        # SQL command to update the coordinates of the picture with the specified pictureID
+        cur.execute('''
+            UPDATE pictures
+            SET coordinates = %s
+            WHERE pictureID = %s;
+        ''', ([40.34642, -74.65609], 1))
+        
+        # Commit the changes to the database
+        conn.commit()
+        print(f"Coordinates updated successfully for pictureID {1}.")
+        
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"An error occurred: {e}")
+    finally:
+        # Ensure the database connection is closed
+        if conn is not None:
+            conn.close()
+
+def insert_picture(pictureID, coordinates, link, chosen):
+    conn = None
+    try:
+        # Creating a cursor object using the connection object
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        # SQL statement for inserting data
+        insert_sql = '''INSERT INTO pictures (pictureID, coordinates, link, chosen) 
+                        VALUES (%s, %s, %s, %s)'''
+        # Executing the SQL statement with the provided values
+        cur.execute(insert_sql, (pictureID, coordinates, link, chosen))
+        # Committing the transaction
+        conn.commit()
+        print("Row inserted successfully.")
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error in insert operation: {error}")
+    finally:
+        # Closing the cursor
+        if cur is not None:
+            cur.close()
+
+def update_picture_id_by_coordinates(new_pictureID, coordinates):
+    conn = None
+    try:
+        # Creating a cursor object using the connection object
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        # SQL statement for updating the pictureID
+        update_sql = '''UPDATE pictures SET pictureID = %s WHERE coordinates = ARRAY[%s, %s]::float[]'''
+        # Executing the SQL statement with the provided values
+        cur.execute(update_sql, (new_pictureID, coordinates[0], coordinates[1]))
+        # Committing the transaction
+        conn.commit()
+        # Check if the update was successful
+        if cur.rowcount == 0:
+            print("No rows were updated.")
+        else:
+            print(f"{cur.rowcount} row(s) updated successfully.")
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error in update operation: {error}")
+    finally:
+        # Closing the cursor
+        if cur is not None:
+            cur.close()
+
+def get_winner(challenge_id):
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        cur.execute("SELECT winner_id FROM matches WHERE challenge_id = %s;", (challenge_id,))
+        result = cur.fetchone()
+        if result is None:
+            return None
+        else:
+            return result[0]
+        
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error: {error}")
+    finally:
+        if conn is not None:
+            conn.close()
 
 def main():
     # update()
@@ -795,19 +1060,12 @@ def main():
     #drop_pic_table()
     #create_pic_table()
     # print(has_pic_been_chosen(4))
-    reset_pic()
-    #insert_challenge_record()
-    #reset_picture('33')
-    #show_rows()
-    print(player_played('wn4759'))
-    #reset_players()
-    #print(player_played('wn4759'))
+
     #print()
     #clear_challenges_table()
     #clear_matches_table()
     #reset_challenges_id_sequence()
-    
-
+   
     # Closing the connection
 if __name__=="__main__":
     main()
