@@ -194,12 +194,9 @@ hr {
 .game-btns {
   text-decoration: none;
   display: flex;
-  flex-direction: row;
-  align-items: flex-end;
   justify-content: flex-end;
-  position: fixed;
-  bottom: 3vh;
-  right: 15vw;
+  position: relative;
+  bottom: -65vh;
 }
 
 footer {
@@ -211,10 +208,11 @@ footer {
 .main-content {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: flex-start;
-  width: 90%; /* Ensure the container takes up the full width */
+  width: 100%; /* Ensure the container takes up the full width */
   max-height: 90%;
+  padding: 4vh 0vw;
 }
 
 .result-content {
@@ -234,7 +232,7 @@ footer {
 .map {
   width: 40vw; 
   height: 65vh; 
-  padding: 1vh 1vw;
+  padding: 1vh 0vw;
   position: relative; 
   margin-bottom: 5vh;
 }
@@ -349,3 +347,19 @@ footer {
   margin-right: auto;
 }
 
+@media screen and (max-width: 1000px) {
+  .main-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .game-image {
+    width: 50vw; /* Adjust as needed */
+    height: 50vh;
+  }
+
+  .map {
+    width: 50vw; /* Adjust as needed */
+    height: auto;
+  }
+}
