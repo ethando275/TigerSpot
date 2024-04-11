@@ -85,7 +85,7 @@ def game():
     user_played = database.player_played(username)
 
     if user_played == True:
-        html_code = flask.render_template('index.html', username = username)
+        html_code = flask.render_template('alrplayed.html', username = username)
         response = flask.make_response(html_code)
         return response
 
