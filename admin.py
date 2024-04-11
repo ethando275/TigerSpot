@@ -241,7 +241,7 @@ def submit2():
         return 
     index = int(flask.request.form.get('index'))
     challenge_id = flask.request.form.get('challenge_id')
-    database.update_versus_pic_status(challenge_id, auth.authenticate(), index)
+    database.update_versus_pic_status(challenge_id, auth.authenticate(), index+1)
     versusList = database.get_random_versus(challenge_id)
     coor = database.get_pic_info("coordinates", versusList[index])
     distance = database.calc_distance(currLat, currLon, coor)
