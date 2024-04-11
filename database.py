@@ -1,6 +1,8 @@
 import psycopg2
 from geopy.distance import geodesic
 import random
+import cloudinary.api
+import cloud
 
 
 DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
@@ -32,20 +34,31 @@ def create_pic_table():
         link varchar(255), 
         chosen boolean);''')
 
+    cloudinary.config(
+    cloud_name = 'dmiaxw4rr', 
+    api_key = '678414952824331', 
+    api_secret = 'wt-aWFLd0n-CelO5kN8h1NCYFzY'
+    )
+
+    folder_name = 'TigerSpot'
+
+    resources = cloudinary.api.resources(
+        type = 'upload',
+        prefix = folder_name, 
+        max_results = 500,
+        context = True
+    )
+
     pictureID = 0
 
-    with open('picturedata.txt', 'r') as file:
-        while True:
-            link = file.readline().strip()
-
-            if not link:
-                break 
-            coordinates = [float(file.readline().strip()), float(file.readline().strip())]
-            pictureID += 1
-            chosen = False
-            cur.execute(''' INSERT INTO pictures (pictureID, coordinates, link, chosen) 
-            VALUES (%s, %s, %s, %s);
-            ''', (pictureID, coordinates, link, chosen))
+    for resource in resources.get('resources', []):
+        link, latitude, longitude = cloud.image_data(resource)
+        coordinates = [latitude, longitude]
+        pictureID += 1
+        chosen = False
+        cur.execute(''' INSERT INTO pictures (pictureID, coordinates, link, chosen) 
+        VALUES (%s, %s, %s, %s);
+        ''', (pictureID, coordinates, link, chosen))
         # cur.execute(f'''INSERT INTO pictures (pictureID, coordinates, link, chosen) 
         # VALUES ({pictureID}, {coordinates}, '{link}', {chosen});''')
     conn.commit()
@@ -58,7 +71,8 @@ def create_user_table():
     cur = conn.cursor()
     cur.execute('''CREATE TABLE IF NOT EXISTS users (
     username varchar(255),
-    points int);''')
+    points int,
+    played boolean);''')
 
         # cur.execute('''INSERT INTO users (userID, points) 
         #     VALUES ('1', '123');''')
@@ -167,11 +181,13 @@ def show_rows():
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
 
+    print("USERS TABLE")
     cur.execute("SELECT * FROM users;")
     rows = cur.fetchall()
     for row in rows:
         print(row)
-        
+    
+    print("DAILY USERS TABLE")
     cur.execute("SELECT * FROM usersDaily;")
     rows = cur.fetchall()
     for row in rows:
@@ -182,10 +198,12 @@ def show_rows():
     for row in rows:
         print(row)
     
+    print("CHALLENGES TABLE")
     cur.execute("SELECT * FROM challenges;")
     for row in cur.fetchall():
         print(row)
 
+    print("MATCHES TABLE")
     cur.execute("SELECT * FROM matches;")
     for row in cur.fetchall():
         print(row)
@@ -205,7 +223,7 @@ def insert_player(username, points): # can remove this points parameter
     result = cur.fetchone()
 
     if result is None:
-        cur.execute("INSERT INTO users (username, points) VALUES (%s, %s);", (username, 0))
+        cur.execute("INSERT INTO users (username, points, played) VALUES (%s, %s, %s);", (username, 0, False))
 
     # Commit change and disconnect
     conn.commit()
@@ -230,10 +248,46 @@ def update_player(username, points):
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
 
-    cur.execute("UPDATE users SET points=%s WHERE username=%s;", (points, username))
+    cur.execute("UPDATE users SET points=%s, played=%s WHERE username=%s;", (points, True, username))
 
     conn.commit()
     conn.close()
+
+def player_played(username): 
+
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+    cur.execute("SELECT played FROM users WHERE username=%s;", (username, ))
+    result = cur.fetchall()[0][0]
+
+    conn.commit()
+    conn.close()
+
+    return result
+
+def reset_players():
+
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+
+    cur.execute("UPDATE users SET played=%s;", (False, ))
+
+    conn.commit()
+    conn.close()
+
+def reset_picture(id):
+
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+    update("pictures", "chosen", False, "pictureID", id)
+
+    conn.commit()
+    conn.close()
+
+
 
 def update_player_daily(username, points): 
     conn = psycopg2.connect(DATABASE_URL)
@@ -596,6 +650,15 @@ def get_pic_id():
     while(chosen):
         num = random.randint(1, get_table_size())
         chosen = has_pic_been_chosen(num)
+    
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+    update("pictures", "chosen", True, "pictureID", num)
+
+    conn.commit()
+    conn.close()
+
     return num
 
 #For Admin: reset all pictures to False, meaning they haven't been chosen
@@ -997,24 +1060,7 @@ def main():
     #drop_pic_table()
     #create_pic_table()
     # print(has_pic_been_chosen(4))
-    # reset_pic()
-    #insert_picture(4, [40.349020, -74.653282], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594813/IMG_8918_o7x9nv.jpg", False)
-    #insert_picture(5, [40.35014, -74.65285], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594815/IMG_0010_a2xd92.jpg", False)
-    #insert_picture(6, [40.34855, -74.65622], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594815/IMG_0011_epzjfx.jpg", False)
-    #insert_picture(7, [40.34785, -74.65410], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594813/IMG_0016_pvpuan.jpg", False)
-    #insert_picture(8, [40.34952, -74.65760], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594814/IMG_0012_gyeoc8.jpg", False)
-    #insert_picture(9, [40.34661, -74.65605], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594814/IMG_0013_a2lgwj.jpg", False)
-    #insert_picture(10, [40.35020, -74.65503], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594814/IMG_0014_mhbsia.jpg", False)
-    #insert_picture(11, [40.34201, -74.65450], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594813/IMG_0018_jkycga.jpg", False)
-    #insert_picture(12, [40.34789, -74.65794], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594813/IMG_0017_gp6byj.jpg", False)
-    #insert_picture(13, [40.34597, -74.65759], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781259/TigerSpot/IMG_2992_saqtml.jpg", False)
-    #insert_picture(13, [40.34868, -74.65508], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781260/TigerSpot/IMG_3007_pug42w.jpg", False)
-    #update_picture_id_by_coordinates(14, [40.34902, -74.653282])
-    #update_picture_id_by_coordinates(15, [40.35014, -74.65285])
-    #update_picture_id_by_coordinates(16, [40.34868, -74.65508])
-    show_rows()
-    #update_picture_coordinates()
-    #insert_into_challenges()
+
     #print()
     #clear_challenges_table()
     #clear_matches_table()
