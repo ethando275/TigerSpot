@@ -361,6 +361,7 @@ footer {
     width: 85vw; 
     height: auto;
     padding-left: 4vw;
+    padding-bottom: 4vh;
   }
 
   #map {
