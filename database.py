@@ -239,7 +239,7 @@ def insert_player(username, points): # can remove this points parameter
     conn.commit()
     conn.close()
 
-def calculate_points(username, distance):
+def calculate_today_points(distance):
     if distance - 3 <= 0:
         points = 100
     elif distance - 10 <= 0:
@@ -248,8 +248,12 @@ def calculate_points(username, distance):
         points = 50
     else:
         points = 0
+    
+    return points
 
-    points = points + get_points(username)
+def calculate_total_points(username, today_points):
+    
+    points = today_points + get_points(username)
 
     return points
 
@@ -1253,6 +1257,7 @@ def main():
     #reset_challenges_id_sequence()
     #drop_daily_points_table()
     #create_daily_points_table()
+    #reset_players()
     # Closing the connection
     
 if __name__=="__main__":

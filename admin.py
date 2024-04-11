@@ -124,11 +124,14 @@ def submit():
     distance = database.calc_distance(currLat, currLon, coor)
     username = auth.authenticate()
 
-    points = database.calculate_points(username, distance)
-    database.update_player(username, points)
-    database.update_player_daily(username, points, distance)
+    today_points = database.calculate_today_points(distance)
+    total_points = database.calculate_total_points(username, today_points)
+    
+    database.update_player(username, total_points)
+    database.update_player_daily(username, today_points, distance)
 
-    html_code = flask.render_template('results.html', dis = distance, lat = currLat, lon = currLon, coor=coor, points = points)
+
+    html_code = flask.render_template('results.html', dis = distance, lat = currLat, lon = currLon, coor=coor, today_points = today_points)
     response = flask.make_response(html_code)
     return response
 
