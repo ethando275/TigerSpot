@@ -28,7 +28,7 @@
             width: 50.5%; /* New container takes up remaining space */
             margin-left: auto;
             margin-right: auto;
-            padding: 2vh 2vw; /* Add some padding */
+            padding-top: 1vh;
         }
     </style>
   </head>
@@ -49,11 +49,11 @@
     </header>
 
     <main class="result-content">
+      <div id="distance"></div>
+      <div id="distance">You have scored {{today_points}} points!</div>
       <div class="map">
         <!-- Add map ad-->
         <div id="map"></div>
-        <div id="distance"></div>
-        <div id="points">You have scored {{today_points}} points!</div>
         <br>
       </div>
       <a href="/leaderboard"><button class="result-btn"><b>See Results</b></button></a>
