@@ -19,12 +19,18 @@ dotenv.load_dotenv()
 app.secret_key = os.environ['APP_SECRET_KEY']
 
 #-----------------------------------------------------------------------
-id = database.get_pic_id()
+id = 1
 # database.update("pictures", "chosen", True, "pictureID", id)
 #-----------------------------------------------------------------------
 
-
+def get_username():
+    username = auth.authenticate()
 # Routes for authentication.
+
+def pic_of_day():
+    global id
+    id = database.get_pic_id()
+    print(f"PICTUREID IS NOW: {id}")
 
 @app.route('/logoutapp', methods=['GET'])
 def logoutapp():
@@ -39,10 +45,19 @@ def logoutcas():
 @app.route('/', methods=['GET'])
 @app.route('/index', methods=['GET'])
 def index():
+
+    html_code = flask.render_template('index.html')
+    response = flask.make_response(html_code)
+    return response
+
+#-----------------------------------------------------------------------
+
+@app.route('/menu', methods=['GET'])
+def menu():
     username = auth.authenticate()
     database.insert_player(username, 0)
     
-    html_code = flask.render_template('index.html', username = username)
+    html_code = flask.render_template('menu.html', username = username)
     # html_code = flask.render_template('index.html')
     response = flask.make_response(html_code)
     return response
@@ -61,9 +76,20 @@ def requests():
 
 @app.route('/game', methods=['GET'])
 def game():
+
+    username = auth.authenticate()
+
     # get link from database
     # link = database.query()
-    
+
+    user_played = database.player_played(username)
+
+    if user_played == True:
+        html_code = flask.render_template('alrplayed.html', username = username)
+        response = flask.make_response(html_code)
+        return response
+
+        
     # coor = database.get_pic_info("coordinates", id)
     link = database.get_pic_info("link", id)
 
@@ -73,6 +99,7 @@ def game():
     # distance = flask.request.args.get('distance')
     # print('Distance: ' + distance)
     return response
+
 
 #-----------------------------------------------------------------------
 
