@@ -234,7 +234,6 @@ footer {
   height: 65vh; 
   padding: 1vh 0vw;
   position: relative; 
-  margin-bottom: 5vh;
 }
 
 /* Leaderboard styles */
@@ -354,13 +353,18 @@ footer {
   }
 
   .game-image {
-    width: 50vw; /* Adjust as needed */
+    width: 80vw; 
     height: 50vh;
   }
 
   .map {
-    width: 50vw; /* Adjust as needed */
+    width: 85vw; 
     height: auto;
+    padding-left: 4vw;
+  }
+
+  #map {
+    width: 85vw;
   }
 }
 
