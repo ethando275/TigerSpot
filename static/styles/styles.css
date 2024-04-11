@@ -83,6 +83,7 @@ main {
 
 .button {
   background-color: orange;
+  color: black;
   border: 0.6vw solid black;
   border-radius: 1vw;
   font-size: 8vh;
