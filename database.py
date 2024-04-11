@@ -1,6 +1,7 @@
 import psycopg2
 from geopy.distance import geodesic
 import random
+import cloudinary
 import cloudinary.api
 import cloud
 
