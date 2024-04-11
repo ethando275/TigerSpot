@@ -39,19 +39,18 @@
           <img class="logo" src="static\styles\logo.png" alt="Logo" />
           <p>
             <b class="text">
-              Oops, looks like you've already made your daily guess! 
-              Please wait until tomorrow to play again. 
-              In the meantime, play a 1v1 game with a friend instead!
+              Hello {{username}}. Think you have what it takes to “spot” where a Princeton landmark
+              is? Test your skills with Tiger Spot and land yourself at the top
+              of the leaderboard!
             </b>
           </p>
-          <p>
-            <b class="text">
-                <!-- REPLACE DAILY_SCORE VAR WITH WHATEVER IT'S CALLED -->
-                Your Today's Score is: {{daily_score}}. 
-                Your distance from the actual point was {{distance_score}} meters away.
-            </b>
-          </p>
+          <a href="/game">
+          <button class="button">
+            <b>Let's Go!</b>
+          </button>
+          </a>
         </div>
+        <!-- Add any content specific to the index page here -->
       </main>
     </div>
   </body>
