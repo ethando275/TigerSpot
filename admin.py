@@ -39,10 +39,19 @@ def logoutcas():
 @app.route('/', methods=['GET'])
 @app.route('/index', methods=['GET'])
 def index():
+
+    html_code = flask.render_template('index.html')
+    response = flask.make_response(html_code)
+    return response
+
+#-----------------------------------------------------------------------
+
+@app.route('/menu', methods=['GET'])
+def menu():
     username = auth.authenticate()
     database.insert_player(username, 0)
     
-    html_code = flask.render_template('index.html', username = username)
+    html_code = flask.render_template('menu.html', username = username)
     # html_code = flask.render_template('index.html')
     response = flask.make_response(html_code)
     return response
