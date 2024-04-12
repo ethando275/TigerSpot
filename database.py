@@ -341,12 +341,8 @@ def update_player_daily(username, points, distance):
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
 
-    cur.execute("SELECT points FROM usersDaily WHERE username=%s;", (username,))
-    result = cur.fetchone()
-
-    if result is None:
-        cur.execute("UPDATE usersDaily SET points=%s, distance=%s, played=%s WHERE username=%s;", (points, distance, True, username))
-
+    cur.execute("UPDATE usersDaily SET points=%s, distance=%s, played=%s WHERE username=%s;", (points, distance, True, username))
+    print("EXECUTED DAILY UPDATE")
     conn.commit()
     conn.close()
     
@@ -1123,10 +1119,8 @@ def main():
     # return link
     #print(get_points('fl9971'))
     #drop_pic_table()
-    create_pic_table()
     show_rows()
-    create_pic_table()
-    show_rows()
+    print(player_played('wn4759'))
     # print(has_pic_been_chosen(4))
     # reset_pic()
     #insert_picture(4, [40.349020, -74.653282], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594813/IMG_8918_o7x9nv.jpg", False)
