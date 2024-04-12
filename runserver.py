@@ -11,7 +11,7 @@ def timer():
     pic_changed = False
     while True: 
         now = datetime.datetime.now()
-        if now.hour == 0 and now.minute == 0 and now.second == 0 and not pic_changed:
+        if now.hour == 12 and now.minute == 9 and now.second == 0 and not pic_changed:
             database.reset_players()
             admin.pic_of_day()
             database.drop_daily_points_table()
