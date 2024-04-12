@@ -256,6 +256,13 @@ def calculate_today_points(distance):
         points = 250
     elif distance - 50 <= 0:
         points = 100
+        points = 750
+    elif distance - 35 <= 0:
+        points = 500
+    elif distance - 45 <= 0:
+        points = 250
+    elif distance - 50 <= 0:
+        points = 100
     else:
         points = 0
     
@@ -1102,6 +1109,7 @@ def get_winner(challenge_id):
         if conn is not None:
             conn.close()
 
+def main():
 def main():
     # update()
     # create_pic_table()
