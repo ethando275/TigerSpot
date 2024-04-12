@@ -10,8 +10,6 @@ import dotenv
 import random
 from flask import Flask, flash, redirect, url_for, request, render_template
 
-
-
 #-----------------------------------------------------------------------
 
 app = flask.Flask(__name__, template_folder='.')
@@ -19,18 +17,11 @@ dotenv.load_dotenv()
 app.secret_key = os.environ['APP_SECRET_KEY']
 
 #-----------------------------------------------------------------------
+# GLOBAL VAR DEFAULT VAL FOR ID, NEED TO RESOLVE SECURITY MEASURES
 id = 1
-# database.update("pictures", "chosen", True, "pictureID", id)
 #-----------------------------------------------------------------------
 
-
-def pic_of_day(new_id):
-    global id
-    id = new_id
-    print(f"PICTUREID IS NOW: {id}")
-
 # Routes for authentication.
-
 @app.route('/logoutapp', methods=['GET'])
 def logoutapp():
     return auth.logoutapp()
