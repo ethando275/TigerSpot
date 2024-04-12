@@ -1,32 +1,6 @@
 import sys
 import admin
 import argparse
-import database
-import datetime
-import time
-import threading
-
-
-def timer():
-    pic_changed = False
-    while True: 
-        now = datetime.datetime.now()
-        if now.hour == 12 and now.minute == 9 and now.second == 0 and not pic_changed:
-            database.reset_players()
-            admin.pic_of_day()
-            database.drop_daily_points_table()
-            database.create_daily_points_table()
-            print('here')
-            pic_changed = True
-            time.sleep(60)
-
-
-        elif now.minute != 0: 
-            pic_changed = False
-        
-        time.sleep(1)
-
-            
 
 def main():
     parser = argparse.ArgumentParser(
@@ -44,15 +18,8 @@ def main():
         sys.exit(2)
 
     try:
-
-        timer_thread = threading.Thread(target=timer)
-        #stops thread when main program exits
-        timer_thread.daemon = True
-        timer_thread.start()
-    
-        admin.app.run(host='0.0.0.0', port=args.port, debug=False)
+        admin.app.run(host='0.0.0.0', port=args.port, debug=True)
         
-
     except Exception as ex:
         print(ex, file=sys.stderr)
         sys.exit(1)
