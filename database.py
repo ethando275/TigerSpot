@@ -248,6 +248,8 @@ def insert_player(username):
 def calculate_today_points(distance):
     if distance - 15 <= 0:
         points = 1000
+    if distance - 15 <= 0:
+        points = 1000
     elif distance - 25 <= 0:
         points = 750
     elif distance - 35 <= 0:
@@ -259,6 +261,7 @@ def calculate_today_points(distance):
     else:
         points = 0
     
+    return points 
     return points 
 
 def calculate_total_points(username, today_points):
@@ -1108,6 +1111,8 @@ def main():
     # create_user_table()
     #reset_players()
     #show_rows()
+    #reset_players()
+    #show_rows()
     # insert()
     # connection establishment
     # Creating a cursor object
@@ -1118,6 +1123,8 @@ def main():
     # return link
     #print(get_points('fl9971'))
     #drop_pic_table()
+    create_pic_table()
+    show_rows()
     create_pic_table()
     show_rows()
     # print(has_pic_been_chosen(4))
