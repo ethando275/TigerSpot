@@ -4,9 +4,15 @@ import random
 import cloudinary
 import cloudinary.api
 import cloud
-
+import datetime
 
 DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
+
+
+def pic_of_day():
+   day_of_year = datetime.datetime.now().timetuple().tm_yday
+   picture_id = (day_of_year - 1) % 125 + 1
+   return picture_id
 
 def drop_pic_table():
    # query to create a database
@@ -40,8 +46,7 @@ def create_pic_table():
     cur.execute('''CREATE TABLE IF NOT EXISTS pictures (
         pictureID int,
         coordinates float[2],
-        link varchar(255), 
-        chosen boolean);''')
+        link varchar(255));''')
 
     cloudinary.config(
     cloud_name = 'dmiaxw4rr', 
@@ -65,9 +70,9 @@ def create_pic_table():
         coordinates = [latitude, longitude]
         pictureID += 1
         chosen = False
-        cur.execute(''' INSERT INTO pictures (pictureID, coordinates, link, chosen) 
-        VALUES (%s, %s, %s, %s);
-        ''', (pictureID, coordinates, link, chosen))
+        cur.execute(''' INSERT INTO pictures (pictureID, coordinates, link) 
+        VALUES (%s, %s, %s);
+        ''', (pictureID, coordinates, link))
         # cur.execute(f'''INSERT INTO pictures (pictureID, coordinates, link, chosen) 
         # VALUES ({pictureID}, {coordinates}, '{link}', {chosen});''')
     conn.commit()
@@ -80,8 +85,7 @@ def create_user_table():
     cur = conn.cursor()
     cur.execute('''CREATE TABLE IF NOT EXISTS users (
     username varchar(255),
-    points int,
-    played boolean);''')
+    points int);''')
 
         # cur.execute('''INSERT INTO users (userID, points) 
         #     VALUES ('1', '123');''')
@@ -98,7 +102,8 @@ def create_daily_points_table():
     cur.execute('''CREATE TABLE IF NOT EXISTS usersDaily (
     username varchar(255),
     points int,
-    distance int);''')
+    distance int,
+    played boolean);''')
 
     conn.commit()
     cur.close()
@@ -158,6 +163,7 @@ def get_pic_info(col, id):
     # create_user_table()
 
     cur.execute(f"SELECT {col} FROM pictures WHERE pictureID = {id}")
+
 
     rows = cur.fetchall()
 
@@ -222,7 +228,7 @@ def show_rows():
     cur.close()
     conn.close()
     
-def insert_player(username, points): # can remove this points parameter
+def insert_player(username):
 
    # Connect to database
     conn = psycopg2.connect(DATABASE_URL)
@@ -233,7 +239,7 @@ def insert_player(username, points): # can remove this points parameter
     result = cur.fetchone()
 
     if result is None:
-        cur.execute("INSERT INTO users (username, points, played) VALUES (%s, %s, %s);", (username, 0, False))
+        cur.execute("INSERT INTO users (username, points) VALUES (%s, %s);", (username, 0,))
 
     # Commit change and disconnect
     conn.commit()
@@ -253,7 +259,7 @@ def calculate_today_points(distance):
     else:
         points = 0
     
-    return points
+    return points 
 
 def calculate_total_points(username, today_points):
     
@@ -266,7 +272,7 @@ def update_player(username, points):
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
 
-    cur.execute("UPDATE users SET points=%s, played=%s WHERE username=%s;", (points, True, username))
+    cur.execute("UPDATE users SET points=%s WHERE username=%s;", (points, username))
 
     conn.commit()
     conn.close()
@@ -276,7 +282,7 @@ def player_played(username):
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
 
-    cur.execute("SELECT played FROM users WHERE username=%s;", (username, ))
+    cur.execute("SELECT played FROM usersDaily WHERE username=%s;", (username, ))
     result = cur.fetchall()[0][0]
 
     conn.commit()
@@ -284,13 +290,22 @@ def player_played(username):
 
     return result
 
+def reset_player(username):
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+    cur.execute("UPDATE usersDaily SET played=%s, points=%s WHERE username=%s;", (False, 0, username))
+
+    conn.commit()
+    conn.close()
+
 def reset_players():
 
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
 
 
-    cur.execute("UPDATE users SET played=%s;", (False, ))
+    cur.execute("UPDATE usersDaily SET played=%s;", (False, ))
 
     conn.commit()
     conn.close()
@@ -305,6 +320,19 @@ def reset_picture(id):
     conn.commit()
     conn.close()
 
+def insert_player_daily(username):
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+    cur.execute("SELECT points FROM usersDaily WHERE username=%s;", (username,))
+    result = cur.fetchone()
+
+    if result is None:
+        cur.execute("INSERT INTO usersDaily (username, points, distance, played) VALUES (%s, %s, %s, %s);", (username, 0, 0, False))
+
+    conn.commit()
+    conn.close()
+
 
 def update_player_daily(username, points, distance):
     conn = psycopg2.connect(DATABASE_URL)
@@ -314,7 +342,7 @@ def update_player_daily(username, points, distance):
     result = cur.fetchone()
 
     if result is None:
-        cur.execute("INSERT INTO usersDaily (username, points, distance) VALUES (%s, %s, %s);", (username, points, distance))
+        cur.execute("UPDATE usersDaily SET points=%s, distance=%s, played=%s WHERE username=%s;", (points, distance, True, username))
 
     conn.commit()
     conn.close()
@@ -1011,17 +1039,17 @@ def update_picture_coordinates():
         if conn is not None:
             conn.close()
 
-def insert_picture(pictureID, coordinates, link, chosen):
+def insert_picture(pictureID, coordinates, link):
     conn = None
     try:
         # Creating a cursor object using the connection object
         conn = psycopg2.connect(DATABASE_URL)
         cur = conn.cursor()
         # SQL statement for inserting data
-        insert_sql = '''INSERT INTO pictures (pictureID, coordinates, link, chosen) 
-                        VALUES (%s, %s, %s, %s)'''
+        insert_sql = '''INSERT INTO pictures (pictureID, coordinates, link) 
+                        VALUES (%s, %s, %s)'''
         # Executing the SQL statement with the provided values
-        cur.execute(insert_sql, (pictureID, coordinates, link, chosen))
+        cur.execute(insert_sql, (pictureID, coordinates, link))
         # Committing the transaction
         conn.commit()
         print("Row inserted successfully.")
@@ -1078,8 +1106,8 @@ def main():
     # update()
     # create_pic_table()
     # create_user_table()
-    reset_players()
-    show_rows()
+    #reset_players()
+    #show_rows()
     # insert()
     # connection establishment
     # Creating a cursor object
@@ -1090,7 +1118,8 @@ def main():
     # return link
     #print(get_points('fl9971'))
     #drop_pic_table()
-    #create_pic_table()
+    create_pic_table()
+    show_rows()
     # print(has_pic_been_chosen(4))
     # reset_pic()
     #insert_picture(4, [40.349020, -74.653282], "https://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594813/IMG_8918_o7x9nv.jpg", False)
@@ -1107,15 +1136,18 @@ def main():
     #update_picture_id_by_coordinates(14, [40.34902, -74.653282])
     #update_picture_id_by_coordinates(15, [40.35014, -74.65285])
     #update_picture_id_by_coordinates(16, [40.34868, -74.65508])
-    show_rows()
+    #show_rows()
     #update_picture_coordinates()
     #print()
     #create_challenge("jon", "ed8205")
     #clear_challenges_table()
     #clear_matches_table()
     #reset_challenges_id_sequence()
+    #drop_user_table()
+    #create_user_table()
     #drop_daily_points_table()
     #create_daily_points_table()
+    
     #reset_players()
     # Closing the connection
     

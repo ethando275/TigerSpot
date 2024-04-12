@@ -23,14 +23,13 @@ id = 1
 # database.update("pictures", "chosen", True, "pictureID", id)
 #-----------------------------------------------------------------------
 
-def get_username():
-    username = auth.authenticate()
-# Routes for authentication.
 
-def pic_of_day():
+def pic_of_day(new_id):
     global id
-    id = database.get_pic_id()
+    id = new_id
     print(f"PICTUREID IS NOW: {id}")
+
+# Routes for authentication.
 
 @app.route('/logoutapp', methods=['GET'])
 def logoutapp():
@@ -55,7 +54,8 @@ def index():
 @app.route('/menu', methods=['GET'])
 def menu():
     username = auth.authenticate()
-    database.insert_player(username, 0)
+    database.insert_player(username)
+    database.insert_player_daily(username)
     
     html_code = flask.render_template('menu.html', username = username)
     # html_code = flask.render_template('index.html')
@@ -77,6 +77,8 @@ def requests():
 @app.route('/game', methods=['GET'])
 def game():
 
+    global id
+
     username = auth.authenticate()
 
     # get link from database
@@ -91,7 +93,13 @@ def game():
         response = flask.make_response(html_code)
         return response
 
-        
+    print(f"ID WAS {id}")
+
+    if id != database.pic_of_day():
+        database.reset_player(username)
+        id = database.pic_of_day()
+        print(f"ID IS NOW: {id}")
+
     # coor = database.get_pic_info("coordinates", id)
     link = database.get_pic_info("link", id)
 
