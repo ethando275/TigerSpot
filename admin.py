@@ -137,6 +137,7 @@ def submit():
     
     database.update_player(username, total_points)
     database.update_player_daily(username, today_points, distance)
+    print("UPDATED")
 
 
     html_code = flask.render_template('results.html', dis = distance, lat = currLat, lon = currLon, coor=coor, today_points = today_points)
