@@ -180,7 +180,7 @@ def create_challenge_route():
     
     # Handle the response from the database function
     if 'error' in result:
-        return flask.jsonify({'status': 'error', 'message': result['error']}), 400  # Consider adding appropriate status codes
+        return flask.jsonify({'status': 'error', 'message': result['error']}), 400 
     else:
         return flask.jsonify({'status': 'success', 'message': result['success'], 'challenge_id': result['challenge_id']}), 200
 
