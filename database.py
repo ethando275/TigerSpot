@@ -428,7 +428,7 @@ def create_challenge(challenger_id, challengee_id):
         
         challenge_id = cur.fetchone()[0]
         conn.commit()
-
+        print(f"Challenge created with ID: {challenge_id}")
         return {'success': 'Challenge created successfully', 'challenge_id': challenge_id}
 
     except (Exception, psycopg2.DatabaseError) as error:
@@ -1018,10 +1018,10 @@ def show_rows():
     for row in rows:
         print(row)
     
-    cur.execute("SELECT * FROM pictures;")
-    rows = cur.fetchall()
-    for row in rows:
-        print(row)
+    #cur.execute("SELECT * FROM pictures;")
+    #rows = cur.fetchall()
+    #for row in rows:
+     #   print(row)
     
     print("CHALLENGES TABLE")
     cur.execute("SELECT * FROM challenges;")
@@ -1040,7 +1040,7 @@ def show_rows():
 
 def main():
     # update()
-    create_pic_table()
+    #create_pic_table()
     # create_user_table()
     #reset_players()
     #show_rows()
@@ -1057,7 +1057,7 @@ def main():
     #print(get_points('fl9971'))
     #drop_table('pictures')
     show_rows()
-    print(player_played('wn4759'))
+    #print(player_played('wn4759'))
     # print(has_pic_been_chosen(4))
     # reset_pic()
     #update_picture_id_by_coordinates(14, [40.34902, -74.653282])
