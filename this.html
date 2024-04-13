@@ -114,25 +114,27 @@
                 var challengeeID = document.getElementById("opponentID").value;
                 // Set up the AJAX request
                 fetch('/create-challenge', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: `challenger_id=${encodeURIComponent(challengerID)}&challengee_id=${encodeURIComponent(challengeeID)}`
-                })
-                .then(response => response.json())
-                // Inside your fetch().then() response handling
-                .then(data => {
-                    if (data.status === 'error' || challengeeID == "") {
-                        // Notify the user that a match already exists
-                        document.getElementById("matchID").textContent = "";
-                        alert(data.message);
-                    } else {
-                        // Notify the user that a new match was created successfully
-                        alert("Match created successfully. Match ID: " + data.challenge_id + ". Refresh to see challenge updates.");
-                        
-                    }
-                })
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `challenger_id=${encodeURIComponent(challengerID)}&challengee_id=${encodeURIComponent(challengeeID)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);  // Log data to see what's being returned from the server
+                if (data.status === 'error' || challengeeID == "") {
+                    console.log("Handling error");  // Check if this part gets executed
+                    alert(data.message);
+                } else {
+                    alert("Match created successfully. Match ID: " + data.challenge_id + ". Refresh to see challenge updates.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);  // Log errors if fetch itself fails
+                alert('Error making request: ' + error.message);
+            });
+
                 });
             });
 </script>
