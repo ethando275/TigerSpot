@@ -106,6 +106,18 @@ def game():
 
 @app.route('/submit', methods=['POST'])
 def submit():
+
+    username = auth.authenticate()
+
+    user_played = database.player_played(username)
+
+    print(f"INSIDE SUBMIT: user played is {user_played}")
+
+    if user_played:
+        html_code = flask.render_template('alrplayed.html', username = username, today_points = today_points, today_distance = today_distance)
+        response = flask.make_response(html_code)
+        return response
+
     # get user input using flask.request.args.get('')
     #once user clicks submit then get coordinates 
     currLat = flask.request.form.get('currLat')  # Use .get for safe retrieval
@@ -129,7 +141,6 @@ def submit():
     database.update_player(username, total_points)
     database.update_player_daily(username, today_points, distance)
     print("UPDATED")
-
 
     html_code = flask.render_template('results.html', dis = distance, lat = currLat, lon = currLon, coor=coor, today_points = today_points)
     response = flask.make_response(html_code)
