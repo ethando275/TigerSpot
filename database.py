@@ -23,9 +23,19 @@ DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-c
 def drop_table(table):
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
-    cur.execute(f"DROP TABLE {table}")
+    cur.execute(f"DROP TABLE {table}; ")
+
     conn.commit()
+    cur.close()
     conn.close()
+
+def drop_pic_table():
+   # query to create a database
+   conn = psycopg2.connect(DATABASE_URL)
+   cur = conn.cursor()
+   cur.execute('''DROP TABLE pictures; ''')
+   conn.commit()
+   conn.close()
 
 def create_pic_table():
     conn = psycopg2.connect(DATABASE_URL)
@@ -57,10 +67,14 @@ def create_pic_table():
     for resource in resources.get('resources', []):
         link, latitude, longitude = cloud.image_data(resource)
         coordinates = [latitude, longitude]
-        pictureID += 1
-        cur.execute(''' INSERT INTO pictures (pictureID, coordinates, link) 
-        VALUES (%s, %s, %s);
-        ''', (pictureID, coordinates, link))
+
+        cur.execute("SELECT * FROM pictures WHERE link = %s", (link,))
+        exists = cur.fetchone()
+        if not exists:
+            pictureID += 1
+            cur.execute(''' INSERT INTO pictures (pictureID, coordinates, link) 
+            VALUES (%s, %s, %s);
+            ''', (pictureID, coordinates, link))
 
     conn.commit()
     cur.close()
@@ -1018,6 +1032,7 @@ def show_rows():
     for row in rows:
         print(row)
     
+    print("PICTURES TABLE")
     cur.execute("SELECT * FROM pictures;")
     rows = cur.fetchall()
     for row in rows:
@@ -1033,7 +1048,7 @@ def show_rows():
     for row in cur.fetchall():
         print(row)
 
-    # conn.commit()
+    conn.commit()
     cur.close()
     conn.close()
 
@@ -1135,7 +1150,7 @@ def main():
     # update()
     #create_pic_table()
     # create_user_table()
-    reset_players()
+    #reset_players()
     #show_rows()
     #reset_players()
     #show_rows()
@@ -1144,11 +1159,12 @@ def main():
     # Creating a cursor object
     # return query(cur)
     # create_user_table()
-    # create_pic_table()
+    #create_pic_table()
     # link = query()
     # return link
     #print(get_points('fl9971'))
-    #drop_table('pictures')
+    #drop_pic_table()
+    #cur.close()
     show_rows()
     print(player_played('wn4759'))
     # print(has_pic_been_chosen(4))
