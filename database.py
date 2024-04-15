@@ -1002,6 +1002,101 @@ def get_winner(challenge_id):
 
 #-----------------------------------------------------------------------
 
+def update_versus_pic_status(challenge_id, user_id, index):
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        
+        # First, determine if the user is the challenger or the challengee for this challenge
+        cur.execute('''
+            SELECT challenger_id, challengee_id
+            FROM challenges
+            WHERE id = %s;
+        ''', (challenge_id,))
+        
+        result = cur.fetchone()
+        if result is None:
+            print("Challenge not found.")
+            return
+        
+        challenger_id, challengee_id = result
+        
+        # Depending on whether the user is the challenger or the challengee,
+        # update the corresponding finished column in the matches table
+        if user_id == challenger_id:
+            cur.execute('''
+                UPDATE challenges
+                SET challenger_bool[%s] = TRUE
+                WHERE id = %s;
+            ''', (index, challenge_id))
+        elif user_id == challengee_id:
+            cur.execute('''
+                UPDATE challenges
+                SET challengee_bool[%s] = TRUE
+                WHERE id = %s;
+            ''', (index, challenge_id))
+        else:
+            print("User is not part of this challenge.")
+            return
+        
+        conn.commit()
+        print("Finish status updated successfully.")
+        
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error: {error}")
+    finally:
+        if conn is not None:
+            conn.close()
+
+def store_versus_pic_points(challenge_id, user_id, index, points):
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        
+        # First, determine if the user is the challenger or the challengee for this challenge
+        cur.execute('''
+            SELECT challenger_id, challengee_id
+            FROM challenges
+            WHERE id = %s;
+        ''', (challenge_id,))
+        
+        result = cur.fetchone()
+        if result is None:
+            print("Challenge not found.")
+            return
+        
+        challenger_id, challengee_id = result
+        
+        # Depending on whether the user is the challenger or the challengee,
+        # update the corresponding finished column in the matches table
+        if user_id == challenger_id:
+            cur.execute('''
+                UPDATE challenges
+                SET challenger_points[%s] = %s
+                WHERE id = %s;
+            ''', (index, points, challenge_id))
+        elif user_id == challengee_id:
+            cur.execute('''
+                UPDATE challenges
+                SET challengee_points[%s] = %s
+                WHERE id = %s;
+            ''', (index, points, challenge_id))
+        else:
+            print("User is not part of this challenge.")
+            return
+        
+        conn.commit()
+        print("Points updated successfully.")
+        
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error: {error}")
+    finally:
+        if conn is not None:
+            conn.close()
+
+
 def show_rows():
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
@@ -1018,10 +1113,11 @@ def show_rows():
     for row in rows:
         print(row)
     
-    #cur.execute("SELECT * FROM pictures;")
-    #rows = cur.fetchall()
-    #for row in rows:
-     #   print(row)
+    print("PICTURES TABLE")
+    cur.execute("SELECT * FROM pictures;")
+    rows = cur.fetchall()
+    for row in rows:
+        print(row)
     
     print("CHALLENGES TABLE")
     cur.execute("SELECT * FROM challenges;")
