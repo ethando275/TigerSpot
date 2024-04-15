@@ -830,7 +830,7 @@ def get_challenge_results(challenge_id):
         
         # Query to get challenger and challengee points for the given challenge ID
         cur.execute('''
-            SELECT challenger_id, challengee_id, challenger_points, challengee_points
+            SELECT challenger_id, challengee_id, challenger_points, challengee_points, challenger_pic_points, challengee_pic_points
             FROM challenges
             WHERE id = %s;
         ''', (challenge_id,))
@@ -840,7 +840,7 @@ def get_challenge_results(challenge_id):
             print("Challenge not found.")
             return {"error": "Challenge not found"}
 
-        challenger_id, challengee_id, challenger_points, challengee_points = result
+        challenger_id, challengee_id, challenger_points, challengee_points, challenger_pic_points, challengee_pic_points = result
         
         # Determine the winner or if it's a tie
         if challenger_points > challengee_points:
@@ -853,9 +853,13 @@ def get_challenge_results(challenge_id):
         # Return a dictionary with the results
         return {
             "winner": winner,
+            "challenger_id": challenger_id,
+            "challengee_id": challengee_id,
             "challenger_points": challenger_points,
             "challengee_points": challengee_points,
-            "challenge_id": challenge_id
+            "challenge_id": challenge_id,
+            "challenger_pic_points": challenger_pic_points,
+            "challengee_pic_points": challengee_pic_points,
         }
         
     except (Exception, psycopg2.DatabaseError) as error:
@@ -912,13 +916,19 @@ def insert_into_challenges():
         # Insert a new row into the challenges table
         cur.execute('''
             INSERT INTO challenges (challenger_id, challengee_id, status, versusList, challenger_bool, challengee_bool)
-            VALUES (%s, %s, %s, %s);
-        ''', ("ed8205", "jon", "accepted", random,))
+            VALUES (%s, %s, %s, %s, %s, %s);
+        ''', ("ed8205", "jon", "completed", random, [True, True, True, True, True], [True, True, True, True, True]))
         
         # Commit the changes to the database
         conn.commit()
         print("New challenge inserted successfully.")
         
+        cur.execute('''
+                    INSERT INTO matches (challenge_id, winner_id, challenger_score, challengee_score)
+                    VALUES (%s, %s, %s, %s);
+                    ''', (1, "ed8205", 5, 3))
+        conn.commit()
+        print("New match inserted successfully.")
     except Exception as e:
         print(f"An error occurred: {e}")
     finally:
@@ -1172,7 +1182,7 @@ def store_versus_pic_points(challenge_id, user_id, index, points):
         if user_id == challenger_id:
             cur.execute('''
                 UPDATE challenges
-                SET challenger_points[%s] = %s
+                SET challenger_pic_points[%s] = %s
                 WHERE id = %s;
             ''', (index, points, challenge_id))
         elif user_id == challengee_id:
@@ -1241,6 +1251,7 @@ def update_versus_pic_status(challenge_id, user_id, index):
         if conn is not None:
             conn.close()
 
+
 def main():
     # update()
     #create_pic_table()
@@ -1261,6 +1272,7 @@ def main():
     #drop_pic_table()
     #cur.close()
     show_rows()
+    #insert_into_challenges()
     #print(player_played('wn4759'))
     # print(has_pic_been_chosen(4))
     # reset_pic()
