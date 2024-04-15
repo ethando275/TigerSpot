@@ -76,7 +76,7 @@
                         {% if challenges.received %}
                             {% for challenge in challenges.received %}
                             <div class="row">
-                                <div class="rank">{{ challenge.id }}</div>
+                                <div class="rank">{{ challenge.challenger_id }}</div>
                                 <div class="name">{{ challenge.status }}</div>
                                 {% if challenge.winner_id != None %}
                                 <a href="{{ url_for('versus_stats', challenge_id=challenge.id) }}" class="score link-style">
