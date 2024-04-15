@@ -43,8 +43,12 @@
                         <div class="row">
                             <div class="rank">{{ challenge.challengee_id }}</div>
                             <div class="name">{{ challenge.status }}</div>
-                            {% if challenges.winner_id != None %}
-                                <div class="score">{{ challenge.winner_id }}</div>
+                            {% if challenge.winner_id != None %}
+                            <a href="{{ url_for('versus_stats', challenge_id=challenge.id) }}" class="score link-style">
+                                {{ challenge.winner_id }}
+                            </a>
+                            {% else %}
+                            <div class="score">None</div>
                             {% endif %}
                             {% if challenge.status == 'accepted' and not challenge.challenger_finished %}
                                 <form method="post" action="/play_challenge">
@@ -72,10 +76,14 @@
                         {% if challenges.received %}
                             {% for challenge in challenges.received %}
                             <div class="row">
-                                <div class="rank">{{ challenge.challenger_id }}</div>
+                                <div class="rank">{{ challenge.id }}</div>
                                 <div class="name">{{ challenge.status }}</div>
-                                {% if challenges.winner_id != None %}
-                                <div class="score">{{ challenge.winner_id }}</div>
+                                {% if challenge.winner_id != None %}
+                                <a href="{{ url_for('versus_stats', challenge_id=challenge.id) }}" class="score link-style">
+                                    {{ challenge.winner_id }}
+                                </a>
+                                {% else %}
+                                <div class="score">None</div>
                                 {% endif %}
                                 {% if challenge.status == 'accepted' and not challenge.challengee_finished %}
                                     <form method="post" action="/play_challenge">
@@ -105,6 +113,18 @@
 </body>
 </html>
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Select all elements with the class 'score' and add a click event listener to each
+    document.querySelectorAll('.score').forEach(function(element) {
+        element.addEventListener('click', function() {
+            // Redirect to the URL stored in the 'data-url' attribute
+            var url = element.getAttribute('data-url');
+            window.location.href = url;
+        });
+    });
+});
+
+
             var users = JSON.parse('{{ users | safe }}');
             document.addEventListener("DOMContentLoaded", function() {
             document.getElementById("versusForm").addEventListener("submit", function(event) {
