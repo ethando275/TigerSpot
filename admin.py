@@ -257,7 +257,7 @@ def submit2():
     coor = database.get_pic_info("coordinates", versusList[index])
     distance = database.calc_distance(currLat, currLon, coor)
     points = database.calculate_versus(distance)
-    database.store_versus_pic_points(challenge_id, auth.authenticate(), index, points)
+    database.store_versus_pic_points(challenge_id, auth.authenticate(), index+1, points)
     database.update_versus_points(challenge_id, auth.authenticate(), points)
     index = int(index) + 1
 
