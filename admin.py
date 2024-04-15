@@ -59,6 +59,7 @@ def menu():
 def requests():
     pending_challenges = database.get_user_challenges(auth.authenticate())
     users = database.get_players()
+    print(pending_challenges)
     username = flask.request.args.get('username')
 
     html_code = flask.render_template('this.html', challenges=pending_challenges, user=auth.authenticate(), users=flask.json.dumps(users), username=username)
@@ -262,5 +263,15 @@ def submit2():
     index = int(index) + 1
 
     html_code = flask.render_template('versusresults.html', dis = distance, lat = currLat, lon = currLon, coor=coor, index=index, challenge_id=challenge_id, points=points)
+    response = flask.make_response(html_code)
+    return response
+
+@app.route('/versus_stats', methods=['GET'])
+def versus_stats():
+    challenge_id = flask.request.args.get('challenge_id')
+    results = database.get_challenge_results(challenge_id)
+    versusList = database.get_random_versus(challenge_id)
+    pictures = [database.get_pic_info("link", pic) for pic in versusList]
+    html_code = flask.render_template('versus_stats.html', results=results, images=pictures)
     response = flask.make_response(html_code)
     return response
