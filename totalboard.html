@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rules Page</title>
+    <title>Leaderboard Page</title>
     <link rel="stylesheet" href="{{url_for('static', filename = 'styles/styles.css')}}" />
-
 </head>
 <body>
-
     <header>
         <nav>
             <div class="home-icon">
@@ -20,30 +18,31 @@
                 <div class="dropdown">
                     <img src="static\styles\trophy.png" alt="Leaderboard" />
                     <div class="dropdown-content">
-                        <a href="/leaderboard">Daily</a>
-                        <a href="/totalboard">Versus</a>
+                        <a href="leaderboard.html">Daily</a>
+                        <a href="totalboard.html">Versus</a>
                     </div>
                 </div>
                 <a href="logoutcas"><img src="static\styles\logout.png" alt="Logout" /></a>
             </div>
         </nav>
     </header>
-
+    
     <main>
-        <div class="instructions">
-          <b><p class="title">Instructions</p>
-          <ul>
-            <li>You will be given a picture taken somewhere on Princeton's campus</li>
-            <li>It is your job to zoom in on the map and place your marker on where you think this picture was taken</li>
-            <li>The closer you are, the more points you will receive!</li>
-          </ul></b>
-            <a href="/game">
-            <button class="button">
-            <b>Play Now!</b>
-            </button>
-          </a>
-        </div>
+            <div class="top-players">
+                <h2>Top Overall Players</h2>
+                <div id="container">
+                    {% for player in top_players %}
+                    <div class="row">
+                        <div class="rank">{{ loop.index }}</div>
+                        <div class="name">{{ player['username'] }}</div>
+                        <div class="score">{{ player['points'] }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
     </main>
     <!-- Add any scripts here -->
 </body>
 </html>
+
