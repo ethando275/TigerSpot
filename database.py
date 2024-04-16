@@ -190,6 +190,8 @@ def pic_of_day():
    picture_id = (day_of_year - 1) % get_table_size() + 1
    return picture_id
 
+#-----------------------------------------------------------------------
+
 def get_pic_info(col, id):
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
@@ -202,6 +204,8 @@ def get_pic_info(col, id):
     # conn.commit()
     cur.close()
     conn.close()
+    
+#-----------------------------------------------------------------------
 
 def get_distance():
     conn = psycopg2.connect(DATABASE_URL)
@@ -215,6 +219,8 @@ def get_distance():
     # conn.commit()
     cur.close()
     conn.close()
+    
+#-----------------------------------------------------------------------
 
 def calc_distance(lat1, lon1, coor2):
     coor1 = (lat1, lon1)
@@ -236,8 +242,10 @@ def calculate_today_points(distance):
         points = 100
     else:
         points = 0
-    
-    return points 
+
+    return points
+
+#-----------------------------------------------------------------------
 
 def calculate_total_points(username, today_points):
     
@@ -257,14 +265,19 @@ def update_player(username, points):
     conn.commit()
     conn.close()
 
+#-----------------------------------------------------------------------
+
 def update_player_daily(username, points, distance):
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
+    
 
     cur.execute("UPDATE usersDaily SET points=%s, distance=%s, played=%s WHERE username=%s;", (points, distance, True, username))
     print("EXECUTED DAILY UPDATE")
     conn.commit()
     conn.close()
+
+#-----------------------------------------------------------------------
 
 def player_played(username): 
 
@@ -279,6 +292,8 @@ def player_played(username):
 
     return result
 
+#-----------------------------------------------------------------------
+
 def reset_player(username):
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
@@ -287,6 +302,7 @@ def reset_player(username):
 
     conn.commit()
     conn.close()
+#-----------------------------------------------------------------------
 
 # server wide player reset
 def reset_players():
@@ -317,6 +333,8 @@ def get_daily_points(username):
     
     return points[0]
 
+#-----------------------------------------------------------------------
+
 def get_daily_distance(username):
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
@@ -331,6 +349,8 @@ def get_daily_distance(username):
         return 0
     
     return distance[0]
+
+#-----------------------------------------------------------------------
     
 def get_top_players():
 
@@ -351,6 +371,29 @@ def get_top_players():
 
     return top_players
 
+#-----------------------------------------------------------------------
+
+def get_daily_top_players():
+
+    # Connect to database
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+    daily_top_players = []
+    cur.execute("SELECT username, points FROM usersDaily ORDER BY points DESC LIMIT 10;")
+    table = cur.fetchall()
+    for row in table:
+        username, points = row
+        player_stats = {'username': username, 'points': points}
+        daily_top_players.append(player_stats)
+
+   # Disconnect
+    conn.close()
+
+    return daily_top_players
+
+#-----------------------------------------------------------------------
+
 def get_points(username):
 
    # Connect to database
@@ -365,6 +408,8 @@ def get_points(username):
 
     return points[0]
 
+#-----------------------------------------------------------------------
+
 def get_rank(username):
     
    # Connect to database
@@ -372,16 +417,18 @@ def get_rank(username):
     cur = conn.cursor()
     
     try: 
-        cur.execute("SELECT username, points, DENSE_RANK() OVER (ORDER BY points DESC) as rank FROM users;")
+        cur.execute("SELECT username, points, DENSE_RANK() OVER (ORDER BY points DESC, username ASC) as rank FROM users;")
         players = cur.fetchall()
         
-        for player in players: 
+        for player in players:
             if player[0] == username:
                 return player[2]
         return "Player not found"
     
     finally:
         conn.close()
+        
+#-----------------------------------------------------------------------
 
     
 def remove_from_user_table(username):
@@ -395,6 +442,8 @@ def remove_from_user_table(username):
 
     # Disconnect
     conn.close()
+    
+#-----------------------------------------------------------------------
 
 #Returns the number of rows from pictures table
 def get_table_size():
@@ -409,7 +458,6 @@ def get_table_size():
     return pic_num
 
     conn.close()
-
 
 #-----------------------------------------------------------------------
 
@@ -451,6 +499,8 @@ def create_challenge(challenger_id, challengee_id):
     finally:
         if conn is not None:
             conn.close()
+            
+#-----------------------------------------------------------------------
 
 # Accept a challenge
 def accept_challenge(challenge_id):
@@ -479,6 +529,8 @@ def accept_challenge(challenge_id):
             conn.close()
     return status
 
+#-----------------------------------------------------------------------
+
 # Decline a challenge
 def decline_challenge(challenge_id):
     status = "failed"  # Default status in case of error
@@ -496,6 +548,8 @@ def decline_challenge(challenge_id):
         if conn is not None:
             conn.close()
     return status
+
+#-----------------------------------------------------------------------
 
 
 # Complete a match
@@ -515,6 +569,8 @@ def complete_match(challenge_id, winner_id, challenger_score, challengee_score):
     finally:
         if conn is not None:
             conn.close()
+            
+#-----------------------------------------------------------------------
 
 def get_players():
     # Connect to database
@@ -530,6 +586,8 @@ def get_players():
 
     return user_ids
 
+#-----------------------------------------------------------------------
+
 #dont run again
 def create_challenges_table():
     conn = psycopg2.connect(DATABASE_URL)
@@ -542,6 +600,8 @@ def create_challenges_table():
     conn.commit()
     cur.close()
     conn.close()
+    
+#-----------------------------------------------------------------------
 
 #dont run again
 def create_matches_table():
@@ -556,6 +616,8 @@ def create_matches_table():
     conn.commit()
     cur.close()
     conn.close()
+    
+#-----------------------------------------------------------------------
 
 def clear_challenges_table():
     conn = None
@@ -571,6 +633,9 @@ def clear_challenges_table():
     finally:
         if conn is not None:
             conn.close()
+        
+        
+#-----------------------------------------------------------------------
 
 def clear_matches_table():
     conn = None
@@ -586,6 +651,8 @@ def clear_matches_table():
     finally:
         if conn is not None:
             conn.close()
+            
+#-----------------------------------------------------------------------
 
 def reset_challenges_id_sequence():
     conn = None
@@ -604,7 +671,8 @@ def reset_challenges_id_sequence():
     finally:
         if conn is not None:
             conn.close()
-
+            
+#-----------------------------------------------------------------------
 
 def get_user_challenges(user_id):
     conn = psycopg2.connect(DATABASE_URL)  # Ensure DATABASE_URL is properly configured
@@ -653,6 +721,8 @@ def get_user_challenges(user_id):
     
     return user_challenges
 
+#-----------------------------------------------------------------------
+
 def update_finish_status(challenge_id, user_id):
     conn = None
     try:
@@ -700,6 +770,8 @@ def update_finish_status(challenge_id, user_id):
         if conn is not None:
             conn.close()
 
+#-----------------------------------------------------------------------
+
 def check_finish_status(challenge_id):
     conn = None
     status = {"status": "unfinished"}  # Default status
@@ -729,6 +801,8 @@ def check_finish_status(challenge_id):
             conn.close()
     
     return status
+
+#-----------------------------------------------------------------------
 
 def get_challenge_participants(challenge_id):
     conn = None
@@ -762,6 +836,8 @@ def get_challenge_participants(challenge_id):
     finally:
         if conn is not None:
             conn.close()
+            
+#-----------------------------------------------------------------------
 
 def update_versus_points(challenge_id, user_id, additional_points):
     conn = None
@@ -810,6 +886,8 @@ def update_versus_points(challenge_id, user_id, additional_points):
         if conn is not None:
             conn.close()
 
+#-----------------------------------------------------------------------
+
 def calculate_versus(distance):
     if distance - 3 <= 0:
         points = 100
@@ -821,6 +899,8 @@ def calculate_versus(distance):
         points = 0
 
     return points
+
+#-----------------------------------------------------------------------
 
 def get_challenge_results(challenge_id):
     conn = None
@@ -868,6 +948,8 @@ def get_challenge_results(challenge_id):
     finally:
         if conn is not None:
             conn.close()
+            
+#-----------------------------------------------------------------------
 
 def create_random_versus():
     row_count = get_table_size()
@@ -904,6 +986,8 @@ def get_random_versus(challenge_id):
     finally:
         if conn is not None:
             conn.close()
+            
+#-----------------------------------------------------------------------
 
 def insert_into_challenges():
     
@@ -935,6 +1019,8 @@ def insert_into_challenges():
         # Ensure the database connection is closed
         if conn is not None:
             conn.close()
+            
+#-----------------------------------------------------------------------
 
 def update_picture_coordinates():
     conn = None
@@ -960,6 +1046,8 @@ def update_picture_coordinates():
         # Ensure the database connection is closed
         if conn is not None:
             conn.close()
+            
+#-----------------------------------------------------------------------
 
 def insert_picture(pictureID, coordinates, link):
     conn = None
@@ -981,6 +1069,8 @@ def insert_picture(pictureID, coordinates, link):
         # Closing the cursor
         if cur is not None:
             cur.close()
+    
+#-----------------------------------------------------------------------
 
 def update_picture_id_by_coordinates(new_pictureID, coordinates):
     conn = None
@@ -1005,6 +1095,8 @@ def update_picture_id_by_coordinates(new_pictureID, coordinates):
         # Closing the cursor
         if cur is not None:
             cur.close()
+            
+#-----------------------------------------------------------------------
 
 def get_winner(challenge_id):
     conn = None
@@ -1072,6 +1164,8 @@ def update_versus_pic_status(challenge_id, user_id, index):
     finally:
         if conn is not None:
             conn.close()
+        
+#-----------------------------------------------------------------------
 
 def store_versus_pic_points(challenge_id, user_id, index, points):
     conn = None
@@ -1121,6 +1215,8 @@ def store_versus_pic_points(challenge_id, user_id, index, points):
             conn.close()
 
 
+#-----------------------------------------------------------------------
+
 def show_rows():
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
@@ -1156,6 +1252,8 @@ def show_rows():
     conn.commit()
     cur.close()
     conn.close()
+
+#-----------------------------------------------------------------------
 
 def store_versus_pic_points(challenge_id, user_id, index, points):
     conn = None
@@ -1204,6 +1302,8 @@ def store_versus_pic_points(challenge_id, user_id, index, points):
         if conn is not None:
             conn.close()
 
+#-----------------------------------------------------------------------
+
 def update_versus_pic_status(challenge_id, user_id, index):
     conn = None
     try:
@@ -1251,6 +1351,7 @@ def update_versus_pic_status(challenge_id, user_id, index):
         if conn is not None:
             conn.close()
 
+#-----------------------------------------------------------------------
 
 def main():
     # update()
