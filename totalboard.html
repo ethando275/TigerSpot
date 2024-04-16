@@ -18,8 +18,8 @@
                 <div class="dropdown">
                     <img src="static\styles\trophy.png" alt="Leaderboard" />
                     <div class="dropdown-content">
-                        <a href="leaderboard.html">Daily</a>
-                        <a href="totalboard.html">Versus</a>
+                        <a href="/leaderboard">Daily</a>
+                        <a href="/totalboard">Overall</a>
                     </div>
                 </div>
                 <a href="logoutcas"><img src="static\styles\logout.png" alt="Logout" /></a>
@@ -28,6 +28,27 @@
     </header>
     
     <main>
+        <div class="leaderboard">
+            <div class="user-stats">
+                <h2>Your Stats</h2>
+                <img class="person-icon" src="static\styles\person.png">
+                <div class="stats-row">
+                    <div class="label">Ranking:</div><div class="value">{{rank}}</div>
+                </div>
+                <div class="stats-row">
+                    <div class="label">Time:</div><div class="value">1:23:45 (Filler)</div>
+                </div>
+                <div class="stats-row">
+                    <div class="label">Today's Score:</div><div class="value">{{daily_points}}</div>
+                </div>
+                <div class="stats-row">
+                    <div class="label">Total Score:</div><div class="value">{{points}}</div>
+                </div>
+                <div class="stats-row">
+                    <div class="label">Accuracy:</div><div class="value">75% (Filler)</div>
+                </div>
+            </div>
+
             <div class="top-players">
                 <h2>Top Overall Players</h2>
                 <div id="container">
