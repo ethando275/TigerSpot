@@ -46,6 +46,39 @@ nav {
   color: white;
 }
 
+.nav-icons {
+    text-align: right;
+    max-width: 100%;
+    height: auto;
+    float: right;
+    margin-right: 1vw;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 120px;
+    box-shadow: 0 0.2vw 0.5vw rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 1vh 1vw;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
 main {
   margin: 0;
   padding: 4vh 4vw;
@@ -83,6 +116,7 @@ main {
 
 .button {
   background-color: orange;
+  color: black;
   border: 0.6vw solid black;
   border-radius: 1vw;
   font-size: 8vh;
@@ -370,6 +404,7 @@ footer {
     width: 85vw; 
     height: auto;
     padding-left: 4vw;
+    padding-bottom: 4vh;
   }
 
   #map {
