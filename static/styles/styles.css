@@ -112,7 +112,7 @@ main {
 
 .text {
   display: flex;
-  font-size: 4.5vh;
+  font-size: 3vw;
   line-height: 1.5;
   align-items: center;
   padding: 0vh 8vw;
@@ -123,7 +123,7 @@ main {
   color: black;
   border: 0.6vw solid black;
   border-radius: 1vw;
-  font-size: 8vh;
+  font-size: 8vw;
   padding: 1vh 1vw;
   transition-duration: 0.2s;
   cursor: pointer;
@@ -156,13 +156,13 @@ main {
 }
 
 .instructions .title {
-  font-size: 10vh;
+  font-size: 6vw;
   margin-bottom: 2vh;
 }
 
 .instructions ul {
   padding: 0vh 5vw;
-  font-size: 4.5vh;
+  font-size: 2vw;
   text-align: left;
 }
 
