@@ -155,9 +155,22 @@ def rules():
 
 #-----------------------------------------------------------------------
 
-@app.route('/leaderboard', methods=['GET'])
+@app.route('/totalboard', methods=['GET'])
 def leaderboard():
     top_players = database.get_top_players()
+    username = auth.authenticate()
+    points = database.get_points(username)
+    daily_points = database.get_daily_points(username)
+    rank = database.get_rank(username)
+    html_code = flask.render_template('totalboard.html', top_players = top_players, points = points, daily_points = daily_points, rank = rank)
+    response = flask.make_response(html_code)
+    return response
+
+#-----------------------------------------------------------------------
+
+@app.route('/leaderboard', methods=['GET'])
+def totalleaderboard():
+    top_players = database.get_daily_top_players()
     username = auth.authenticate()
     points = database.get_points(username)
     daily_points = database.get_daily_points(username)
