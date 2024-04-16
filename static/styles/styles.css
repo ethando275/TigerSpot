@@ -57,6 +57,7 @@ nav {
 .dropdown {
     position: relative;
     display: inline-block;
+    padding-left: 1vw;
 }
 
 .dropdown-content {
