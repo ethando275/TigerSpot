@@ -15,13 +15,7 @@
             <div class="nav-icons">
                 <a href="/rules"><img src="static\styles\questionmark.png" alt="Rules" /></a>
                 <a href="/requests"><img src = "static\styles\requests.png" alt="Requests"/></a>
-                <div class="dropdown">
-                    <img src="static\styles\trophy.png" alt="Leaderboard" />
-                    <div class="dropdown-content">
-                        <a href="/leaderboard">Daily</a>
-                        <a href="/totalboard">Overall</a>
-                    </div>
-                </div>
+                <a href="/leaderboard"><img src = "static\styles\trophy.png" alt="Leaderboard"/></a>
                 <a href="logoutcas"><img src="static\styles\logout.png" alt="Logout" /></a>
             </div>
         </nav>
@@ -45,12 +39,18 @@
                     <div class="label">Total Score:</div><div class="value">{{points}}</div>
                 </div>
                 <div class="stats-row">
-                    <div class="label">Streak</div><div class="value">W You're a Beast</div>
+                    <div class="label">Streak</div><div class="value">&#128293;</div>
                 </div>
             </div>
 
             <div class="top-players">
-                <h2>Top Overall Players</h2>
+                <div class="dropdown">
+                    <h2>Top Overall Players</h2>
+                    <div class="dropdown-content">
+                        <a href="/leaderboard">Daily Leaderboard</a>
+                        <a href="/totalboard">Overall Leaderboard</a>
+                    </div>
+                </div>
                 <div id="container">
                     {% for player in top_players %}
                     <div class="row">

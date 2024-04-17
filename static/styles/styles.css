@@ -78,6 +78,9 @@ nav {
 
 .dropdown:hover .dropdown-content {
     display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 main {
