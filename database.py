@@ -909,16 +909,21 @@ def update_versus_points(challenge_id, user_id, additional_points):
 #-----------------------------------------------------------------------
 
 def calculate_versus(distance):
-    if distance - 3 <= 0:
-        points = 100
-    elif distance - 10 <= 0:
-        points = 80
+    if distance - 15 <= 0:
+        points = 1000
     elif distance - 25 <= 0:
-        points = 50
+        points = 750
+    elif distance - 35 <= 0:
+        points = 500
+    elif distance - 45 <= 0:
+        points = 250
+    elif distance - 50 <= 0:
+        points = 100
     else:
         points = 0
 
     return points
+
 
 #-----------------------------------------------------------------------
 
