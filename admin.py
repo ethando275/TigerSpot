@@ -169,7 +169,7 @@ def leaderboard():
 
 #-----------------------------------------------------------------------
 
-@app.route('/leaderboard', methods=['GET'])
+@app.route('/leaderboard', methods=['GET'])   
 def totalleaderboard():
     top_players = database.get_daily_top_players()
     username = auth.authenticate()
