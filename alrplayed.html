@@ -27,13 +27,7 @@
             <div class="nav-icons">
                 <a href="/rules"><img src="static\styles\questionmark.png" alt="Rules" /></a>
                 <a href="/requests"><img src = "static\styles\requests.png" alt="Requests"/></a>
-                <div class="dropdown">
-                    <img src="static\styles\trophy.png" alt="Leaderboard" />
-                    <div class="dropdown-content">
-                        <a href="/leaderboard">Daily</a>
-                        <a href="/totalboard">Overall</a>
-                    </div>
-                </div>
+                <a href="/leaderboard"></a><img src="static\styles\trophy.png" alt="Leaderboard"/></a>
                 <a href="logoutcas"><img src="static\styles\logout.png" alt="Logout" /></a>
             </div>
         </nav>
@@ -58,7 +52,7 @@
                 Your distance from the actual point was {{ today_distance }} meters away.
             </b>
           </p>
-          <button id='share' onclick="copyTextToClipboard('Tiger Spot {{today_points}} points | {{today_distance}} m away')">Share</button>
+          <button id='share' onclick="copyTextToClipboard('Tiger Spot {{today_points}} points | {{today_distance}} m away')"><b>Share</b></button>
         </div>
       </main>
     </div>
