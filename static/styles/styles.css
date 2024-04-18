@@ -402,6 +402,21 @@ footer {
   margin-right: auto;
 }
 
+#share {
+  background-color: orange;
+  color: black;
+  border: 0.4vw solid black;
+  border-radius: 1vw;
+  font-size: 2vw;
+  padding: 1vh 1vw;
+  transition-duration: 0.2s;
+  cursor: pointer;
+}
+
+#share:hover {
+  background-color: rgb(219, 128, 16);
+}
+
 @media screen and (max-width: 1000px) {
   .main-content {
     flex-direction: column;
