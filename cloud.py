@@ -19,20 +19,25 @@ def convert_fraction(input):
 def image_data(resource):
 
   url = resource['url']
-  public_id = resource['public_id']
+  # public_id = resource['public_id']
 
-  resource_details = cloudinary.api.resource(public_id, exif=True)
-  embedded_data = resource_details.get('exif', {})
-  latitude_ref = embedded_data.get('GPSLatitudeRef')
-  latitude = convert_decimalcoords(embedded_data.get('GPSLatitude'))
-  if (latitude_ref == 'S'):
-    latitude = -latitude
+  # resource_details = cloudinary.api.resource(public_id, exif=True)
+  # embedded_data = resource_details.get('exif', {})
+  # latitude_ref = embedded_data.get('GPSLatitudeRef')
+  # latitude = convert_decimalcoords(embedded_data.get('GPSLatitude'))
+  # if (latitude_ref == 'S'):
+  #   latitude = -latitude
 
-  longitude_ref = embedded_data.get('GPSLongitudeRef')
-  longitude = convert_decimalcoords(embedded_data.get('GPSLongitude'))
-  if (longitude_ref == 'W'):
-    longitude = -longitude
+  # longitude_ref = embedded_data.get('GPSLongitudeRef')
+  # longitude = convert_decimalcoords(embedded_data.get('GPSLongitude'))
+  # if (longitude_ref == 'W'):
+  #   longitude = -longitude
 
+  # return url, latitude, longitude
+
+  custom_metadata = resource.get('context', {}).get('custom', {})
+  latitude = float(custom_metadata.get('Latitude'))
+  longitude = float(custom_metadata.get('Longitude'))
   return url, latitude, longitude
 
   #for resource in resources.get('resources', []):
