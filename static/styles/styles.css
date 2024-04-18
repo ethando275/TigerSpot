@@ -114,14 +114,14 @@ main {
 }
 
 .logo {
-  width: 60vw;
+  width: 50vw;
   max-height: 60vh; /* Adjusted max-height for vertical responsiveness */
   padding: 1vh 1vw; /* Adjusted padding for responsiveness */
 }
 
 .text {
   display: flex;
-  font-size: 3vw;
+  font-size: 2vw;
   line-height: 1.5;
   align-items: center;
   padding: 0vh 8vw;
@@ -132,7 +132,7 @@ main {
   color: black;
   border: 0.6vw solid black;
   border-radius: 1vw;
-  font-size: 8vw;
+  font-size: 4vw;
   padding: 1vh 1vw;
   transition-duration: 0.2s;
   cursor: pointer;
