@@ -22,6 +22,9 @@
         height: 650px; /* Fixed height to match the carousel */
         object-fit: cover; /* Ensures images cover the area without distorting aspect ratios */
     }
+    .winner {
+        text-align: center;
+    }
    </style>
   </head>
   <body>
@@ -38,7 +41,17 @@
             </div>
         </nav>
     </header>
-    <main class="main-content">
+    <main class="main-content d-flex justify-content-center align-items-center">
+        <!-- Text on the left side -->
+        <div class="side-text left-text">
+            <div class="row">Challenger: {{results.challenger_id}}</div>
+            {% for points in results.challenger_pic_points %}
+            <div class="row">Picture {{loop.index}}: {{points}}</div>
+            {% endfor %}
+            <div class="row">Total: {{results.challenger_points}}</div>
+        </div>
+        
+        <!-- Carousel -->
         <div id="exampleCarousel" class="carousel slide" data-bs-ride="carousel">
             <!-- Indicators/dots -->
             <ol class="carousel-indicators">
@@ -46,8 +59,9 @@
                 <li data-bs-target="#exampleCarousel" data-bs-slide-to="{{ loop.index0 }}" {% if loop.first %}class="active"{% endif %} aria-current="true" aria-label="Slide {{ loop.index }}"></li>
                 {% endfor %}
             </ol>
-        
+    
             <!-- The slideshow/content -->
+            <b><p class="winner">Winner: {{results.winner}}</p>
             <div class="carousel-inner">
                 {% for image in images %}
                 <div class="carousel-item {% if loop.first %}active{% endif %}">
@@ -55,7 +69,7 @@
                 </div>
                 {% endfor %}
             </div>
-        
+    
             <!-- Left and right controls/icons -->
             <button class="carousel-control-prev" type="button" data-bs-target="#exampleCarousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -66,8 +80,17 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
-        
+    
+        <!-- Text on the right side -->
+        <div class="side-text right-text">
+            <div class="row">Challengee: {{results.challengee_id}}</div>
+            {% for points in results.challengee_pic_points %}
+            <div class="row">Picture {{loop.index}}: {{points}}</div>
+            {% endfor %}
+            <div class="row">Total: {{results.challengee_points}}</div>
+        </div>
     </main>
+    
   </body>
 </html>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
