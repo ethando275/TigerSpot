@@ -86,7 +86,7 @@ def update_picture_coordinates():
         print(f"Coordinates updated successfully for pictureID {1}.")
         
     except (Exception, psycopg2.DatabaseError) as error:
-        print(f"An error occurred: {e}")
+        print(f"An error occurred: {error}")
     finally:
         # Ensure the database connection is closed
         if conn is not None:

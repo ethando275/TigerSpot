@@ -1,6 +1,7 @@
 import psycopg2
 import random
 import database
+import versus
 
 DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
 
@@ -164,7 +165,7 @@ def get_user_challenges(user_id):
     # Iterate through the results and categorize each challenge
     for challenge in challenges:
         # Add challenger_finished and challengee_finished to the dictionary
-        if get_winner(challenge[0]) is not None:
+        if versus.get_winner(challenge[0]) is not None:
             challenge_dict = {
                 "id": challenge[0], 
                 "challenger_id": challenge[1], 
@@ -172,7 +173,7 @@ def get_user_challenges(user_id):
                 "status": challenge[3],
                 "challenger_finished": challenge[4],
                 "challengee_finished": challenge[5],
-                "winner_id": get_winner(challenge[0])
+                "winner_id": versus.get_winner(challenge[0])
             }
         else:
             challenge_dict = {
@@ -350,39 +351,8 @@ def get_challenge_results(challenge_id):
         if conn is not None:
             conn.close()
 
-def insert_into_challenges():
-    
-    conn = None
-    try:
-        # Connect to the PostgreSQL database
-        conn = psycopg2.connect(DATABASE_URL)
-        cur = conn.cursor()
-        random = create_random_versus()
-        # Insert a new row into the challenges table
-        cur.execute('''
-            INSERT INTO challenges (challenger_id, challengee_id, status, versusList, challenger_bool, challengee_bool)
-            VALUES (%s, %s, %s, %s, %s, %s);
-        ''', ("ed8205", "jon", "completed", random, [True, True, True, True, True], [True, True, True, True, True]))
-        
-        # Commit the changes to the database
-        conn.commit()
-        print("New challenge inserted successfully.")
-        
-        cur.execute('''
-                    INSERT INTO matches (challenge_id, winner_id, challenger_score, challengee_score)
-                    VALUES (%s, %s, %s, %s);
-                    ''', (1, "ed8205", 5, 3))
-        conn.commit()
-        print("New match inserted successfully.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
-    finally:
-        # Ensure the database connection is closed
-        if conn is not None:
-            conn.close()
-
 def create_random_versus():
-    row_count = get_table_size()
+    row_count = database.get_table_size()
     
     # Generate 5 unique pseudo-random integers from 1 to row_count
     random_indices = random.sample(range(1, row_count + 1), 5)
