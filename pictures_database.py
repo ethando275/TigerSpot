@@ -5,6 +5,7 @@ import cloudinary.api
 import cloud
 import database
 
+DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
 
 def create_pic_table():
     conn = psycopg2.connect(DATABASE_URL)
