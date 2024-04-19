@@ -1,6 +1,9 @@
 import psycopg2
 import random
 
+DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
+
+
 def update_versus_points(challenge_id, user_id, additional_points):
     conn = None
     try:
@@ -64,42 +67,6 @@ def calculate_versus(distance):
         points = 0
 
     return points
-
-def create_random_versus():
-    row_count = get_table_size()
-    
-    # Generate 5 unique pseudo-random integers from 1 to row_count
-    random_indices = random.sample(range(1, row_count + 1), 5)
-    
-    return random_indices
-        
-def get_random_versus(challenge_id):
-    conn = None
-    try:
-        conn = psycopg2.connect(DATABASE_URL)
-        cur = conn.cursor()
-        
-        # Query to get the versusList for the given challenge ID
-        cur.execute('''
-            SELECT versusList
-            FROM challenges
-            WHERE id = %s;
-        ''', (challenge_id,))
-        
-        result = cur.fetchone()
-        if result is None:
-            print("Challenge not found.")
-            return {"error": "Challenge not found"}
-        
-        versusList = result[0]
-        return versusList
-        
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(f"Error: {error}")
-        return {"error": str(error)}
-    finally:
-        if conn is not None:
-            conn.close()
 
 def get_winner(challenge_id):
     conn = None
