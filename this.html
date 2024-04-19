@@ -45,7 +45,7 @@
                             <div class="name">{{ challenge.status }}</div>
                             {% if challenge.winner_id != None %}
                             <a href="{{ url_for('versus_stats', challenge_id=challenge.id) }}" class="score link-style">
-                                {{ challenge.winner_id }}
+                            {{ challenge.winner_id }}
                             </a>
                             {% else %}
                             <div class="score">None</div>
@@ -80,7 +80,7 @@
                                 <div class="name">{{ challenge.status }}</div>
                                 {% if challenge.winner_id != None %}
                                 <a href="{{ url_for('versus_stats', challenge_id=challenge.id) }}" class="score link-style">
-                                    {{ challenge.winner_id }}
+                                {{ challenge.winner_id }}
                                 </a>
                                 {% else %}
                                 <div class="score">None</div>
