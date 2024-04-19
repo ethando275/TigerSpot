@@ -386,3 +386,11 @@ def get_random_versus(challenge_id):
     finally:
         if conn is not None:
             conn.close()
+
+def main():
+    #clear_challenges_table()
+    #reset_challenges_id_sequence()
+    print()
+    
+if __name__=="__main__":
+    main()
