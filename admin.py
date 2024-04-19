@@ -4,9 +4,18 @@
 
 import flask
 import database
+import challenges_database
+import matches_database
+import versus
+import pictures_database
+import user_database
 import os 
 import auth
 import dotenv
+import distance_func
+import daily_user_database
+import points
+import user_database
 import random
 from flask import Flask, flash, redirect, url_for, request, render_template
 
@@ -57,8 +66,8 @@ def menu():
 
 @app.route('/requests', methods=['GET'])
 def requests():
-    pending_challenges = database.get_user_challenges(auth.authenticate())
-    users = database.get_players()
+    pending_challenges = challenges_database.get_user_challenges(auth.authenticate())
+    users = user_database.get_players()
     username = flask.request.args.get('username')
     html_code = flask.render_template('this.html', challenges=pending_challenges, user=auth.authenticate(), users=flask.json.dumps(users), username=username)
     response = flask.make_response(html_code)
@@ -74,9 +83,9 @@ def game():
     # get link from database
     # link = database.query()
 
-    user_played = database.player_played(username)
-    today_points = database.get_daily_points(username)
-    today_distance = database.get_daily_distance(username)
+    user_played = daily_user_database.player_played(username)
+    today_points = points.get_daily_points(username)
+    today_distance = daily_user_database.get_daily_distance(username)
 
     if user_played:
         html_code = flask.render_template('alrplayed.html', username = username, today_points = today_points, today_distance = today_distance)
@@ -85,13 +94,13 @@ def game():
 
     print(f"ID WAS {id}")
 
-    if id != database.pic_of_day():
-        database.reset_player(username)
-        id = database.pic_of_day()
+    if id != pictures_database.pic_of_day():
+        daily_user_database.reset_player(username)
+        id = pictures_database.pic_of_day()
         print(f"ID IS NOW: {id}")
 
     # coor = database.get_pic_info("coordinates", id)
-    link = database.get_pic_info("link", id)
+    link = pictures_database.get_pic_info("link", id)
 
     # get user input using flask.request.args.get('')
     html_code = flask.render_template('gamepage.html', link = link, id = id)
@@ -108,7 +117,8 @@ def submit():
 
     username = auth.authenticate()
 
-    user_played = database.player_played(username)
+    user_played = daily_user_database.database.player_played(username)
+    today_distance = daily_user_database.get_daily_distance(username)
 
     print(f"INSIDE SUBMIT: user played is {user_played}")
 
@@ -128,17 +138,17 @@ def submit():
         return 
     
     # id = flask.request.form.get('id')
-    coor = database.get_pic_info("coordinates", id)
+    coor = pictures_database.get_pic_info("coordinates", id)
     # print(coor)
 
-    distance = database.calc_distance(currLat, currLon, coor)
+    distance = distance_func.calc_distance(currLat, currLon, coor)
     username = auth.authenticate()
 
-    today_points = database.calculate_today_points(distance)
-    total_points = database.calculate_total_points(username, today_points)
+    today_points = points.calculate_today_points(distance)
+    total_points = points.calculate_total_points(username, today_points)
     
-    database.update_player(username, total_points)
-    database.update_player_daily(username, today_points, distance)
+    user_database.update_player(username, total_points)
+    daily_user_database.update_player_daily(username, today_points, distance)
     print("UPDATED")
 
     html_code = flask.render_template('results.html', dis = distance, lat = currLat, lon = currLon, coor=coor, today_points = today_points)
@@ -157,12 +167,12 @@ def rules():
 
 @app.route('/totalboard', methods=['GET'])
 def leaderboard():
-    top_players = database.get_top_players()
+    top_players = user_database.get_top_players()
     username = auth.authenticate()
-    points = database.get_points(username)
-    daily_points = database.get_daily_points(username)
+    points = user_database.get_points(username)
+    daily_points = daily_user_database.get_daily_points(username)
     rank = database.get_rank(username)
-    daily_rank = database.get_daily_rank(username)
+    daily_rank = daily_user_database.get_daily_rank(username)
     html_code = flask.render_template('totalboard.html', top_players = top_players, points = points, daily_points = daily_points, rank = rank, daily_rank = daily_rank)
     response = flask.make_response(html_code)
     return response
@@ -173,10 +183,10 @@ def leaderboard():
 def totalleaderboard():
     top_players = database.get_daily_top_players()
     username = auth.authenticate()
-    points = database.get_points(username)
-    daily_points = database.get_daily_points(username)
-    rank = database.get_rank(username)
-    daily_rank = database.get_daily_rank(username)
+    points = user_database.get_points(username)
+    daily_points = daily_user_database.get_daily_points(username)
+    rank = user_database.get_rank(username)
+    daily_rank = daily_user_database.get_daily_rank(username)
     html_code = flask.render_template('leaderboard.html', top_players = top_players, points = points, daily_points = daily_points, rank = rank, daily_rank = daily_rank)
     response = flask.make_response(html_code)
     return response
@@ -185,7 +195,7 @@ def totalleaderboard():
 
 @app.route('/versus', methods=['GET'])
 def versus():
-    users = database.get_players()
+    users = user_database.get_players()
     username = flask.request.args.get('username')
     html_code = flask.render_template('versus.html', users=flask.json.dumps(users), username=username)
     response = flask.make_response(html_code)
@@ -194,14 +204,14 @@ def versus():
 @app.route('/create-challenge', methods=['POST'])
 def create_challenge_route():
     challengee_id = flask.request.form['challengee_id'].strip()  # Trim whitespace
-    users = database.get_players()  # Assuming this returns a list of usernames
+    users = user_database.get_players()  # Assuming this returns a list of usernames
     
     # Ensure challengee_id is not empty and exists in the users list
     if challengee_id == None or challengee_id not in users or challengee_id == auth.authenticate():
         response = {'status': 'error', 'message': 'Invalid challengee ID'}
         return flask.jsonify(response), 400  # Including a 400 Bad Request status code
     else:
-        result = database.create_challenge(auth.authenticate(), challengee_id)
+        result = challenges_database.create_challenge(auth.authenticate(), challengee_id)
     
     # Handle the response from the database function
     if 'error' in result:
@@ -212,7 +222,7 @@ def create_challenge_route():
 @app.route('/accept_challenge', methods=['POST'])
 def accept_challenge_route():
     challenge_id = flask.request.form.get('challenge_id')
-    result = database.accept_challenge(challenge_id)  # Assuming this returns some result
+    result = challenges_database.accept_challenge(challenge_id)  # Assuming this returns some result
     if result == "accepted":
         flash('Challenge accepted successfully.')
     else:
@@ -222,7 +232,7 @@ def accept_challenge_route():
 @app.route('/decline_challenge', methods=['POST'])
 def decline_challenge_route():
     challenge_id = flask.request.form.get('challenge_id')
-    result = database.decline_challenge(challenge_id)  # Assuming this returns some result
+    result = challenges_database.decline_challenge(challenge_id)  # Assuming this returns some result
     if result == "declined":
         flash('Challenge declined successfully.')
     else:
@@ -233,10 +243,10 @@ def decline_challenge_route():
 def play_game():
     challenge_id = flask.request.form.get('challenge_id')
     index = int(flask.request.form.get('index', 0))
-    versusList = database.get_random_versus(challenge_id)
+    versusList = challenges_database.get_random_versus(challenge_id)
 
     if index < len(versusList):
-        link = database.get_pic_info("link", versusList[index])
+        link = pictures_database.get_pic_info("link", versusList[index])
         html_code = flask.render_template('versusgame.html', challenge_id=challenge_id, index=index, link=link)
         response = flask.make_response(html_code)
         return response
@@ -249,11 +259,11 @@ def play_game():
 def end_challenge():
     challenge_id = flask.request.form.get('challenge_id')
     user = auth.authenticate()
-    database.update_finish_status(challenge_id, user)
-    status = database.check_finish_status(challenge_id)
+    challenges_database.update_finish_status(challenge_id, user)
+    status = challenges_database.check_finish_status(challenge_id)
     if status['status'] == "finished":
-        result = database.get_challenge_results(challenge_id)
-        database.complete_match(challenge_id, result['winner'], result['challenger_points'], result['challengee_points'])
+        result = challenges_database.get_challenge_results(challenge_id)
+        matches_database.complete_match(challenge_id, result['winner'], result['challenger_points'], result['challengee_points'])
         return redirect(url_for('requests'))
     else:
         return redirect(url_for('requests'))
@@ -266,13 +276,13 @@ def submit2():
         return 
     index = int(flask.request.form.get('index'))
     challenge_id = flask.request.form.get('challenge_id')
-    database.update_versus_pic_status(challenge_id, auth.authenticate(), index+1)
-    versusList = database.get_random_versus(challenge_id)
-    coor = database.get_pic_info("coordinates", versusList[index])
-    distance = database.calc_distance(currLat, currLon, coor)
-    points = database.calculate_versus(distance)
-    database.store_versus_pic_points(challenge_id, auth.authenticate(), index+1, points)
-    database.update_versus_points(challenge_id, auth.authenticate(), points)
+    versus.update_versus_pic_status(challenge_id, auth.authenticate(), index+1)
+    versusList = challenges_database.get_random_versus(challenge_id)
+    coor = pictures_database.get_pic_info("coordinates", versusList[index])
+    distance = distance_func.calc_distance(currLat, currLon, coor)
+    points = versus.calculate_versus(distance)
+    versus.store_versus_pic_points(challenge_id, auth.authenticate(), index+1, points)
+    versus.update_versus_points(challenge_id, auth.authenticate(), points)
     index = int(index) + 1
 
     html_code = flask.render_template('versusresults.html', dis = distance, lat = currLat, lon = currLon, coor=coor, index=index, challenge_id=challenge_id, points=points)
@@ -282,10 +292,9 @@ def submit2():
 @app.route('/versus_stats', methods=['GET'])
 def versus_stats():
     challenge_id = flask.request.args.get('challenge_id')
-    results = database.get_challenge_results(challenge_id)
-    print(results)
-    versusList = database.get_random_versus(challenge_id)
-    pictures = [database.get_pic_info("link", pic) for pic in versusList]
+    results = challenges_database.get_challenge_results(challenge_id)
+    versusList = challenges_database.get_random_versus(challenge_id)
+    pictures = [pictures_database.get_pic_info("link", pic) for pic in versusList]
     html_code = flask.render_template('versus_stats.html', results=results, images=pictures)
     response = flask.make_response(html_code)
     return response
