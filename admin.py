@@ -6,7 +6,7 @@ import flask
 import database
 import challenges_database
 import matches_database
-import versus
+import versus_database
 import pictures_database
 import user_database
 import os 
@@ -54,8 +54,8 @@ def index():
 @app.route('/menu', methods=['GET'])
 def menu():
     username = auth.authenticate()
-    database.insert_player(username)
-    database.insert_player_daily(username)
+    user_database.insert_player(username)
+    daily_user_database.insert_player_daily(username)
     
     html_code = flask.render_template('menu.html', username = username)
     # html_code = flask.render_template('index.html')
@@ -84,7 +84,7 @@ def game():
     # link = database.query()
 
     user_played = daily_user_database.player_played(username)
-    today_points = points.get_daily_points(username)
+    today_points = daily_user_database.get_daily_points(username)
     today_distance = daily_user_database.get_daily_distance(username)
 
     if user_played:
@@ -117,7 +117,7 @@ def submit():
 
     username = auth.authenticate()
 
-    user_played = daily_user_database.database.player_played(username)
+    user_played = daily_user_database.player_played(username)
     today_distance = daily_user_database.get_daily_distance(username)
 
     print(f"INSIDE SUBMIT: user played is {user_played}")
@@ -194,7 +194,7 @@ def totalleaderboard():
 #-----------------------------------------------------------------------
 
 @app.route('/versus', methods=['GET'])
-def versus():
+def versus_func():
     users = user_database.get_players()
     username = flask.request.args.get('username')
     html_code = flask.render_template('versus.html', users=flask.json.dumps(users), username=username)
@@ -276,13 +276,13 @@ def submit2():
         return 
     index = int(flask.request.form.get('index'))
     challenge_id = flask.request.form.get('challenge_id')
-    versus.update_versus_pic_status(challenge_id, auth.authenticate(), index+1)
+    versus_database.update_versus_pic_status(challenge_id, auth.authenticate(), index+1)
     versusList = challenges_database.get_random_versus(challenge_id)
     coor = pictures_database.get_pic_info("coordinates", versusList[index])
     distance = distance_func.calc_distance(currLat, currLon, coor)
-    points = versus.calculate_versus(distance)
-    versus.store_versus_pic_points(challenge_id, auth.authenticate(), index+1, points)
-    versus.update_versus_points(challenge_id, auth.authenticate(), points)
+    points = versus_database.calculate_versus(distance)
+    versus_database.store_versus_pic_points(challenge_id, auth.authenticate(), index+1, points)
+    versus_database.update_versus_points(challenge_id, auth.authenticate(), points)
     index = int(index) + 1
 
     html_code = flask.render_template('versusresults.html', dis = distance, lat = currLat, lon = currLon, coor=coor, index=index, challenge_id=challenge_id, points=points)
