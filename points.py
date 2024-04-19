@@ -1,4 +1,5 @@
 import user_database
+import daily_user_database
 
 def calculate_today_points(distance):
     if distance - 15 <= 0:

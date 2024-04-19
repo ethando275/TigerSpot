@@ -1,7 +1,7 @@
 import psycopg2
 import random
 import database
-import versus
+import versus_database
 
 DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
 
@@ -165,7 +165,7 @@ def get_user_challenges(user_id):
     # Iterate through the results and categorize each challenge
     for challenge in challenges:
         # Add challenger_finished and challengee_finished to the dictionary
-        if versus.get_winner(challenge[0]) is not None:
+        if versus_database.get_winner(challenge[0]) is not None:
             challenge_dict = {
                 "id": challenge[0], 
                 "challenger_id": challenge[1], 
@@ -173,7 +173,7 @@ def get_user_challenges(user_id):
                 "status": challenge[3],
                 "challenger_finished": challenge[4],
                 "challengee_finished": challenge[5],
-                "winner_id": versus.get_winner(challenge[0])
+                "winner_id": versus_database.get_winner(challenge[0])
             }
         else:
             challenge_dict = {
