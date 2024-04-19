@@ -52,3 +52,10 @@ def complete_match(challenge_id, winner_id, challenger_score, challengee_score):
     finally:
         if conn is not None:
             conn.close()
+
+def main():
+    #clear_matches_table()
+    print()
+    
+if __name__=="__main__":
+    main()
