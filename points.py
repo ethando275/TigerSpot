@@ -1,3 +1,5 @@
+import user_database
+
 def calculate_today_points(distance):
     if distance - 15 <= 0:
         points = 1000
@@ -18,6 +20,6 @@ def calculate_today_points(distance):
 
 def calculate_total_points(username, today_points):
     
-    points = today_points + get_points(username)
+    points = today_points + user_database.get_points(username)
 
     return points

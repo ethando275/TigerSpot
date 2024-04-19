@@ -13,6 +13,9 @@ import os
 import auth
 import dotenv
 import distance_func
+import daily_user_database
+import points
+import user_database
 import random
 from flask import Flask, flash, redirect, url_for, request, render_template
 
@@ -80,9 +83,9 @@ def game():
     # get link from database
     # link = database.query()
 
-    user_played = database.player_played(username)
-    today_points = database.get_daily_points(username)
-    today_distance = database.get_daily_distance(username)
+    user_played = daily_user_database.player_played(username)
+    today_points = points.get_daily_points(username)
+    today_distance = daily_user_database.get_daily_distance(username)
 
     if user_played:
         html_code = flask.render_template('alrplayed.html', username = username, today_points = today_points, today_distance = today_distance)
@@ -91,13 +94,13 @@ def game():
 
     print(f"ID WAS {id}")
 
-    if id != database.pic_of_day():
-        database.reset_player(username)
-        id = database.pic_of_day()
+    if id != pictures_database.pic_of_day():
+        daily_user_database.reset_player(username)
+        id = pictures_database.pic_of_day()
         print(f"ID IS NOW: {id}")
 
     # coor = database.get_pic_info("coordinates", id)
-    link = database.get_pic_info("link", id)
+    link = pictures_database.get_pic_info("link", id)
 
     # get user input using flask.request.args.get('')
     html_code = flask.render_template('gamepage.html', link = link, id = id)
@@ -114,7 +117,8 @@ def submit():
 
     username = auth.authenticate()
 
-    user_played = database.player_played(username)
+    user_played = daily_user_database.database.player_played(username)
+    today_distance = daily_user_database.get_daily_distance(username)
 
     print(f"INSIDE SUBMIT: user played is {user_played}")
 
@@ -134,17 +138,17 @@ def submit():
         return 
     
     # id = flask.request.form.get('id')
-    coor = database.get_pic_info("coordinates", id)
+    coor = pictures_database.get_pic_info("coordinates", id)
     # print(coor)
 
     distance = distance_func.calc_distance(currLat, currLon, coor)
     username = auth.authenticate()
 
-    today_points = database.calculate_today_points(distance)
-    total_points = database.calculate_total_points(username, today_points)
+    today_points = points.calculate_today_points(distance)
+    total_points = points.calculate_total_points(username, today_points)
     
-    database.update_player(username, total_points)
-    database.update_player_daily(username, today_points, distance)
+    user_database.update_player(username, total_points)
+    daily_user_database.update_player_daily(username, today_points, distance)
     print("UPDATED")
 
     html_code = flask.render_template('results.html', dis = distance, lat = currLat, lon = currLon, coor=coor, today_points = today_points)
@@ -163,12 +167,12 @@ def rules():
 
 @app.route('/totalboard', methods=['GET'])
 def leaderboard():
-    top_players = database.get_top_players()
+    top_players = user_database.get_top_players()
     username = auth.authenticate()
-    points = database.get_points(username)
-    daily_points = database.get_daily_points(username)
+    points = user_database.get_points(username)
+    daily_points = daily_user_database.get_daily_points(username)
     rank = database.get_rank(username)
-    daily_rank = database.get_daily_rank(username)
+    daily_rank = daily_user_database.get_daily_rank(username)
     html_code = flask.render_template('totalboard.html', top_players = top_players, points = points, daily_points = daily_points, rank = rank, daily_rank = daily_rank)
     response = flask.make_response(html_code)
     return response
@@ -179,10 +183,10 @@ def leaderboard():
 def totalleaderboard():
     top_players = database.get_daily_top_players()
     username = auth.authenticate()
-    points = database.get_points(username)
-    daily_points = database.get_daily_points(username)
-    rank = database.get_rank(username)
-    daily_rank = database.get_daily_rank(username)
+    points = user_database.get_points(username)
+    daily_points = daily_user_database.get_daily_points(username)
+    rank = user_database.get_rank(username)
+    daily_rank = daily_user_database.get_daily_rank(username)
     html_code = flask.render_template('leaderboard.html', top_players = top_players, points = points, daily_points = daily_points, rank = rank, daily_rank = daily_rank)
     response = flask.make_response(html_code)
     return response
