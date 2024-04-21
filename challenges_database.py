@@ -352,7 +352,7 @@ def get_challenge_results(challenge_id):
             conn.close()
 
 def create_random_versus():
-    row_count = database.get_table_size()
+    row_count = database.get_table_size('pictures')
     
     # Generate 5 unique pseudo-random integers from 1 to row_count
     random_indices = random.sample(range(1, row_count + 1), 5)
