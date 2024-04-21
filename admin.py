@@ -87,17 +87,20 @@ def game():
     today_points = daily_user_database.get_daily_points(username)
     today_distance = daily_user_database.get_daily_distance(username)
 
+    print(f"ID WAS: {id}")
+
+    if id != pictures_database.pic_of_day():
+        daily_user_database.reset_player(username)
+        user_played = daily_user_database.player_played(username)
+        id = pictures_database.pic_of_day()
+        print(f"RESET ID IS NOW: {id}")
+
     if user_played:
         html_code = flask.render_template('alrplayed.html', username = username, today_points = today_points, today_distance = today_distance)
         response = flask.make_response(html_code)
         return response
 
-    print(f"ID WAS {id}")
-
-    if id != pictures_database.pic_of_day():
-        daily_user_database.reset_player(username)
-        id = pictures_database.pic_of_day()
-        print(f"ID IS NOW: {id}")
+    print(f"CURRENT ID IS {id}")
 
     # coor = database.get_pic_info("coordinates", id)
     link = pictures_database.get_pic_info("link", id)

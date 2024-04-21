@@ -150,3 +150,9 @@ def get_daily_rank(username):
     
     finally:
         conn.close()
+
+def main():
+    update_player_daily('wn4759', 100, 30)
+
+if __name__=="__main__":
+    main()
