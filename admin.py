@@ -181,7 +181,7 @@ def leaderboard():
 
 @app.route('/leaderboard', methods=['GET'])   
 def totalleaderboard():
-    top_players = database.get_daily_top_players()
+    top_players = daily_user_database.get_daily_top_players()
     username = auth.authenticate()
     points = user_database.get_points(username)
     daily_points = daily_user_database.get_daily_points(username)
