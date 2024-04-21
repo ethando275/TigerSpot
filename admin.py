@@ -171,7 +171,7 @@ def leaderboard():
     username = auth.authenticate()
     points = user_database.get_points(username)
     daily_points = daily_user_database.get_daily_points(username)
-    rank = database.get_rank(username)
+    rank = user_database.get_rank(username)
     daily_rank = daily_user_database.get_daily_rank(username)
     html_code = flask.render_template('totalboard.html', top_players = top_players, points = points, daily_points = daily_points, rank = rank, daily_rank = daily_rank)
     response = flask.make_response(html_code)
