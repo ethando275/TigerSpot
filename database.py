@@ -107,6 +107,7 @@ def show_rows():
     conn.close()
 
 def main():
+
     show_rows()
     
 if __name__=="__main__":
