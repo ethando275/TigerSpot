@@ -51,21 +51,15 @@ def update_versus_points(challenge_id, user_id, additional_points):
             conn.close()
 #-----------------------------------------------------------------------
 
-def calculate_versus(distance):
-    if distance - 15 <= 0:
-        points = 1000
-    elif distance - 25 <= 0:
-        points = 750
-    elif distance - 35 <= 0:
-        points = 500
-    elif distance - 45 <= 0:
-        points = 250
-    elif distance - 50 <= 0:
-        points = 100
-    else:
-        points = 0
+def calculate_versus(distance, time):
+    if distance < 0:
+        raise ValueError("Distance cannot be negative")
+    dis_points = max(0, 1 - distance / 100) * 900
+    if time < 0 or time > 120:
+        raise ValueError("Time taken must be between 0 and the maximum allowed time")
+    time_points = max(0, 1 - time / 120) * 100
 
-    return points
+    return dis_points + time_points
 
 def get_winner(challenge_id):
     conn = None
