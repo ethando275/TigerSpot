@@ -39,7 +39,11 @@
                     <div class="label">Total Score:</div><div class="value">{{points}}</div>
                 </div>
                 <div class="stats-row">
-                    <div class="label">Streak</div><div class="value">&#128293;</div>
+                    {% if streak == 0 %}
+                    <div class="label">Streak</div><div class="value">0</div>
+                    {% else %}
+                    <div class="label">Streak</div><div class="value">{{streak}} &#128293;</div>
+                    {% endif %}
                 </div>
             </div>
 
