@@ -255,10 +255,6 @@ def play_game():
         html_code = flask.render_template('versusgame.html', challenge_id=challenge_id, index=index, link=link)
         response = flask.make_response(html_code)
         return response
-    else:
-        html_code = flask.render_template('match.html', challenge_id=challenge_id)
-        response = flask.make_response(html_code)
-        return response
 
 @app.route('/end_challenge', methods=['POST'])
 def end_challenge():
