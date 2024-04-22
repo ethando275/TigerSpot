@@ -15,7 +15,7 @@ def calculate_today_points(distance):
     #     points = 100
     # else:
     #     points = 0
-    points = 5000*(math.e)**(-distance/200)
+    points = max(0, 1 - distance / 100) * 1000
 
     return points
 
@@ -28,10 +28,15 @@ def calculate_total_points(username, today_points):
     return points
 
 def test_point_distribution(distance):
-    print(calculate_today_points(distance))
+    print(f"If distance is {distance}, then points is", calculate_today_points(distance))
 
 def main():
+    test_point_distribution(0)
     test_point_distribution(50)
+    test_point_distribution(90)
+    test_point_distribution(100)
+    test_point_distribution(1000)
+
     
 if __name__=="__main__":
     main()
