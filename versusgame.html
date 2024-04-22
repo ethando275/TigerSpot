@@ -38,6 +38,7 @@
       <b><p class="game-text">Versus Mode</p></b>
     </header>
     <main class="main-content">
+      <div>Image: {{index+1}}/5</div>
       <div> <br> <br> <img class="game-image" src="{{link}}"></div>
       <div class="map">
         <div id="timer">02:00</div>
@@ -159,7 +160,7 @@
 
   function checkCoordinates() {
     // Ensure all necessary data is set before submission
-    document.getElementById('index').value = parseInt(document.getElementById('index').value) + 1;
+    document.getElementById('index').value = parseInt(document.getElementById('index').value);
     return true; // Allows form submission
   }
 
