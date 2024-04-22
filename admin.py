@@ -244,9 +244,27 @@ def decline_challenge_route():
         flash('Error declining challenge.')
     return redirect(url_for('requests'))
 
-@app.route('/play_challenge', methods=['POST'])
-def play_game():
+@app.route('/play_button', methods=['POST'])
+def play_button():
     challenge_id = flask.request.form.get('challenge_id')
+    user = auth.authenticate()
+    status = challenges_database.get_playbutton_status(challenge_id, user)
+    if status == None:
+        challenges_database.update_playbutton_status(challenge_id, user)
+        return redirect(url_for('start_challenge', challenge_id=challenge_id))
+    elif status == True:
+        challenges_database.update_finish_status(challenge_id, user)
+        status = challenges_database.check_finish_status(challenge_id)
+        if status['status'] == "finished":
+            result = challenges_database.get_challenge_results(challenge_id)
+            matches_database.complete_match(challenge_id, result['winner'], result['challenger_points'], result['challengee_points'])
+            return redirect(url_for('requests'))
+        else:
+            return redirect(url_for('requests'))
+
+@app.route('/start_challenge', methods=['GET'])
+def start_challenge():
+    challenge_id = flask.request.args.get('challenge_id')
     index = int(flask.request.form.get('index', 0))
     versusList = challenges_database.get_random_versus(challenge_id)
 
