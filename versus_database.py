@@ -52,6 +52,9 @@ def update_versus_points(challenge_id, user_id, additional_points):
 #-----------------------------------------------------------------------
 
 def calculate_versus(distance, time):
+    time_points = 0
+    dis_points = 0
+
     if distance < 0:
         raise ValueError("Distance cannot be negative")
     dis_points = max(0, 1 - distance / 100) * 900
