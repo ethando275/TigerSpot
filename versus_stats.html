@@ -65,7 +65,11 @@
             </ol>
     
             <!-- The slideshow/content -->
+            {% if results.winner == "Tie"%}
+            <b><p class="winner">Result: Tie</p>
+            {% else %}
             <b><p class="winner">Winner: {{results.winner}}</p>
+            {% endif %}
             <div class="carousel-inner">
                 {% for image in images %}
                 <div class="carousel-item {% if loop.first %}active{% endif %}">
