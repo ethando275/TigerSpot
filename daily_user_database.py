@@ -171,13 +171,13 @@ def get_daily_rank(username):
     cur = conn.cursor()
     
     try: 
-        cur.execute("SELECT username, points, DENSE_RANK() OVER (ORDER BY points DESC, username ASC) as rank FROM usersDaily;")
+        cur.execute("SELECT username, points, DENSE_RANK() OVER (ORDER BY points DESC, username ASC) as rank FROM usersDaily WHERE last_played = CURRENT_DATE;")
         players = cur.fetchall()
         
         for player in players:
             if player[0] == username:
                 return player[2]
-        return "Player not found"
+        return "Play Today's Game!"
     
     finally:
         conn.close()
@@ -187,6 +187,7 @@ def get_daily_rank(username):
 def main():
     # update_player_daily('wn4759', 100, 30)
     reset_player('cl7359')
+    #create_daily_user_table()
 
 #-----------------------------------------------------------------------
 
