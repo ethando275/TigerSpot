@@ -276,18 +276,29 @@ def submit2():
     currLat = flask.request.form.get('currLat')  
     currLon = flask.request.form.get('currLon')
     if not currLat or not currLon:
-        return 
+        index = int(flask.request.form.get('index'))
+        challenge_id = flask.request.form.get('challenge_id')
+        points = 0
+        distance = 0
+        versus_database.update_versus_pic_status(challenge_id, auth.authenticate(), index+1)
+        versus_database.store_versus_pic_points(challenge_id, auth.authenticate(), index+1, points)
+        versus_database.update_versus_points(challenge_id, auth.authenticate(), points)
+        index = int(index) + 1
+        html_code = flask.render_template('versusresults.html', dis = distance, lat = None, lon = None, coor=None, index=index, challenge_id=challenge_id, points=points)
+        response = flask.make_response(html_code)
+        return response
+    
     index = int(flask.request.form.get('index'))
     challenge_id = flask.request.form.get('challenge_id')
+    time = int(flask.request.form.get('time'))
     versus_database.update_versus_pic_status(challenge_id, auth.authenticate(), index+1)
     versusList = challenges_database.get_random_versus(challenge_id)
     coor = pictures_database.get_pic_info("coordinates", versusList[index])
     distance = distance_func.calc_distance(currLat, currLon, coor)
-    points = versus_database.calculate_versus(distance)
+    points = versus_database.calculate_versus(distance, time)
     versus_database.store_versus_pic_points(challenge_id, auth.authenticate(), index+1, points)
     versus_database.update_versus_points(challenge_id, auth.authenticate(), points)
     index = int(index) + 1
-
     html_code = flask.render_template('versusresults.html', dis = distance, lat = currLat, lon = currLon, coor=coor, index=index, challenge_id=challenge_id, points=points)
     response = flask.make_response(html_code)
     return response
