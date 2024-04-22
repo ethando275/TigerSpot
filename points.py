@@ -15,9 +15,12 @@ def calculate_today_points(distance):
     #     points = 100
     # else:
     #     points = 0
- 
-    points = max(0, 1 - distance / 100) * 1000
 
+    if distance < 10:
+        points = 1000
+    else:
+        distance -= 10
+        points = max(0, 1 - distance / 100) * 1000
     return points
 
 #-----------------------------------------------------------------------
