@@ -100,7 +100,7 @@ def get_top_players():
     cur = conn.cursor()
 
     top_players = []
-    cur.execute("SELECT username, points FROM users ORDER BY points DESC LIMIT 10;")
+    cur.execute("SELECT username, points FROM users ORDER BY points DESC,  username ASC LIMIT 10;")
     table = cur.fetchall()
     for row in table:
         username, points = row
