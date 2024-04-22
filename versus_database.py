@@ -52,6 +52,7 @@ def update_versus_points(challenge_id, user_id, additional_points):
 #-----------------------------------------------------------------------
 
 def calculate_versus(distance, time):
+
     if time < 10 and distance < 10:
         return 1000
     else:
@@ -62,7 +63,6 @@ def calculate_versus(distance, time):
         if time < 0 or time > 120:
             raise ValueError("Time taken must be between 0 and the maximum allowed time")
         time_points = max(0, 1 - time / 120) * 100
-
         return dis_points + time_points
 
 def get_winner(challenge_id):

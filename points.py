@@ -15,6 +15,7 @@ def calculate_today_points(distance):
     #     points = 100
     # else:
     #     points = 0
+
     if distance < 10:
         points = 1000
     else:
