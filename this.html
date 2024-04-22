@@ -147,7 +147,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.log("Handling error");  // Check if this part gets executed
                     alert(data.message);
                 } else {
-                    alert("Match created successfully. Match ID: " + data.challenge_id + ". Refresh to see challenge updates.");
+                    alert("Match created successfully.");
+                    window.location.reload();
                 }
             })
             .catch(error => {
