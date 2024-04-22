@@ -387,6 +387,104 @@ def get_random_versus(challenge_id):
         if conn is not None:
             conn.close()
 
+def update_playbutton_status(challenge_id, user_id):
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        
+        # First, determine if the user is the challenger or the challengee for this challenge
+        cur.execute('''
+            SELECT challenger_id, challengee_id
+            FROM challenges
+            WHERE id = %s;
+        ''', (challenge_id,))
+        
+        result = cur.fetchone()
+        if result is None:
+            print("Challenge not found.")
+            return
+        
+        challenger_id, challengee_id = result
+        
+        # Depending on whether the user is the challenger or the challengee,
+        # update the corresponding finished column in the matches table
+        if user_id == challenger_id:
+            cur.execute('''
+                UPDATE challenges
+                SET playger_button_status = TRUE
+                WHERE id = %s;
+            ''', (challenge_id,))
+        elif user_id == challengee_id:
+            cur.execute('''
+                UPDATE challenges
+                SET playgee_button_status = TRUE
+                WHERE id = %s;
+            ''', (challenge_id,))
+        else:
+            print("User is not part of this challenge.")
+            return
+        
+        conn.commit()
+        print("Play button status updated successfully.")
+        
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error: {error}")
+    finally:
+        if conn is not None:
+            conn.close()
+
+def get_playbutton_status(challenge_id, user_id):
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        
+        # First, determine if the user is the challenger or the challengee for this challenge
+        cur.execute('''
+            SELECT challenger_id, challengee_id
+            FROM challenges
+            WHERE id = %s;
+        ''', (challenge_id,))
+        
+        result = cur.fetchone()
+        if result is None:
+            print("Challenge not found.")
+            return
+        
+        challenger_id, challengee_id = result
+        
+        # Depending on whether the user is the challenger or the challengee,
+        # update the corresponding finished column in the matches table
+        if user_id == challenger_id:
+            cur.execute('''
+                SELECT playger_button_status
+                FROM challenges
+                WHERE id = %s;
+            ''', (challenge_id,))
+        elif user_id == challengee_id:
+            cur.execute('''
+                SELECT playgee_button_status
+                FROM challenges
+                WHERE id = %s;
+            ''', (challenge_id,))
+        else:
+            print("User is not part of this challenge.")
+            return
+        
+        result = cur.fetchone()
+        if result is not None:
+            return result[0]
+        else:
+            print("No results found.")
+            return None
+        
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error: {error}")
+    finally:
+        if conn is not None:
+            conn.close()
+
 def main():
     #clear_challenges_table()
     #reset_challenges_id_sequence()

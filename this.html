@@ -51,7 +51,7 @@
                             <div class="score">None</div>
                             {% endif %}
                             {% if challenge.status == 'accepted' and not challenge.challenger_finished %}
-                                <form method="post" action="/play_challenge">
+                                <form method="post" action="/play_button">
                                     <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
                                     <button type="submit" class="submit"><b>Play</b></button>
                                 </form>
@@ -86,7 +86,7 @@
                                 <div class="score">None</div>
                                 {% endif %}
                                 {% if challenge.status == 'accepted' and not challenge.challengee_finished %}
-                                    <form method="post" action="/play_challenge">
+                                    <form method="post" action="/play_button">
                                         <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
                                         <button type="submit" class="submit"><b>Play</b></button>
                                     </form>
