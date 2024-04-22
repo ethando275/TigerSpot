@@ -29,6 +29,25 @@ def insert_player(username):
     conn.commit()
     conn.close()
 
+def reset_player_total_points(username):
+
+   # Connect to database
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+    
+    # Check if username exists
+    cur.execute("SELECT points FROM users WHERE username=%s;", (username,))
+    result = cur.fetchone()
+
+    if result is None:
+        return
+    else:
+        cur.execute("UPDATE users SET points=%s WHERE username=%s;", (0, username))
+    # Commit change and disconnect
+    conn.commit()
+    print(f"Player {username} now has", get_points(username), "points")
+    conn.close()
+
 def update_player(username, points):
 
     conn = psycopg2.connect(DATABASE_URL)
@@ -119,3 +138,9 @@ def get_players():
     conn.close()
 
     return user_ids
+
+def main():
+    reset_player_total_points("cl7359")
+
+if __name__=="__main__":
+    main()

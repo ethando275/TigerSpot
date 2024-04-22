@@ -56,6 +56,7 @@ def player_played(username):
 
 #-----------------------------------------------------------------------
 
+#resets the user's daily points
 def reset_player(username):
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
@@ -152,8 +153,8 @@ def get_daily_rank(username):
         conn.close()
 
 def main():
-    update_player_daily('wn4759', 100, 30)
-    # reset_player('cl7359')
+    # update_player_daily('wn4759', 100, 30)
+    reset_player('cl7359')
 
 if __name__=="__main__":
     main()
