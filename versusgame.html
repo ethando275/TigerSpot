@@ -26,6 +26,10 @@
             float: right; /* Align to the right */
             padding: 2vh 2vw; /* Add some padding */
         }
+        #timer {
+          font-size: 40px;
+          font-family: Arial, sans-serif;
+        }
     </style>
     
   </head>
@@ -34,9 +38,9 @@
       <b><p class="game-text">Versus Mode</p></b>
     </header>
     <main class="main-content">
-      <img class="game-image" src="{{link}}">
+      <div> <br> <br> <img class="game-image" src="{{link}}"></div>
       <div class="map">
-        <!-- Add map ad-->
+        <div id="timer">02:00</div>
         <div id="map"></div>
         <div id="distance"></div>
         <form id="versusgame" method="post" action="/submit2" onsubmit="return checkCoordinates()">
@@ -45,6 +49,7 @@
           <input type = "hidden" id="id" name = "id" value ="">
           <input type = "hidden" id="index" name = "index" value ="{{index}}">
           <input type = "hidden" id="challenge_id" name = "challenge_id" value ="{{challenge_id}}">
+          <input type = "hidden" id="time" name = "time" value ="">
           <button type="submit" class="submit"><b>Submit</b></button>
           <button type = "button" class="clear" onclick ="clearForm()"><b>Clear</b></button>
         </form>
@@ -55,7 +60,6 @@
 </html>
       <!-- Add any scripts here -->
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
       <script>
       // function haversineDistance(lat1, lon1, lat2, lon2) {
       //     // Radius of the Earth in meters
@@ -121,16 +125,50 @@
       }
 
       function checkCoordinates() {
-      var currLat = document.getElementById('currLat').value;
-      var currLon = document.getElementById('currLon').value;
-      if (!currLat || !currLon) {
-          alert('Please click on the map to select a location before submitting.');
-          return false; // Prevents form submission
-      }
       dodcument.getElementById('index').value = "{{index}}" + 1;
       return true; // Allows form submission
   }
    
+  var timeLeft = 120; // 2 minutes, you had set it to 10 seconds; adjust it to 120 seconds for 2 minutes.
 
-      </script>
+  // Update the countdown every 1 second
+  var countdown = setInterval(function() {
+    var minutes = Math.floor(timeLeft / 60);
+    var seconds = timeLeft % 60;
+
+    // Format the output to always have two digits for minutes and seconds
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+    // Display the result in the element with id="timer"
+    document.getElementById("timer").innerHTML = minutes + ":" + seconds;
+
+    // Store the remaining time in the hidden field
+    document.getElementById('time').value = 120 - timeLeft;
+
+    // Decrement the time left
+    timeLeft--;
+
+    // Stop the countdown when it reaches zero
+    if (timeLeft < 0) {
+      clearInterval(countdown);
+      document.getElementById("timer").innerHTML = "TIME UP!";
+      document.getElementById("versusgame").submit(); // Auto-submit the form when time is up
+    }
+  }, 1000);
+
+  function checkCoordinates() {
+    // Ensure all necessary data is set before submission
+    document.getElementById('index').value = parseInt(document.getElementById('index').value) + 1;
+    return true; // Allows form submission
+  }
+
+  function clearForm() {
+    markersGroup.clearLayers();
+    document.getElementById('currLat').value = "";
+    document.getElementById('currLon').value = "";
+    document.getElementById('time').value = ""; // Clear time value too
+  }
+
+</script>
 

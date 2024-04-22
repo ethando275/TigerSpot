@@ -39,19 +39,7 @@
     </style>
   </head>
   <body>
-    <header>
-        <nav>
-            <div class="home-icon">
-                <a href="/menu"><img src="static\styles\home.png" alt="Home Page"></a>
-            </div>
-            <div class="nav-icons">
-                <a href="/rules"><img src="static\styles\questionmark.png" alt="Rules" /></a>
-                <a href="/requests"><img src = "static\styles\requests.png" alt="Requests"/></a>
-                <a href="/leaderboard"><img src = "static\styles\trophy.png" alt="Leaderboard"/></a>
-                <a href="logoutcas"><img src="static\styles\logout.png" alt="Logout" /></a>
-            </div>
-        </nav>
-    </header>
+
 
     <main class="main-content">
       <div class="map">
@@ -114,7 +102,7 @@
     var distance = "{{ dis }}";
     distance = parseFloat(distance).toFixed(5); // Formats the distance to 2 decimal places
     document.getElementById('distance').innerHTML =  "Distance from actual point: "+ distance + " meters";
-    document.getElementById('points').innerHTML =  "You earned: "+ "{{ points }}"+ " points";
+    document.getElementById('points').innerHTML = "You earned: " + parseFloat("{{ points }}").toFixed(5) + " points";
     var marker1 = L.marker(["{{coor[0]}}", "{{coor[1]}}"], {icon: new L.Icon({
     iconUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers/img/marker-icon-2x-green.png',
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
