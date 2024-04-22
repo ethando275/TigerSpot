@@ -87,6 +87,10 @@ nav {
   margin: 0 2vw
 }
 
+.highlight {
+  color: rgb(235, 135, 28);
+}
+
 .dropdown-content a:last-child {
     border-right: none; /* Remove border from last child */
 }
