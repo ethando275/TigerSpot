@@ -11,7 +11,9 @@ def create_daily_user_table():
     username varchar(255),
     points int,
     distance int,
-    played boolean);''')
+    played boolean,
+    last_played date,
+    current_streak int);''')
     conn.commit()
     cur.close()
     conn.close()
@@ -24,7 +26,7 @@ def insert_player_daily(username):
     result = cur.fetchone()
 
     if result is None:
-        cur.execute("INSERT INTO usersDaily (username, points, distance, played) VALUES (%s, %s, %s, %s);", (username, 0, 0, False))
+        cur.execute("INSERT INTO usersDaily (username, points, distance, played, last_played, current_streak) VALUES (%s, %s, %s, %s, NULL, %s);", (username, 0, 0, False, 0))
 
     conn.commit()
     conn.close()
@@ -34,14 +36,25 @@ def update_player_daily(username, points, distance):
     cur = conn.cursor()
     
 
-    cur.execute("UPDATE usersDaily SET points=%s, distance=%s, played=%s WHERE username=%s;", (points, distance, True, username))
+    cur.execute('''UPDATE usersDaily
+                SET 
+                points=%s,
+                distance=%s,
+                played=%s,
+                last_played= CURRENT_DATE,
+                current_streak = CASE
+                    WHEN last_played IS NULL THEN 1 
+                    WHEN last_played = CURRENT_DATE - INTERVAL '1 day' THEN current_streak + 1 
+                    ELSE 1 
+                END
+                WHERE username=%s;''', (points, distance, True, username))
     print("EXECUTED DAILY UPDATE")
     conn.commit()
     conn.close()
 
 #-----------------------------------------------------------------------
 
-def player_played(username): 
+def player_played(username):
 
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
@@ -61,7 +74,7 @@ def reset_player(username):
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
 
-    cur.execute("UPDATE usersDaily SET played=%s, points=%s WHERE username=%s;", (False, 0, username))
+    cur.execute("UPDATE usersDaily SET played=%s, points=%s, distance=%s WHERE username=%s;", (False, 0, 0, username))
 
     conn.commit()
     conn.close()
@@ -78,6 +91,21 @@ def reset_players():
     conn.commit()
     conn.close()
 
+#-----------------------------------------------------------------------
+
+def get_streak(username):
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+    cur.execute('''SELECT current_streak FROM usersDaily WHERE username=%s;''', (username,))
+    streak = cur.fetchone()
+
+    conn.close()
+
+    if streak is None:
+        return 0
+
+    return streak[0]
 #-----------------------------------------------------------------------
     
 def get_daily_points(username):
@@ -122,7 +150,7 @@ def get_daily_top_players():
     cur = conn.cursor()
 
     daily_top_players = []
-    cur.execute("SELECT username, points FROM usersDaily ORDER BY points DESC LIMIT 10;")
+    cur.execute("SELECT username, points FROM usersDaily WHERE last_played = CURRENT_DATE ORDER BY points DESC, username ASC LIMIT 10;")
     table = cur.fetchall()
     for row in table:
         username, points = row
@@ -133,6 +161,8 @@ def get_daily_top_players():
     conn.close()
 
     return daily_top_players
+
+#-----------------------------------------------------------------------
 
 def get_daily_rank(username):
     
@@ -152,9 +182,13 @@ def get_daily_rank(username):
     finally:
         conn.close()
 
+#-----------------------------------------------------------------------
+
 def main():
     # update_player_daily('wn4759', 100, 30)
     reset_player('cl7359')
+
+#-----------------------------------------------------------------------
 
 if __name__=="__main__":
     main()

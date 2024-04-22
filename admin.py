@@ -176,7 +176,8 @@ def leaderboard():
     daily_points = daily_user_database.get_daily_points(username)
     rank = user_database.get_rank(username)
     daily_rank = daily_user_database.get_daily_rank(username)
-    html_code = flask.render_template('totalboard.html', top_players = top_players, points = points, daily_points = daily_points, rank = rank, daily_rank = daily_rank)
+    streak = daily_user_database.get_streak(username)
+    html_code = flask.render_template('totalboard.html', top_players = top_players, points = points, daily_points = daily_points, rank = rank, daily_rank = daily_rank, streak = streak)
     response = flask.make_response(html_code)
     return response
 
@@ -190,7 +191,8 @@ def totalleaderboard():
     daily_points = daily_user_database.get_daily_points(username)
     rank = user_database.get_rank(username)
     daily_rank = daily_user_database.get_daily_rank(username)
-    html_code = flask.render_template('leaderboard.html', top_players = top_players, points = points, daily_points = daily_points, rank = rank, daily_rank = daily_rank)
+    streak = daily_user_database.get_streak(username)
+    html_code = flask.render_template('leaderboard.html', top_players = top_players, points = points, daily_points = daily_points, rank = rank, daily_rank = daily_rank, streak = streak)
     response = flask.make_response(html_code)
     return response
 
