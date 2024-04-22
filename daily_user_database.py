@@ -153,6 +153,7 @@ def get_daily_rank(username):
 
 def main():
     update_player_daily('wn4759', 100, 30)
+    # reset_player('cl7359')
 
 if __name__=="__main__":
     main()
