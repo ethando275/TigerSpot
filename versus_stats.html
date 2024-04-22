@@ -50,9 +50,9 @@
         <div class="side-text left-text">
             <div class="row">Challenger: {{results.challenger_id}}</div>
             {% for points in results.challenger_pic_points %}
-            <div class="row">Picture {{loop.index}}: {{points}}</div>
+            <div class="row">Picture {{loop.index}}: {{points}} Points</div>
             {% endfor %}
-            <div class="row">Total: {{results.challenger_points}}</div>
+            <div class="row">Total: {{results.challenger_points}} Points</div>
         </div>
         
         <!-- Carousel -->
@@ -89,9 +89,9 @@
         <div class="side-text right-text">
             <div class="row">Challengee: {{results.challengee_id}}</div>
             {% for points in results.challengee_pic_points %}
-            <div class="row">Picture {{loop.index}}: {{points}}</div>
+            <div class="row">Picture {{loop.index}}: {{points}} Points</div>
             {% endfor %}
-            <div class="row">Total: {{results.challengee_points}}</div>
+            <div class="row">Total: {{results.challengee_points}} Points</div>
         </div>
     </main>
     
