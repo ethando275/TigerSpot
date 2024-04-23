@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{url_for('static', filename = 'styles/styles.css')}}" />
 </head>
 <body>
-   <header class="content">
+   <header>
     <nav id="navbar">
         <div class="home-icon">
             <a href="/menu"><img src="static\styles\home.png" alt="Home Page" width="150" height="50"></a>
@@ -90,22 +90,22 @@
     <!-- Add any scripts here -->
     <script>
         // When the user scrolls the page, execute myFunction
-        window.onscroll = function() {myFunction()};
+window.addEventListener('scroll', function() {
+    var navbar = document.getElementById('navbar');
+    var sticky = navbar.offsetTop;
 
-        // Get the navbar
-        var navbar = document.getElementById("navbar");
+    if (window.pageYOffset >= sticky) {
+        navbar.classList.add('sticky');
+        document.body.style.paddingTop = navbar.offsetHeight + 'px'; // Add padding equal to navbar height
+    } else {
+        navbar.classList.remove('sticky');
+        document.body.style.paddingTop = '0'; // Reset padding
+    }
+});
 
-        // Get the offset position of the navbar
-        var sticky = navbar.offsetTop;
 
-        // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
-        function myFunction() {
-        if (window.pageYOffset >= sticky) {
-            navbar.classList.add("sticky")
-        } else {
-            navbar.classList.remove("sticky");
-        }
-        }
+    
+
     </script>
 </body>
 </html>
