@@ -48,7 +48,7 @@
         <div id="distance"></div>
         <div id="points"> </div>
         {% if index < 5 %}
-        <form id="next" method="post" action="/start_challenge">
+        <form id="next" method="get" action="/start_challenge">
             <input type = "hidden" id="challenge_id" name = "challenge_id" value ="{{challenge_id}}">
             <input type = "hidden" id="index" name = "index" value ="{{index}}">
             <button type = "submit" class="submit"><b>Next</b></button>
