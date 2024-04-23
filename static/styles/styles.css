@@ -19,7 +19,7 @@ header {
 }
 
 .home-icon {
-  max-width: 100%;
+  max-width: 150px;
   height: auto;
   margin-right: auto;
 }
@@ -41,17 +41,16 @@ nav {
 }
 
 .nav-icons a {
-  margin-left: 1vw;
+  display: inline-grid;
   text-decoration: none;
-  color: white;
+  color: black;
 }
 
-.nav-icons {
-    text-align: right;
-    max-width: 100%;
-    height: auto;
-    float: right;
-    margin-right: 1vw;
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 1vw;
 }
 
 .dropdown {
@@ -142,7 +141,7 @@ main {
   cursor: pointer;
 }
 
-.button:hover, .result-btn:hover {
+.button:hover, .result-btn:hover, .rules-button:hover {
   background-color: rgb(219, 128, 16);
 }
 
@@ -156,28 +155,52 @@ main {
 }
 
 /* Rules Page CSS*/
+.rules-container {
+  display: flex;
+  flex-direction: row;
+}
 
 .instructions {
   display: flex;
   flex-direction: column;
   text-align: center;
   align-items: center;
+  justify-content: space-evenly;
+  width: 50%;
   border: 0.6vw solid black;
   border-radius: 1vh;
   background: white;
   padding: 0vh 1vw 8vh 1vw;
+  margin: 1vh 1vw;
 }
 
 .instructions .title {
-  font-size: 6vw;
+  font-size: 4vw;
   margin-bottom: 2vh;
 }
 
 .instructions ul {
   padding: 0vh 5vw;
-  font-size: 2vw;
+  font-size: 2vh;
   text-align: left;
 }
+
+.rules {
+  display: flex;
+  flex-direction: row;
+}
+
+.rules-button {
+  background-color: orange;
+  color: black;
+  border: 0.6vw solid black;
+  border-radius: 1vw;
+  font-size: 3vw;
+  padding: 1vh 1vw;
+  transition-duration: 0.2s;
+  cursor: pointer;
+}
+
 
 /* Results Page CSS */
 .game-result {
@@ -275,7 +298,7 @@ footer {
 }
 
 .game-image {
-  width: 30vw; /* Adjusted width */
+  width: 35vw; /* Adjusted width */
   height: 65vh;
   padding: 1vh 1vw;
 }
@@ -440,10 +463,8 @@ footer {
 
   #map {
     width: 85vw;
-  }
-}
+    }
 
-@media screen and (max-width: 1000px) {
   .leaderboard {
     flex-direction: column;
     align-items: center;
@@ -458,4 +479,10 @@ footer {
     width: 60vw; /* Adjust as needed */
     height: 50vh;
   }
+
+  .rules-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
 }
