@@ -249,10 +249,10 @@ def play_button():
     challenge_id = flask.request.form.get('challenge_id')
     user = auth.authenticate()
     status = challenges_database.get_playbutton_status(challenge_id, user)
-    if status == None or status == True:
+    if status == None:
         challenges_database.update_playbutton_status(challenge_id, user)
         return redirect(url_for('start_challenge', challenge_id=challenge_id))
-    #elif status == True:
+    elif status == True:
         challenges_database.update_finish_status(challenge_id, user)
         status = challenges_database.check_finish_status(challenge_id)
         if status['status'] == "finished":
