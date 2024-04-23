@@ -15,7 +15,7 @@ def create_pic_table():
     cur.execute('''CREATE TABLE IF NOT EXISTS pictures (
         pictureID int,
         coordinates float[2],
-        link varchar(255)
+        link varchar(255),
         place varchar(255));''')
 
     # connects to TigerSpot folder in cloudinary
@@ -38,15 +38,15 @@ def create_pic_table():
 
     # loops through folder and retrieves image url, coordinates and sets pictureid per resource
     for resource in resources.get('resources', []):
-        link, latitude, longitude = cloud.image_data(resource)
+        link, latitude, longitude, place = cloud.image_data(resource)
         coordinates = [latitude, longitude]
         cur.execute("SELECT * FROM pictures WHERE link = %s", (link,))
         exists = cur.fetchone()
         if not exists:
             pictureID += 1
-            cur.execute(''' INSERT INTO pictures (pictureID, coordinates, link) 
-            VALUES (%s, %s, %s);
-            ''', (pictureID, coordinates, link))
+            cur.execute(''' INSERT INTO pictures (pictureID, coordinates, link, place) 
+            VALUES (%s, %s, %s, %s);
+            ''', (pictureID, coordinates, link, place))
     conn.commit()
     cur.close()
     conn.close()
@@ -179,6 +179,7 @@ def main():
         print("SUCCESS")
     else: 
         print("FAIL")
+    # create_pic_table()
     
 if __name__=="__main__":
     main()
