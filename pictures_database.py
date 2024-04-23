@@ -54,7 +54,9 @@ def get_current_date():
     eastern = pytz.timezone('America/New_York')
     eastern_timezone = datetime.datetime.now(eastern)
 
-    return eastern_timezone
+    eastern_date = eastern_timezone.date()
+
+    return eastern_date
     
 # Checks the current date and returns associated picture id
 def pic_of_day():
@@ -172,7 +174,7 @@ def main():
     print(eastern_timezone)
     check = daily_user_database.get_last_played_date('wn4759')
     print(check)
-    if eastern_timezone.date() == check:
+    if eastern_timezone == check:
         print("SUCCESS")
     else: 
         print("FAIL")
