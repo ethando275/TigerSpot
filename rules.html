@@ -9,33 +9,69 @@
 </head>
 <body>
 
-    <header>
-        <nav>
-            <div class="home-icon">
-                <a href="/menu"><img src="static\styles\home.png" alt="Home Page"></a>
-            </div>
-            <div class="nav-icons">
-                <a href="/rules"><img src="static\styles\questionmark.png" alt="Rules" /></a>
-                <a href="/requests"><img src = "static\styles\requests.png" alt="Requests"/></a>
-                <a href="/leaderboard"><img src = "static\styles\trophy.png" alt="Leaderboard"/></a>
-                <a href="logoutcas"><img src="static\styles\logout.png" alt="Logout" /></a>
-            </div>
-        </nav>
-    </header>
+   <header>
+    <nav>
+        <div class="home-icon">
+            <a href="/menu"><img src="static\styles\home.png" alt="Home Page" width="150" height="50"></a>
+        </div>
+        <div class="nav-icons">
+            <a href="/rules">
+                <div class="nav-item">
+                    <img src="static\styles\questionmark.png" alt="Rules" />
+                    <span>Rules</span>
+                </div>
+            </a>
+            <a href="/requests">
+                <div class="nav-item">
+                    <img src="static\styles\requests.png" alt="Requests" />
+                    <span>Versus</span>
+                </div>
+            </a>
+            <a href="/leaderboard">
+                <div class="nav-item">
+                    <img src="static\styles\trophy.png" alt="Leaderboard" />
+                    <span>Leaderboard</span>
+                </div>
+            </a>
+            <a href="logoutcas">
+                <div class="nav-item">
+                    <img src="static\styles\logout.png" alt="Logout" />
+                    <span>Log Out</span>
+                </div>
+            </a>
+        </div>
+    </nav>
+</header>
 
     <main>
-        <div class="instructions">
-          <b><p class="title">Instructions</p>
-          <ul>
-            <li>You will be given a picture taken somewhere on Princeton's campus</li>
-            <li>It is your job to zoom in on the map and place your marker on where you think this picture was taken</li>
-            <li>The closer you are, the more points you will receive!</li>
-          </ul></b>
-            <a href="/game">
-            <button class="button">
-            <b>Play Now!</b>
-            </button>
-          </a>
+      <div class="rules-container">
+          <div class="instructions">
+            <b><p class="title">Daily Game Instructions</p>
+            <ul>
+              <li>You will be given a picture taken somewhere on Princeton's campus</li>
+              <li>It is your job to zoom in on the map and place your marker on where you think the photographer was standing when taking the photo.</li>
+              <li>To get at least 1 point, you must at least be within 100 meters of the correct location. The closer you are, the more points you will receive!</li>
+            </ul></b>
+              <a href="/game">
+              <button class="rules-button">
+              <b>Play Daily Game!</b>
+              </button>
+            </a>
+          </div>
+          <div class="instructions">
+            <b><p class="title">Versus Game Instructions</p>
+            <ul>
+              <li>Challenge a friend to play against using their NetID</li>
+              <li>Once both players accept the challenge invitation and hit "play", you and your opponent will be given 5 pictures to guess. The catch is now you will be under a 2 minute time limit - the faster you guess, the more points you gain!</li>
+              <li>The playing format is the same as the daily, just with 5 pictures instead.</li>
+              <li>Once both players have finished guessing, your results will appear shortly to determine the winner!</li>
+            </ul></b>
+              <a href="/requests">
+              <button class="rules-button">
+              <b>Play Versus Game!</b>
+              </button>
+            </a>
+          </div>
         </div>
     </main>
     <!-- Add any scripts here -->
