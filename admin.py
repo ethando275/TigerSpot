@@ -148,6 +148,7 @@ def submit():
     
     # id = flask.request.form.get('id')
     coor = pictures_database.get_pic_info("coordinates", id)
+    place = pictures_database.get_pic_info("place", id)
     # print(coor)
 
     distance = distance_func.calc_distance(currLat, currLon, coor)
@@ -160,7 +161,7 @@ def submit():
     daily_user_database.update_player_daily(username, today_points, distance)
     print("UPDATED")
 
-    html_code = flask.render_template('results.html', dis = distance, lat = currLat, lon = currLon, coor=coor, today_points = today_points)
+    html_code = flask.render_template('results.html', dis = distance, lat = currLat, lon = currLon, coor=coor, today_points = today_points, place = place)
     response = flask.make_response(html_code)
     return response
 
