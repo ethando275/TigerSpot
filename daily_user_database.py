@@ -209,15 +209,6 @@ def remove_daily_user(username):
     conn.commit()
     conn.close()
 
-def remove_daily_user(username):
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
-
-    cur.execute("DELETE FROM usersDaily WHERE username=%s;", (username,))
-
-    conn.commit()
-    conn.close()
-
 def main():
     # update_player_daily('wn4759', 100, 30)
     #reset_player('cl7359')
