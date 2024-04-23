@@ -4,6 +4,7 @@ import cloudinary
 import cloudinary.api
 import cloud
 import database
+import pytz
 
 DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
 
@@ -50,9 +51,12 @@ def create_pic_table():
 
 # Checks the current date and returns associated picture id
 def pic_of_day():
-   day_of_year = datetime.datetime.now().timetuple().tm_yday
-   picture_id = (day_of_year - 1) % database.get_table_size("pictures") + 1
-   return picture_id
+    date_time = datetime.datetime.now()
+    eastern = pytz.timezone('US/Eastern')
+    converted_date_time = eastern.localize(date_time)
+    day_of_year = converted_date_time.timetuple().tm_yday
+    picture_id = (day_of_year - 1) % database.get_table_size("pictures") + 1
+    return picture_id
 
 def get_pic_info(col, id):
     conn = psycopg2.connect(DATABASE_URL)
@@ -62,10 +66,12 @@ def get_pic_info(col, id):
     rows = cur.fetchall()
 
     row = rows[0][0]
-    return row
-    # conn.commit()
+
     cur.close()
     conn.close()
+    
+    return row
+    # conn.commit()
 
 def update_picture_coordinates():
     conn = None
@@ -144,9 +150,16 @@ def update_picture_id_by_coordinates(new_pictureID, coordinates):
 #-----------------------------------------------------------------------
 
 def main():
-    print(datetime.datetime.now())
-
-#-----------------------------------------------------------------------
+    date_time = datetime.datetime.now()
+    print(f"DATETIME: {date_time}")
+    eastern = pytz.timezone('US/Eastern')
+    converted_date_time = eastern.localize(date_time)
+    print(f"CONVERTED DATE TIME: {converted_date_time}")
+    day_of_year = converted_date_time.timetuple().tm_yday
+    print(f"DAY OF YEAR: {day_of_year}")
+    picture_id = (day_of_year - 1) % database.get_table_size("pictures") + 1
+    print(f"PICTURE ID: {picture_id}")
+    
 
 if __name__=="__main__":
     main()
