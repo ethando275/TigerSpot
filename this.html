@@ -8,7 +8,7 @@
 </head>
 <body>
    <header>
-    <nav>
+    <nav id="navbar">
         <div class="home-icon">
             <a href="/menu"><img src="static\styles\home.png" alt="Home Page" width="150" height="50"></a>
         </div>
@@ -177,4 +177,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 });
             });
+    
+
+    // When the user scrolls the page, execute myFunction
+    window.onscroll = function() {myFunction()};
+
+    // Get the navbar
+    var navbar = document.getElementById("navbar");
+
+    // Get the offset position of the navbar
+    var sticky = navbar.offsetTop;
+
+    // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
+    function myFunction() {
+    if (window.pageYOffset >= sticky) {
+        navbar.classList.add("sticky")
+    } else {
+        navbar.classList.remove("sticky");
+    }
+    }
+
 </script>
