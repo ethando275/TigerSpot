@@ -35,7 +35,7 @@ def update_player_daily(username, points, distance):
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
     
-    cur.execute("SET TIME ZONE 'America/New_York;")
+    cur.execute("SET TIME ZONE 'America/New_York';")
 
     cur.execute('''UPDATE usersDaily
                 SET 
