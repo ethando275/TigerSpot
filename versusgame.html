@@ -127,7 +127,6 @@
       }
 
       function checkCoordinates() {
-      dodcument.getElementById('index').value = "{{index}}" + 1;
       return true; // Allows form submission
   }
    
@@ -159,18 +158,6 @@
     }
   }, 1000);
 
-  function checkCoordinates() {
-    // Ensure all necessary data is set before submission
-    document.getElementById('index').value = parseInt(document.getElementById('index').value);
-    return true; // Allows form submission
-  }
-
-  function clearForm() {
-    markersGroup.clearLayers();
-    document.getElementById('currLat').value = "";
-    document.getElementById('currLon').value = "";
-    document.getElementById('time').value = ""; // Clear time value too
-  }
 
 </script>
 
