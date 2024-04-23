@@ -203,7 +203,8 @@ def get_daily_rank(username):
 def main():
     # update_player_daily('wn4759', 100, 30)
     #reset_player('cl7359')
-    reset_player('wn4759')
+    #reset_player('wn4759')
+    reset_player('jy1365')
     #create_daily_user_table()
     #date = get_last_played_date('fl9971')
     #print(date)
