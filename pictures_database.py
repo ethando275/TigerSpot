@@ -5,7 +5,7 @@ import cloudinary.api
 import cloud
 import database
 import pytz
-import pytz
+import daily_user_database
 
 DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
 
@@ -50,10 +50,16 @@ def create_pic_table():
     cur.close()
     conn.close()
 
-# Checks the current date and returns associated picture id
-def pic_of_day():
+def get_current_date():
     eastern = pytz.timezone('America/New_York')
     eastern_timezone = datetime.datetime.now(eastern)
+
+    return eastern_timezone.date()
+    
+# Checks the current date and returns associated picture id
+def pic_of_day():
+
+    eastern_timezone = get_current_date()
     day_of_year = eastern_timezone.timetuple().tm_yday
     print(f"CONVERTED DATE TIME: {eastern_timezone}")
 
@@ -162,6 +168,15 @@ def update_picture_id_by_coordinates(new_pictureID, coordinates):
 
 def main():
     pic_of_day()
+    eastern = pytz.timezone('America/New_York')
+    eastern_timezone = datetime.datetime.now(eastern)
+    print(eastern_timezone)
+    check = daily_user_database.get_last_played_date('fl9971')
+    print(check)
+    if eastern_timezone.date() == check:
+        print("SUCCESS")
+    else: 
+        print("FAIL")
     
 if __name__=="__main__":
     main()

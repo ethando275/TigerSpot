@@ -89,7 +89,10 @@ def game():
 
     print(f"ID WAS: {id}")
 
-    if id != pictures_database.pic_of_day():
+    played_date = daily_user_database.get_last_played_date(username)
+    current_date = pictures_database.get_current_date()
+
+    if  played_date != current_date:
         daily_user_database.reset_player(username)
         user_played = daily_user_database.player_played(username)
         id = pictures_database.pic_of_day()
