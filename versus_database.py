@@ -130,6 +130,56 @@ def update_versus_pic_status(challenge_id, user_id, index):
         if conn is not None:
             conn.close()
         
+def get_versus_pic_status(challenge_id, user_id, index):
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        
+        # First, determine if the user is the challenger or the challengee for this challenge
+        cur.execute('''
+            SELECT challenger_id, challengee_id
+            FROM challenges
+            WHERE id = %s;
+        ''', (challenge_id,))
+        
+        result = cur.fetchone()
+        if result is None:
+            print("Challenge not found.")
+            return
+        
+        challenger_id, challengee_id = result
+        
+        # Depending on whether the user is the challenger or the challengee,
+        # get the corresponding finished column in the matches table
+        if user_id == challenger_id:
+            cur.execute('''
+                SELECT challenger_bool[%s]
+                FROM challenges
+                WHERE id = %s;
+            ''', (index, challenge_id))
+        elif user_id == challengee_id:
+            cur.execute('''
+                SELECT challengee_bool[%s]
+                FROM challenges
+                WHERE id = %s;
+            ''', (index, challenge_id))
+        else:
+            print("User is not part of this challenge.")
+            return
+        
+        result = cur.fetchone()
+        if result is None:
+            print("Index not found.")
+            return
+        else:
+            return result[0]
+        
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error: {error}")
+    finally:
+        if conn is not None:
+            conn.close()
 #-----------------------------------------------------------------------
 
 def store_versus_pic_points(challenge_id, user_id, index, points):
@@ -228,53 +278,5 @@ def store_versus_pic_points(challenge_id, user_id, index, points):
         if conn is not None:
             conn.close()
 
-#-----------------------------------------------------------------------
-
-def update_versus_pic_status(challenge_id, user_id, index):
-    conn = None
-    try:
-        conn = psycopg2.connect(DATABASE_URL)
-        cur = conn.cursor()
-
-        # First, determine if the user is the challenger or the challengee for this challenge
-        cur.execute('''
-            SELECT challenger_id, challengee_id
-            FROM challenges
-            WHERE id = %s;
-        ''', (challenge_id,))
-
-        result = cur.fetchone()
-        if result is None:
-            print("Challenge not found.")
-            return
-
-        challenger_id, challengee_id = result
-
-        # Depending on whether the user is the challenger or the challengee,
-        # update the corresponding boolean value in the challenges table
-        if user_id == challenger_id:
-            cur.execute('''
-                UPDATE challenges
-                SET challenger_bool[%s] = TRUE
-                WHERE id = %s;
-            ''', (index, challenge_id))
-        elif user_id == challengee_id:
-            cur.execute('''
-                UPDATE challenges
-                SET challengee_bool[%s] = TRUE
-                WHERE id = %s;
-            ''', (index, challenge_id))
-        else:
-            print("User is not part of this challenge.")
-            return
-
-        conn.commit()
-        print("Versus pic status updated successfully.")
-
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(f"Error: {error}")
-    finally:
-        if conn is not None:
-            conn.close()
 
 #-----------------------------------------------------------------------
