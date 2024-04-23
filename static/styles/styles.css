@@ -311,17 +311,26 @@ footer {
 }
 
 /* Leaderboard styles */
-/* The sticky class is added to the navbar with JS when it reaches its scroll position */
+/* Smooth transition for the navbar */
+#navbar {
+  transition: top 0.3s ease-in-out;
+}
+
+/* Sticky navbar */
 #navbar.sticky {
   position: fixed;
   top: 0;
-  width: 96%;
-  margin: 0;
+  width: calc(100% - 2vw); /* Adjusted width to accommodate border */
   background-color: white;
   border: 0.6vw solid black;
   padding: 1vh 1vw;
+  z-index: 1000; /* Ensure the navbar is on top of other content */
 }
 
+/* Add some top padding to the page content to prevent sudden quick movement (as the navigation bar gets a new position at the top of the page (position:fixed and top:0) */
+.sticky + .leaderboard {
+  padding-top: 60px;
+}
 
 .leaderboard {
   display: flex;
