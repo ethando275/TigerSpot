@@ -35,7 +35,7 @@ def update_player_daily(username, points, distance):
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
     
-    cur.execute("SET TIME ZONE 'America/New_York;")
+    cur.execute("SET TIME ZONE 'America/New_York';")
 
     cur.execute('''UPDATE usersDaily
                 SET 
@@ -187,7 +187,8 @@ def get_daily_rank(username):
 def main():
     # update_player_daily('wn4759', 100, 30)
     #reset_player('cl7359')
-    reset_player('wn4759')
+    #reset_player('wn4759')
+    reset_player('jy1365')
     #create_daily_user_table()
 
 #-----------------------------------------------------------------------
