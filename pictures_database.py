@@ -15,7 +15,8 @@ def create_pic_table():
     cur.execute('''CREATE TABLE IF NOT EXISTS pictures (
         pictureID int,
         coordinates float[2],
-        link varchar(255));''')
+        link varchar(255)
+        place varchar(255));''')
 
     # connects to TigerSpot folder in cloudinary
     cloudinary.config(
@@ -100,11 +101,11 @@ def update_picture_coordinates():
         cur = conn.cursor()
         
         # SQL command to update the coordinates of the picture with the specified pictureID
-        cur.execute('''
-            UPDATE pictures
-            SET coordinates = %s
-            WHERE pictureID = %s;
-        ''', ([40.34642, -74.65609], 1))
+        # cur.execute('''
+        #     UPDATE pictures
+        #     SET coordinates = %s
+        #     WHERE pictureID = %s;
+        # ''', ([40.34642, -74.65609], 1))
         
         # Commit the changes to the database
         conn.commit()
