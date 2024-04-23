@@ -268,7 +268,7 @@ def play_button():
 @app.route('/start_challenge', methods=['GET'])
 def start_challenge():
     challenge_id = flask.request.args.get('challenge_id')
-    index = int(flask.request.form.get('index', 0))
+    index = int(flask.request.args.get('index', 0))
     versusList = challenges_database.get_random_versus(challenge_id)
 
     if index < len(versusList):
@@ -294,33 +294,42 @@ def end_challenge():
 def submit2():
     currLat = flask.request.form.get('currLat')  
     currLon = flask.request.form.get('currLon')
+    points = 0
     if not currLat or not currLon:
         index = int(flask.request.form.get('index'))
         challenge_id = flask.request.form.get('challenge_id')
-        points = 0
         distance = 0
-        versus_database.update_versus_pic_status(challenge_id, auth.authenticate(), index+1)
-        versus_database.store_versus_pic_points(challenge_id, auth.authenticate(), index+1, points)
-        versus_database.update_versus_points(challenge_id, auth.authenticate(), points)
+        pic_status = versus_database.get_versus_pic_status(challenge_id, auth.authenticate(), index+1)
+        if pic_status == False:
+            versus_database.update_versus_pic_status(challenge_id, auth.authenticate(), index+1)
+            versus_database.store_versus_pic_points(challenge_id, auth.authenticate(), index+1, points)
+            versus_database.update_versus_points(challenge_id, auth.authenticate(), points)
+        else:
+            points = "Already submitted."
         index = int(index) + 1
-        html_code = flask.render_template('versusresults.html', dis = distance, lat = None, lon = None, coor=None, index=index, challenge_id=challenge_id, points=points)
+        html_code = flask.render_template('versusresults.html', dis = distance, lat = None, lon = None, coor=None, index=index, challenge_id=challenge_id, points=str(points))
         response = flask.make_response(html_code)
         return response
     
     index = int(flask.request.form.get('index'))
     challenge_id = flask.request.form.get('challenge_id')
     time = int(flask.request.form.get('time'))
-    versus_database.update_versus_pic_status(challenge_id, auth.authenticate(), index+1)
     versusList = challenges_database.get_random_versus(challenge_id)
     coor = pictures_database.get_pic_info("coordinates", versusList[index])
     distance = distance_func.calc_distance(currLat, currLon, coor)
-    points = versus_database.calculate_versus(distance, time)
-    versus_database.store_versus_pic_points(challenge_id, auth.authenticate(), index+1, points)
-    versus_database.update_versus_points(challenge_id, auth.authenticate(), points)
+    pic_status = versus_database.get_versus_pic_status(challenge_id, auth.authenticate(), index+1)
+    if pic_status == False:
+        points = versus_database.calculate_versus(distance, time)
+        versus_database.store_versus_pic_points(challenge_id, auth.authenticate(), index+1, points)
+        versus_database.update_versus_points(challenge_id, auth.authenticate(), points)
+        versus_database.update_versus_pic_status(challenge_id, auth.authenticate(), index+1)
+    else:
+        points = "Already submitted."
     index = int(index) + 1
-    html_code = flask.render_template('versusresults.html', dis = distance, lat = currLat, lon = currLon, coor=coor, index=index, challenge_id=challenge_id, points=points)
+    html_code = flask.render_template('versusresults.html', dis = distance, lat = currLat, lon = currLon, coor=coor, index=index, challenge_id=challenge_id, points=str(points))
     response = flask.make_response(html_code)
     return response
+    
 
 @app.route('/versus_stats', methods=['GET'])
 def versus_stats():
