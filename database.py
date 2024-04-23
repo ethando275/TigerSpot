@@ -108,6 +108,7 @@ def show_rows():
 
 def main():
     show_rows()
+    # drop_table("pictures")
     
 if __name__=="__main__":
     main()
