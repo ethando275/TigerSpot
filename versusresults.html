@@ -140,7 +140,14 @@
     var distance = "{{ dis }}";
     distance = parseFloat(distance).toFixed(5); // Formats the distance to 2 decimal places
     document.getElementById('distance').innerHTML =  "Distance from actual point: "+ distance + " meters";
-    document.getElementById('points').innerHTML = "You earned: " + parseFloat("{{ points }}").toFixed(5) + " points";
+    check = "{{ points }}";
+    if (check =="Already submitted.") {
+    document.getElementById('points').innerHTML = "You earned: " + "{{points}}";
+    }
+    else {
+    check = check + " points";
+    document.getElementById('points').innerHTML = "You earned: " + check;
+    }
     var marker1 = L.marker(["{{coor[0]}}", "{{coor[1]}}"], {icon: new L.Icon({
     iconUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers/img/marker-icon-2x-green.png',
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
