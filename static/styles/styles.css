@@ -12,7 +12,7 @@ body {
 header {
   background-color: white;
   color: white;
-  padding: 1vw;
+  padding: 1vh 0vw;
   text-align: center;
   box-shadow: 0 1vw 1vw rgba(0, 0, 0, 0.1);
   border-bottom: 0.6vw solid black;
@@ -311,6 +311,18 @@ footer {
 }
 
 /* Leaderboard styles */
+/* The sticky class is added to the navbar with JS when it reaches its scroll position */
+#navbar.sticky {
+  position: fixed;
+  top: 0;
+  width: 96%;
+  margin: 0;
+  background-color: white;
+  border: 0.6vw solid black;
+  padding: 1vh 1vw;
+}
+
+
 .leaderboard {
   display: flex;
   justify-content: space-between;
