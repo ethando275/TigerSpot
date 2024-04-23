@@ -3,20 +3,20 @@ body {
   margin: 0;
   padding: 0;
   background-color: orange;
-  border: 0.6vw solid black;
+  /* border: 0.6vw solid black; */
   min-height: 100vh;
   box-sizing: border-box;
 }
 
 /* Header styles */
-/* header {
+.header-container {
   background-color: white;
   color: white;
   padding: 1vh 0vw;
   text-align: center;
   box-shadow: 0 1vw 1vw rgba(0, 0, 0, 0.1);
-  border-bottom: 0.6vw solid black;
-} */
+  border: 0.6vw solid black;
+} 
 
 .home-icon {
   max-width: 150px;
@@ -316,7 +316,7 @@ footer {
 #navbar {
   position: fixed;
   top: 0;
-  width: calc(100% - 2vw); /* Adjusted width to accommodate border */
+  width: 97%; /* Adjusted width to accommodate border */
   background-color: white;
   border: 0.6vw solid black;
   padding: 1vh 1vw;

@@ -62,7 +62,7 @@
             <b><p class="title">Versus Game Instructions</p>
             <ul>
               <li>Challenge a friend to play against using their NetID</li>
-              <li>Once both players accept the challenge invitation and hit "play", you and your opponent will be given 5 pictures to guess. The catch is now you will be under a 2 minute time limit - the faster you guess, the more points you gain!</li>
+              <li>Once both players accept the challenge invitation and hit "play", you and your opponent will be given 5 pictures to guess. The catch is now you will be under a 2 minute time limit, so guess before time runs out!</li>
               <li>The playing format is the same as the daily, just with 5 pictures instead.</li>
               <li>Once both players have finished guessing, your results will appear shortly to determine the winner!</li>
             </ul></b>
@@ -76,23 +76,18 @@
     </main>
     <!-- Add any scripts here -->
     <script>
-      // When the user scrolls the page, execute myFunction
-      window.onscroll = function() {myFunction()};
+      window.addEventListener('scroll', function() {
+          var navbar = document.getElementById('navbar');
+          var sticky = navbar.offsetTop;
 
-      // Get the navbar
-      var navbar = document.getElementById("navbar");
-
-      // Get the offset position of the navbar
-      var sticky = navbar.offsetTop;
-
-      // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
-      function myFunction() {
-      if (window.pageYOffset >= sticky) {
-          navbar.classList.add("sticky")
-      } else {
-          navbar.classList.remove("sticky");
-      }
-      }
+          if (window.pageYOffset >= sticky) {
+              navbar.classList.add('sticky');
+              document.body.style.paddingTop = navbar.offsetHeight + 'px'; // Add padding equal to navbar height
+          } else {
+              navbar.classList.remove('sticky');
+              document.body.style.paddingTop = '0'; // Reset padding
+          }
+      });
     </script>
 </body>
 </html>
