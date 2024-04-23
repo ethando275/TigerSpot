@@ -140,5 +140,13 @@ def update_picture_id_by_coordinates(new_pictureID, coordinates):
         # Closing the cursor
         if cur is not None:
             cur.close()
-            
+
 #-----------------------------------------------------------------------
+
+def main():
+    print(datetime.datetime.now())
+
+#-----------------------------------------------------------------------
+
+if __name__=="__main__":
+    main()
