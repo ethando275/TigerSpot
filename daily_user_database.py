@@ -200,10 +200,20 @@ def get_daily_rank(username):
 
 #-----------------------------------------------------------------------
 
+def remove_daily_user(username):
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+    cur.execute("DELETE FROM usersDaily WHERE username=%s;", (username,))
+
+    conn.commit()
+    conn.close()
+
 def main():
     # update_player_daily('wn4759', 100, 30)
     #reset_player('cl7359')
-    reset_player('wn4759')
+    #reset_player('wn4759')
+    remove_daily_user('wn4759')
     #reset_player('jy1365')
     #create_daily_user_table()
     # date = get_last_played_date('fl9971')

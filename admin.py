@@ -90,7 +90,10 @@ def game():
     print(f"ID WAS: {id}")
 
     played_date = daily_user_database.get_last_played_date(username)
+    print(f"LAST PLAYED DATE WAS: {played_date}")
+
     current_date = pictures_database.get_current_date()
+    print(f"CURRENT DATE IS: {current_date}")
 
     if  played_date != current_date:
         daily_user_database.reset_player(username)
