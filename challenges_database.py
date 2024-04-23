@@ -489,6 +489,7 @@ def main():
     #clear_challenges_table()
     #reset_challenges_id_sequence()
     print()
+    create_challenge('larry', 'ed8205')
     
 if __name__=="__main__":
     main()
