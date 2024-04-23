@@ -52,11 +52,21 @@ def create_pic_table():
 
 # Checks the current date and returns associated picture id
 def pic_of_day():
-    date_time = datetime.datetime.now()
-    eastern = pytz.timezone('US/Eastern')
-    converted_date_time = eastern.localize(date_time)
-    day_of_year = converted_date_time.timetuple().tm_yday
+    eastern = pytz.timezone('America/New_York')
+    eastern_timezone = datetime.datetime.now(eastern)
+    day_of_year = eastern_timezone.timetuple().tm_yday
+    print(f"CONVERTED DATE TIME: {eastern_timezone}")
+
+    # korean = pytz.timezone('Asia/Seoul')
+    # korean_timezone = datetime.datetime.now(korean)
+    # day_of_year = korean_timezone.timetuple().tm_yday
+    # print(f"CONVERTED DATE TIME: {korean_timezone}")
+
     picture_id = (day_of_year - 1) % database.get_table_size("pictures") + 1
+
+    print(f"DAY OF YEAR: {day_of_year}")
+    print(f"PICTURE ID: {picture_id}")
+
     return picture_id
 
 def get_pic_info(col, id):
@@ -151,16 +161,7 @@ def update_picture_id_by_coordinates(new_pictureID, coordinates):
 #-----------------------------------------------------------------------
 
 def main():
-    date_time = datetime.datetime.now()
-    print(f"DATETIME: {date_time}")
-    eastern = pytz.timezone('US/Eastern')
-    converted_date_time = eastern.localize(date_time)
-    print(f"CONVERTED DATE TIME: {converted_date_time}")
-    day_of_year = converted_date_time.timetuple().tm_yday
-    print(f"DAY OF YEAR: {day_of_year}")
-    picture_id = (day_of_year - 1) % database.get_table_size("pictures") + 1
-    print(f"PICTURE ID: {picture_id}")
+    pic_of_day()
     
-
 if __name__=="__main__":
     main()
