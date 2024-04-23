@@ -206,8 +206,8 @@ def main():
     #reset_player('wn4759')
     reset_player('jy1365')
     #create_daily_user_table()
-    #date = get_last_played_date('fl9971')
-    #print(date)
+    date = get_last_played_date('fl9971')
+    print(date)
 
 #-----------------------------------------------------------------------
 
