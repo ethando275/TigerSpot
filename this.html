@@ -67,8 +67,6 @@
                             <a href="{{ url_for('versus_stats', challenge_id=challenge.id) }}" class="score link-style">
                             {{ challenge.winner_id }}
                             </a>
-                            {% else %}
-                            <div class="score">None</div>
                             {% endif %}
                             {% if challenge.status == 'accepted' and not challenge.challenger_finished %}
                                 <form method="post" action="/play_button">
@@ -102,8 +100,6 @@
                                 <a href="{{ url_for('versus_stats', challenge_id=challenge.id) }}" class="score link-style">
                                 {{ challenge.winner_id }}
                                 </a>
-                                {% else %}
-                                <div class="score">None</div>
                                 {% endif %}
                                 {% if challenge.status == 'accepted' and not challenge.challengee_finished %}
                                     <form method="post" action="/play_button">
