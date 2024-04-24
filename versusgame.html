@@ -54,33 +54,22 @@
           <input type = "hidden" id="time" name = "time" value ="">
           <button type="submit" class="submit"><b>Submit</b></button>
           <button type = "button" class="clear" onclick ="clearForm()"><b>Clear</b></button>
-        </form>
-        
+        </form>  
       </div>
+      <form id="Exit" method="post" action="/play_button">
+        <input type="hidden" id="challenge_id" name="challenge_id" value="{{challenge_id}}">
+        <button type="submit" class="submit" onclick="return confirmExit()"><b>Exit</b></button>
+    </form>       
     </main>
   </body>
 </html>
       <!-- Add any scripts here -->
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
       <script>
-      // function haversineDistance(lat1, lon1, lat2, lon2) {
-      //     // Radius of the Earth in meters
-      //     var R = 6371000;
-      //     // Convert degrees to radians
-      //     var radLat1 = lat1 * Math.PI / 180;
-      //     var radLat2 = lat2 * Math.PI / 180;
-      //     // Difference in coordinates
-      //     var deltaLat = (lat2 - lat1) * Math.PI / 180;
-      //     var deltaLon = (lon2 - lon1) * Math.PI / 180;
-      //     // Haversine formula
-      //     var a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
-      //             Math.cos(radLat1) * Math.cos(radLat2) *
-      //             Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
-      //     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      //     var distance = R * c;
-      //     decimalFormat = distance.toFixed(5);
-      //     return decimalFormat;
-      // }
+      function confirmExit() {
+        return confirm("Are you sure you want to exit? Exiting will result in an automatic loss!");
+    }
+
       
       var markersCount = 2;
       var map = L.map('map', {
