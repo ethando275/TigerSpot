@@ -127,6 +127,7 @@ def submit():
     username = auth.authenticate()
 
     user_played = daily_user_database.player_played(username)
+    today_points = daily_user_database.get_daily_points(username)
     today_distance = daily_user_database.get_daily_distance(username)
 
     print(f"INSIDE SUBMIT: user played is {user_played}")
@@ -161,7 +162,7 @@ def submit():
     daily_user_database.update_player_daily(username, today_points, distance)
     print("UPDATED")
 
-    html_code = flask.render_template('results.html', dis = distance, lat = currLat, lon = currLon, coor=coor, today_points = today_points, place = place)
+    html_code = flask.render_template('results.html', dis = distance, lat = currLat, lon = currLon, coor=coor, today_points = today_points, place = place, today_distance = distance)
     response = flask.make_response(html_code)
     return response
 

@@ -30,6 +30,10 @@
             margin-right: auto;
             padding-top: 1vh;
         }
+
+        #buttons {
+            display: inline-block
+        }
     </style>
   </head>
   <body>
@@ -77,7 +81,10 @@
         <div id="map"></div>
         <br>
       </div>
+      <div id = buttons >
       <a href="/leaderboard"><button class="result-btn"><b>See Leaderboard</b></button></a>
+      <button class="result-btn" onclick="copyTextToClipboard('Tiger Spot {{today_points}} points | {{today_distance}} m away')"><b>Share</b></button>
+      </div>
     </main>
   </body>
 </html>
@@ -148,6 +155,16 @@
     // Optionally, zoom the map to the polyline
     map.fitBounds(polyline.getBounds());
 
+
+    function copyTextToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        // Success feedback
+        alert('Copied results to clipboard');
+    }).catch(err => {
+        // Error handling
+        console.error('Failed to copy text: ', err);
+    });
+}
 
     // When the user scrolls the page, execute myFunction
     window.onscroll = function() {myFunction()};
