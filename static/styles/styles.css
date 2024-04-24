@@ -408,6 +408,9 @@ header {
 .score {
   text-align: right;
 }
+.score2 {
+  text-align: right;
+}
 
 /* User stats styles */
 .user-stats h2 {
