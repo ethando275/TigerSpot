@@ -3,20 +3,19 @@ body {
   margin: 0;
   padding: 0;
   background-color: orange;
-  border: 0.6vw solid black;
-  min-height: 100vh;
+  /* border: 0.6vw solid black; */
   box-sizing: border-box;
 }
 
 /* Header styles */
-/* header {
+.header-container {
   background-color: white;
   color: white;
   padding: 1vh 0vw;
   text-align: center;
   box-shadow: 0 1vw 1vw rgba(0, 0, 0, 0.1);
-  border-bottom: 0.6vw solid black;
-} */
+  border: 0.6vw solid black;
+} 
 
 .home-icon {
   max-width: 150px;
@@ -316,7 +315,7 @@ footer {
 #navbar {
   position: fixed;
   top: 0;
-  width: calc(100% - 2vw); /* Adjusted width to accommodate border */
+  width: 97%; /* Adjusted width to accommodate border */
   background-color: white;
   border: 0.6vw solid black;
   padding: 1vh 1vw;
@@ -460,6 +459,60 @@ header {
 
 #share:hover {
   background-color: rgb(219, 128, 16);
+}
+
+/* Team Page */
+/* Three columns side by side */
+.column {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 25%;
+  margin-bottom: 1vh;
+  padding: 0 1vw;
+}
+
+/* Display the columns below each other instead of side by side on small screens */
+@media screen and (max-width: 700px) {
+  .team-row {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .card {
+    width: 500vw;
+  }
+}
+
+/* Add some shadows to create a card effect */
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 1vh;
+  border: 0.5vw solid black;
+  background-color: white;
+  padding: 1vh 1vw;
+}
+.card:first-child {
+  margin-top: 2vh;
+}
+
+/* Some left and right padding inside the container */
+.container {
+  text-align: center;
+}
+
+.team-row {
+  font-size: 2vh;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  padding: 2vh 2vw;
 }
 
 @media screen and (max-width: 1000px) {
