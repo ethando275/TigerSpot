@@ -26,6 +26,16 @@
             <a href="/menu"><img src="static\styles\home.png" alt="Home Page" width="150" height="50"></a>
         </div>
         <div class="nav-icons">
+          {% if username == "ed8205" or username == "fl9971" or username == "sr4508"%}
+          <a href="/sam">
+              <div class="nav-item">
+                  <img src="static\styles\love.png" alt="Sam" />
+                  <span>Sam</span>
+              </div>
+          </a>
+          {% endif %}
+        </button>
+        </a>
             <a href="/rules">
                 <div class="nav-item">
                     <img src="static\styles\questionmark.png" alt="Rules" />
@@ -69,8 +79,6 @@
           <a href="/game">
           <button class="button">
             <b>Let's Go!</b>
-          </button>
-          </a>
         </div>
         <!-- Add any content specific to the index page here -->
       </main>
