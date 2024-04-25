@@ -109,7 +109,7 @@
     var lat = "{{ lat }}";
     var lon = "{{ lon }}";
     var distance = "{{ dis }}";
-    distance = parseFloat(distance).toFixed(5); // Formats the distance to 2 decimal places
+    distance = parseFloat(distance); // Formats the distance to 2 decimal places
     document.getElementById('distance').innerHTML =  "Distance from actual point: "+ distance + " meters";
     check = "{{ points }}";
     if (check =="Already submitted.") {
