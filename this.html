@@ -118,7 +118,7 @@
                                         <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
                                         <button type="submit" class="submit"><b>Play</b></button>
                                     </form>
-                                {% elif challenge.status != 'completed' and not challenge.challengee_finished %}
+                                {% elif challenge.status != 'completed' and not challenge.challengee_finished and challenge.status != 'declined'%}
                                     <form id="accept" method="post" action="/accept_challenge">
                                         <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
                                         <button type="submit" class="submit"><b>Accept</b></button>
