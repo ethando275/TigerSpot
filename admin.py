@@ -30,6 +30,12 @@ app.secret_key = os.environ['APP_SECRET_KEY']
 id = 1
 #-----------------------------------------------------------------------
 
+@app.route('/sam', methods=['GET'])
+def sam():
+    html_code = flask.render_template('sam.html')
+    response = flask.make_response(html_code)
+    return response
+
 # Routes for authentication.
 @app.route('/logoutapp', methods=['GET'])
 def logoutapp():
