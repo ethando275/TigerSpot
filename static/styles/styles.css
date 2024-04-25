@@ -116,7 +116,7 @@ main {
 }
 
 .logo {
-  width: 50vw;
+  width: 40vw;
   max-height: 60vh; /* Adjusted max-height for vertical responsiveness */
   padding: 1vh 1vw; /* Adjusted padding for responsiveness */
 }
@@ -323,7 +323,7 @@ footer {
 }
 
 header {
-  margin-bottom: 9vh;
+  margin-bottom: 8vh;
 }
 
 .leaderboard {
