@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Team Page</title>
+    <!-- Link to external CSS file -->
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename = 'styles/styles.css')}}"
+    />
+  </head>
+  <body>
+    <header>
+      <nav id="navbar">
+        <div class="home-icon">
+          <a href="/menu"
+            ><img
+              src="static\styles\home.png"
+              alt="Home Page"
+              width="150"
+              height="50"
+          /></a>
+        </div>
+        <div class="nav-icons">
+          <a href="/rules">
+            <div class="nav-item">
+              <img src="static\styles\questionmark.png" alt="Rules" />
+              <span>Rules</span>
+            </div>
+          </a>
+          <a href="/requests">
+            <div class="nav-item">
+              <img src="static\styles\requests.png" alt="Requests" />
+              <span>Versus</span>
+            </div>
+          </a>
+          <a href="/leaderboard">
+            <div class="nav-item">
+              <img src="static\styles\trophy.png" alt="Leaderboard" />
+              <span>Leaderboard</span>
+            </div>
+          </a>
+          <a href="/team">
+            <div class="nav-item">
+              <img src="static\styles\team.png" alt="Meet the Team" />
+              <span>Meet the Team</span>
+            </div>
+          </a>
+          <a href="logoutcas">
+            <div class="nav-item">
+              <img src="static\styles\logout.png" alt="Logout" />
+              <span>Log Out</span>
+            </div>
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <div class="team-row">
+      <div class="column">
+        <div class="card">
+          <img
+            src="static\styles\ethan.jpeg"
+            alt="Ethan"
+            width="150"
+            height="150"
+          />
+          <div class="container">
+            <h2>Ethan Do</h2>
+            <p>Some text that describes me lorem ipsum ipsum lorem.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="column">
+        <div class="card">
+          <img
+            src="static\styles\claudia.jpeg"
+            alt="Claudia"
+            width="150"
+            height="150"
+          />
+          <div class="container">
+            <h2>Claudia Lee</h2>
+            <p>Some text that describes me lorem ipsum ipsum lorem.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="column">
+        <div class="card">
+          <img
+            src="static\styles\frank.jpeg"
+            alt="Frank"
+            width="150"
+            height="150"
+          />
+          <div class="container">
+            <h2>Frank Liu</h2>
+            <p>Some text that describes me lorem ipsum ipsum lorem.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="team-row">
+      <div class="column">
+        <div class="card">
+          <img
+            src="static\styles\winsice.jpeg"
+            alt="Winsice"
+            width="150"
+            height="150"
+          />
+          <div class="container">
+            <h2>Winsice Ng</h2>
+            <p>Some text that describes me lorem ipsum ipsum lorem.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="column">
+        <div class="card">
+          <img
+            src="static\styles\jessica.jpeg"
+            alt="Jessica"
+            width="150"
+            height="150"
+          />
+          <div class="container">
+            <h2>Jessica Yan</h2>
+            <p>Some text that describes me lorem ipsum ipsum lorem.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
