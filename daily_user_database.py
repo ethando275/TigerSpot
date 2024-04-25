@@ -166,6 +166,7 @@ def get_daily_top_players():
     cur = conn.cursor()
 
     daily_top_players = []
+    cur.execute("SET TIME ZONE 'America/New_York';")
     cur.execute("SELECT username, points FROM usersDaily WHERE last_played = CURRENT_DATE ORDER BY points DESC, username ASC LIMIT 10;")
     table = cur.fetchall()
     for row in table:
@@ -187,6 +188,7 @@ def get_daily_rank(username):
     cur = conn.cursor()
     
     try: 
+        cur.execute("SET TIME ZONE 'America/New_York';")
         cur.execute("SELECT username, points, DENSE_RANK() OVER (ORDER BY points DESC, username ASC) as rank FROM usersDaily WHERE last_played = CURRENT_DATE;")
         players = cur.fetchall()
         
