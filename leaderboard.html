@@ -102,18 +102,18 @@
     <!-- Add any scripts here -->
     <script>
         // When the user scrolls the page, execute myFunction
-window.addEventListener('scroll', function() {
-    var navbar = document.getElementById('navbar');
-    var sticky = navbar.offsetTop;
+        window.addEventListener('scroll', function() {
+            var navbar = document.getElementById('navbar');
+            var sticky = navbar.offsetTop;
 
-    if (window.pageYOffset >= sticky) {
-        navbar.classList.add('sticky');
-        document.body.style.paddingTop = (navbar.offsetHeight - 30) + 'px'; // Add padding equal to navbar height
-    } else {
-        navbar.classList.remove('sticky');
-        document.body.style.paddingTop = '0'; // Reset padding
-    }
-});
+            if (window.pageYOffset >= sticky) {
+                navbar.classList.add('sticky');
+                document.body.style.paddingTop = (navbar.offsetHeight - 80) + 'px'; // Add padding equal to navbar height
+            } else {
+                navbar.classList.remove('sticky');
+                document.body.style.paddingTop = '0'; // Reset padding
+            }
+        });
 
 
     
