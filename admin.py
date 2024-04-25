@@ -168,6 +168,14 @@ def rules():
 
 #-----------------------------------------------------------------------
 
+@app.route('/team', methods=['GET'])
+def team():
+    html_code = flask.render_template('team.html')
+    response = flask.make_response(html_code)
+    return response
+
+#-----------------------------------------------------------------------
+
 @app.route('/totalboard', methods=['GET'])
 def leaderboard():
     top_players = user_database.get_top_players()
