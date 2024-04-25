@@ -161,11 +161,11 @@ def submit():
     place = pictures_database.get_pic_info("place", id)
     # print(coor)
 
-    distance = distance_func.calc_distance(currLat, currLon, coor)
+    distance = round(distance_func.calc_distance(currLat, currLon, coor))
     username = auth.authenticate()
 
-    today_points = points.calculate_today_points(distance)
-    total_points = points.calculate_total_points(username, today_points)
+    today_points = round(points.calculate_today_points(distance))
+    total_points = round(points.calculate_total_points(username, today_points))
     
     user_database.update_player(username, total_points)
     daily_user_database.update_player_daily(username, today_points, distance)
@@ -338,10 +338,10 @@ def submit2():
     time = int(flask.request.form.get('time'))
     versusList = challenges_database.get_random_versus(challenge_id)
     coor = pictures_database.get_pic_info("coordinates", versusList[index])
-    distance = distance_func.calc_distance(currLat, currLon, coor)
+    distance = round(distance_func.calc_distance(currLat, currLon, coor))
     pic_status = versus_database.get_versus_pic_status(challenge_id, auth.authenticate(), index+1)
     if pic_status == False:
-        points = versus_database.calculate_versus(distance, time)
+        points = round(versus_database.calculate_versus(distance, time))
         versus_database.store_versus_pic_points(challenge_id, auth.authenticate(), index+1, points)
         versus_database.update_versus_points(challenge_id, auth.authenticate(), points)
         versus_database.update_versus_pic_status(challenge_id, auth.authenticate(), index+1)
