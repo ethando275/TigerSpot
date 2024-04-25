@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Results</title>
+    <link rel="stylesheet" href="{{url_for('static', filename = 'styles/styles.css')}}" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <style>
+         #matchID {
+            height: 50vh;
+            width: 50.5%; /* New container takes up remaining space */
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2vh 2vw; /* Add some padding */
+        }
+        #challengeRequests {
+            height: 50vh;
+            width: 50.5%; /* New container takes up remaining space */
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2vh 2vw; /* Add some padding */
+        }
+    </style>
+  </head>
+  <body>
+   <header>
+    <nav id="navbar">
+        <div class="home-icon">
+            <a href="/menu"><img src="static\styles\home.png" alt="Home Page" width="150" height="50"></a>
+        </div>
+        <div class="nav-icons">
+            <a href="/rules">
+                <div class="nav-item">
+                    <img src="static\styles\questionmark.png" alt="Rules" />
+                    <span>Rules</span>
+                </div>
+            </a>
+            <a href="/requests">
+                <div class="nav-item">
+                    <img src="static\styles\requests.png" alt="Requests" />
+                    <span>Versus</span>
+                </div>
+            </a>
+            <a href="/leaderboard">
+                <div class="nav-item">
+                    <img src="static\styles\trophy.png" alt="Leaderboard" />
+                    <span>Leaderboard</span>
+                </div>
+            </a>
+            <a href="logoutcas">
+                <div class="nav-item">
+                    <img src="static\styles\logout.png" alt="Logout" />
+                    <span>Log Out</span>
+                </div>
+            </a>
+        </div>
+    </nav>
+    </header>
+
+    <main class="main-content">
+        <form id="versusForm" method="get" action="/create-challenge" onsubmit="">
+            <div class="form-group">
+                <label for="VersusID">Enter Opponent NetID</label>
+                <input type="text" name="opponentID" id="opponentID" value="">
+                <input type = "hidden" id="challengee_id" name = "challengee_id" value ="">
+            </div>
+            <button type="submit" class="submit"><b>Submit</b></button>
+        </form>
+        <div id="matchID"></div>
+        <div id="challengeRequests"></div>
+    </main>
+    </body>
+</html>
+        <script>
+            var users = JSON.parse('{{ users | safe }}');
+            document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("versusForm").addEventListener("submit", function(event) {
+                event.preventDefault(); // Prevent the default form submission
+                
+                var challengerID = "{{username}}"// Assuming username is the challenger's ID
+                var challengeeID = document.getElementById("opponentID").value;
+                // Set up the AJAX request
+                fetch('/create-challenge', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `challenger_id=${encodeURIComponent(challengerID)}&challengee_id=${encodeURIComponent(challengeeID)}`
+                })
+                .then(response => response.json())
+                // Inside your fetch().then() response handling
+                .then(data => {
+                    if (data.status === 'error' || challengeeID == "") {
+                        // Notify the user that a match already exists
+                        document.getElementById("matchID").textContent = "";
+                        alert(data.message);
+                    } else {
+                        // Notify the user that a new match was created successfully
+                        document.getElementById("matchID").textContent = "Match created successfully. Match ID: " + data.challenge_id;
+                    }
+                })
+                });
+            });
+
+
+        window.addEventListener('scroll', function() {
+            var navbar = document.getElementById('navbar');
+            var sticky = navbar.offsetTop;
+
+            if (window.pageYOffset >= sticky) {
+                navbar.classList.add('sticky');
+                document.body.style.paddingTop = navbar.offsetHeight + 'px'; // Add padding equal to navbar height
+            } else {
+                navbar.classList.remove('sticky');
+                document.body.style.paddingTop = '0'; // Reset padding
+            }
+        });
+        </script>
+        
