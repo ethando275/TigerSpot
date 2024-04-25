@@ -280,6 +280,16 @@ footer {
 
 .main-content {
   display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%; /* Ensure the container takes up the full width */
+  max-height: 90%;
+  padding: 4vh 0vw;
+}
+
+.main-content.versus {
+  display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
