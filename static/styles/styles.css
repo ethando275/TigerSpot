@@ -288,7 +288,7 @@ footer {
   padding: 4vh 0vw;
 }
 
-.main-content .versus {
+.main-content.versus {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
