@@ -56,11 +56,11 @@
     <main class="main-content">
         <form id="versusForm" method="get" action="/create-challenge" onsubmit="">
             <div class="form-group">
-                <label for="VersusID">Enter Opponent NetID</label>
+                <label for="VersusID"><b>Enter Opponent NetID: </b></label>
                 <input type="text" name="opponentID" id="opponentID" value="">
                 <input type = "hidden" id="challengee_id" name = "challengee_id" value ="">
             </div>
-            <button type="submit" class="submit"><b>Submit</b></button>
+            <button type="submit" class="submit versus"><b>Submit</b></button>
         </form>
         <section class="top-players">
             <h2>Challenges I've Initiated</h2>
@@ -72,7 +72,7 @@
                 </div>
                     {% if challenges.initiated %}
                         {% for challenge in challenges.initiated %}
-                        <div class="row">
+                        <div class="row2">
                             <div class="rank">{{ challenge.challengee_id }}</div>
                             <div class="name">{{ challenge.status }}</div>
                             {% if challenge.winner_id != None %}
@@ -105,11 +105,11 @@
                     <div class="challenges-list">
                         {% if challenges.received %}
                             {% for challenge in challenges.received %}
-                            <div class="row">
+                            <div class="row2">
                                 <div class="rank">{{ challenge.challenger_id }}</div>
                                 <div class="name">{{ challenge.status }}</div>
                                 {% if challenge.winner_id != None %}
-                                <a href="{{ url_for('versus_stats', challenge_id=challenge.id) }}" class="score link-style">
+                                <a href="{{ url_for('versus_stats', challenge_id=challenge.id) }}" class="score">
                                 {{ challenge.winner_id }}
                                 </a>
                                 {% endif %}
