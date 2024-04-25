@@ -280,7 +280,7 @@ footer {
 
 .main-content {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
   width: 100%; /* Ensure the container takes up the full width */
@@ -288,7 +288,7 @@ footer {
   padding: 4vh 0vw;
 }
 
-.main-content.versus {
+.main-content .versus {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -403,19 +403,9 @@ header {
   border-right: 0.25vh solid black;
   border-left: 0.25vh solid black;
   border-top: 0.25vh solid black;
-  margin: 1vh 1vw;
 }
 
 .row {
-  font-size: 2vh;
-  font-weight: bold;
-  display: flex;
-  justify-content: space-between;
-  padding: 2vh 2vw;
-  border-bottom: 0.25vh solid black;
-}
-
-.row2 {
   font-size: 2vh;
   font-weight: bold;
   display: flex;
@@ -435,19 +425,12 @@ header {
   background-color: orange;
 }
 
-.row2 .rank, 
-.row2 .name, 
-.row2 .score, 
-.row2 .label, 
-.row2 .value {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-
-.row2 .score {
-  text-decoration: none;
+.rank,
+.name,
+.score,
+.label,
+.value {
+  flex: 1;
 }
 
 

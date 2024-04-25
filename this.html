@@ -72,7 +72,7 @@
                 </div>
                     {% if challenges.initiated %}
                         {% for challenge in challenges.initiated %}
-                        <div class="row2">
+                        <div class="row">
                             <div class="rank">{{ challenge.challengee_id }}</div>
                             <div class="name">{{ challenge.status }}</div>
                             {% if challenge.winner_id != None %}
@@ -105,7 +105,7 @@
                     <div class="challenges-list">
                         {% if challenges.received %}
                             {% for challenge in challenges.received %}
-                            <div class="row2">
+                            <div class="row">
                                 <div class="rank">{{ challenge.challenger_id }}</div>
                                 <div class="name">{{ challenge.status }}</div>
                                 {% if challenge.winner_id != None %}
