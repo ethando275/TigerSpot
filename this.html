@@ -72,8 +72,8 @@
                 </div>
                     {% if challenges.initiated %}
                         {% for challenge in challenges.initiated %}
-                        <div class="row">
-                            <div class="rank">{{ challenge.challengee_id }}</div>
+                        <div class="input-row">
+                            <div class="user-id">{{ challenge.challengee_id }}</div>
                             <div class="name">{{ challenge.status }}</div>
                             {% if challenge.winner_id != None %}
                             <a href="{{ url_for('versus_stats', challenge_id=challenge.id) }}" class="score link-style">
@@ -89,7 +89,7 @@
                         </div>
                         {% endfor %}
                     {% else %}
-                        <p>No initiated challenges.</p>
+                        <p class="no-challenges">No initiated challenges.</p>
                     {% endif %}
                 </div>
             </div>
@@ -105,8 +105,8 @@
                     <div class="challenges-list">
                         {% if challenges.received %}
                             {% for challenge in challenges.received %}
-                            <div class="row">
-                                <div class="rank">{{ challenge.challenger_id }}</div>
+                            <div class="input-row">
+                                <div class="user-id">{{ challenge.challenger_id }}</div>
                                 <div class="name">{{ challenge.status }}</div>
                                 {% if challenge.winner_id != None %}
                                 <a href="{{ url_for('versus_stats', challenge_id=challenge.id) }}" class="score">
@@ -119,14 +119,16 @@
                                         <button type="submit" class="submit"><b>Play</b></button>
                                     </form>
                                 {% elif challenge.status != 'completed' and not challenge.challengee_finished and challenge.status != 'declined'%}
-                                    <form id="accept" method="post" action="/accept_challenge">
-                                        <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
-                                        <button type="submit" class="submit"><b>Accept</b></button>
-                                    </form>
-                                    <form id="decline" method="post" action="/decline_challenge">
-                                        <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
-                                        <button type="submit" class="submit decline"><b>Decline</b></button>
-                                    </form>
+                                    <div class="duo-buttons">
+                                        <form id="accept" method="post" action="/accept_challenge">
+                                            <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+                                            <button type="submit" class="submit"><b>Accept</b></button>
+                                        </form>
+                                        <form id="decline" method="post" action="/decline_challenge">
+                                            <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+                                            <button type="submit" class="submit decline"><b>Decline</b></button>
+                                        </form>
+                                    </div>
                                 {% endif %}
                             </div>
                             {% endfor %}
