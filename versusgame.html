@@ -21,7 +21,7 @@
             padding: 2vh 2vw; /* Add some padding */
         }
         #distance {
-            height: 50vh;
+            height: 5vh;
             width: 50%; /* New container takes up remaining space */
             float: right; /* Align to the right */
             padding: 2vh 2vw; /* Add some padding */
@@ -41,6 +41,10 @@
       <div class="row">
         <div>Image: {{index+1}}/5</div>
         <div id="timer">02:00</div>
+          <form id="Exit" method="post" action="/play_button">
+            <input type="hidden" id="challenge_id" name="challenge_id" value="{{challenge_id}}">
+            <button type="submit" class="submit exit" onclick="return confirmExit()"><b>Exit</b></button>
+          </form>   
       </div>
 
       <div class="versus-components"> <img class="game-image" src="{{link}}">
@@ -54,13 +58,11 @@
             <input type = "hidden" id="index" name = "index" value ="{{index}}">
             <input type = "hidden" id="challenge_id" name = "challenge_id" value ="{{challenge_id}}">
             <input type = "hidden" id="time" name = "time" value ="">
-            <button type="submit" class="submit"><b>Submit</b></button>
-            <button type = "button" class="clear" onclick ="clearForm()"><b>Clear</b></button>
+            <div class="game-btns">
+            <button type="submit" class="submit versus"><b>Submit</b></button>
+            <button type = "button" class="clear versus" onclick ="clearForm()"><b>Clear</b></button>
+            </div>
           </form>  
-          <form id="Exit" method="post" action="/play_button">
-              <input type="hidden" id="challenge_id" name="challenge_id" value="{{challenge_id}}">
-              <button type="submit" class="submit exit" onclick="return confirmExit()"><b>Exit</b></button>
-          </form>   
         </div>
       </div>
     </main>
