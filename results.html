@@ -30,9 +30,19 @@
             margin-right: auto;
             padding-top: 1vh;
         }
-
         #buttons {
             display: inline-block
+        }
+
+        #share-submit {
+            background-color: white;
+            color: black;
+            border: 0.4vw solid black;
+            border-radius: 1vw;
+            font-size: 2vw;
+            padding: 1vh 1vw;
+            transition-duration: 0.2s;
+            cursor: pointer;
         }
     </style>
   </head>
@@ -95,7 +105,7 @@
       </div>
       <div id = buttons >
       <a href="/leaderboard"><button class="result-btn"><b>See Leaderboard</b></button></a>
-      <button id='share' onclick="copyTextToClipboard('Tiger Spot &#128047;&#128205;| {{today_points}} points | {{today_distance}} m away')"><b>Share</b></button>
+      <button id='share-submit' onclick="copyTextToClipboard('Tiger Spot &#128047;&#128205;| {{today_points}} points | {{today_distance}} m away')"><b>Share</b></button>
       </div>
     </main>
   </body>

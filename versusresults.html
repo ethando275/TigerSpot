@@ -22,7 +22,6 @@
             padding: 2vh 2vw; /* Add some padding */
         }
         #distance {
-            height: 4vh;
             text-align: center;
             width: 50.5%; /* New container takes up remaining space */
             margin-left: auto;
@@ -36,11 +35,21 @@
             margin-left: auto;
             margin-right: auto;
         }
+        #next {
+            display: flex;
+            justify-content: center;
+        }
     </style>
   </head>
   <body>
-    <main class="main-content">
-      <div>Image: {{index}}/5</div>
+    <main class="main-content versus">
+        <div class="row">
+            <div>Image: {{index}}/5</div>
+            <form id="Exit" method="post" action="/play_button">
+                <input type="hidden" id="challenge_id" name="challenge_id" value="{{challenge_id}}">
+                <button type="submit" class="submit exit" onclick="return confirmExit()"><b>Exit</b></button>
+            </form>  
+      </div> 
       <div class="map">
         <!-- Add map ad-->
         <div id="map"></div>
@@ -59,10 +68,7 @@
           </form>
         {% endif %}
       </div>
-      <form id="Exit" method="post" action="/play_button">
-        <input type="hidden" id="challenge_id" name="challenge_id" value="{{challenge_id}}">
-        <button type="submit" class="submit" onclick="return confirmExit()"><b>Exit</b></button>
-    </form>   
+
     </main>
   </body>
 </html>
