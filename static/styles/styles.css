@@ -258,6 +258,10 @@ header .game-text {
   background-color: rgb(102, 151, 240);
 }
 
+#Exit {
+  margin-left: 1vw;
+}
+
 .clear:hover,
 .submit:hover, 
 .submit.decline:hover {
@@ -271,9 +275,10 @@ hr {
 .game-btns {
   text-decoration: none;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   position: relative;
   bottom: -65vh;
+  right: 10vw;
 }
 
 footer {
@@ -302,6 +307,11 @@ footer {
   padding: 4vh 0vw;
 }
 
+.submit.versus, 
+.clear.versus {
+  margin-top: 2vh;
+}
+
 #versusForm {
   display: flex;
   flex-direction: row;
@@ -317,14 +327,14 @@ footer {
   background-color: red;
 }
 
-.versus.submit {
-  margin: 0vh 1vw;
-}
-
 .versus-components {
   display: flex;
   flex-direction: row;
+}
 
+.vs-buttons {
+  display: flex;
+  flex-direction: row;
 }
 
 .result-content {
@@ -637,4 +647,8 @@ header {
     align-items: center;
   }
 
+  .versus-components {
+    display: flex;
+    flex-direction: column;
+  }
 }
