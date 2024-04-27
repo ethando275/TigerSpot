@@ -40,11 +40,11 @@
             click the "Submit" button to see how accurate you are! In Versus mode, make sure to submit before the timer ends!</p></b>
       </div>
     </header>
-    <main class="main-content versus">
+    <main class="main-content">
       <div>Image: {{index+1}}/5</div>
       <div> <br> <br> <img class="game-image" src="{{link}}"></div>
+      <div id="timer">02:00</div>
       <div class="map">
-        <div id="timer">02:00</div>
         <div id="map"></div>
         <div id="distance"></div>
         <form id="versusgame" method="post" action="/submit2" onsubmit="return checkCoordinates()">
