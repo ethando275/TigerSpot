@@ -15,6 +15,7 @@ body {
   text-align: center;
   box-shadow: 0 1vw 1vw rgba(0, 0, 0, 0.1);
   border: 0.6vw solid black;
+  margin-bottom: 0;
 } 
 
 .home-icon {
@@ -240,23 +241,26 @@ header .game-text {
   transition-duration: 0.2s;
   cursor: pointer;
   margin-right: 0.75vw;
+  text-decoration: none;
+  background-color: rgb(83, 219, 81);
 }
 
 .clear {
   background-color: rgb(228, 34, 34);
 }
 
-.submit {
-  text-decoration: none;
-  background-color: rgb(83, 219, 81);
-}
 
 .submit a {
   text-decoration: none;
 }
 
+.submit.exit {
+  background-color: rgb(102, 151, 240);
+}
+
 .clear:hover,
-.submit:hover {
+.submit:hover, 
+.submit.decline:hover {
   background-color: rgb(255, 255, 255);
 }
 
@@ -310,11 +314,17 @@ footer {
 }
 
 .submit.decline {
-  color: red;
+  background-color: red;
 }
 
 .versus.submit {
   margin: 0vh 1vw;
+}
+
+.versus-components {
+  display: flex;
+  flex-direction: row;
+
 }
 
 .result-content {
@@ -419,6 +429,33 @@ header {
   align-items: center;
 }
 
+.input-row {
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1vh 0vw;
+}
+
+.duo-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.no-challenges {
+  text-align: center;
+}
+
+#accept {
+  padding-bottom: 1vh;
+}
+
+.user-id {
+  padding-left: 2.5vw;
+}
+
 .top-players h2 {
   margin-top: 0;
   margin-bottom: 2vh;
@@ -434,7 +471,8 @@ header {
 .name,
 .score,
 .label,
-.value {
+.value, 
+.user-id {
   flex: 1;
 }
 

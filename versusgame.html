@@ -27,41 +27,42 @@
             padding: 2vh 2vw; /* Add some padding */
         }
         #timer {
-          font-size: 40px;
-          font-family: Arial, sans-serif;
+          padding: 0vh 1vw;
         }
     </style>
     
   </head>
   <body>
-    <header>
-      <div class="header-container">
+    <header class="header-container">
         <b><p class="game-text">Click anywhere on the map to drop a pin! Once you're ready to submit, 
             click the "Submit" button to see how accurate you are! In Versus mode, make sure to submit before the timer ends!</p></b>
-      </div>
     </header>
-    <main class="main-content">
-      <div>Image: {{index+1}}/5</div>
-      <div> <br> <br> <img class="game-image" src="{{link}}"></div>
-      <div id="timer">02:00</div>
-      <div class="map">
-        <div id="map"></div>
-        <div id="distance"></div>
-        <form id="versusgame" method="post" action="/submit2" onsubmit="return checkCoordinates()">
-          <input type = "hidden" id="currLat" name = "currLat" value ="">
-          <input type = "hidden" id="currLon" name = "currLon" value ="">
-          <input type = "hidden" id="id" name = "id" value ="">
-          <input type = "hidden" id="index" name = "index" value ="{{index}}">
-          <input type = "hidden" id="challenge_id" name = "challenge_id" value ="{{challenge_id}}">
-          <input type = "hidden" id="time" name = "time" value ="">
-          <button type="submit" class="submit"><b>Submit</b></button>
-          <button type = "button" class="clear" onclick ="clearForm()"><b>Clear</b></button>
-        </form>  
+    <main class="main-content versus">
+      <div class="row">
+        <div>Image: {{index+1}}/5</div>
+        <div id="timer">02:00</div>
       </div>
-      <form id="Exit" method="post" action="/play_button">
-        <input type="hidden" id="challenge_id" name="challenge_id" value="{{challenge_id}}">
-        <button type="submit" class="submit" onclick="return confirmExit()"><b>Exit</b></button>
-    </form>       
+
+      <div class="versus-components"> <img class="game-image" src="{{link}}">
+        <div class="map">
+          <div id="map"></div>
+          <div id="distance"></div>
+          <form id="versusgame" method="post" action="/submit2" onsubmit="return checkCoordinates()">
+            <input type = "hidden" id="currLat" name = "currLat" value ="">
+            <input type = "hidden" id="currLon" name = "currLon" value ="">
+            <input type = "hidden" id="id" name = "id" value ="">
+            <input type = "hidden" id="index" name = "index" value ="{{index}}">
+            <input type = "hidden" id="challenge_id" name = "challenge_id" value ="{{challenge_id}}">
+            <input type = "hidden" id="time" name = "time" value ="">
+            <button type="submit" class="submit"><b>Submit</b></button>
+            <button type = "button" class="clear" onclick ="clearForm()"><b>Clear</b></button>
+          </form>  
+          <form id="Exit" method="post" action="/play_button">
+              <input type="hidden" id="challenge_id" name="challenge_id" value="{{challenge_id}}">
+              <button type="submit" class="submit exit" onclick="return confirmExit()"><b>Exit</b></button>
+          </form>   
+        </div>
+      </div>
     </main>
   </body>
 </html>
