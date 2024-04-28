@@ -110,10 +110,15 @@ main {
   flex-direction: column;
   text-align: center;
   align-items: center;
+  justify-content: center;
   border: 0.6vw solid black;
   border-radius: 1vh;
   background: white;
   padding: 7vh 1vw;
+}
+
+.page {
+  margin-top: 12vh;
 }
 
 .logo {
@@ -170,7 +175,7 @@ main {
   border: 0.6vw solid black;
   border-radius: 1vh;
   background: white;
-  padding: 0vh 1vw 8vh 1vw;
+  padding: 0vh 1vw 2vh 1vw;
   margin: 1vh 1vw;
 }
 
@@ -417,7 +422,10 @@ header {
 .user-stats {
   display: flex;
   flex-direction: column;
-  margin-left: 1.5vh;
+}
+
+.instructions {
+  max-width: 60vw;
 }
 
 #container {
@@ -572,7 +580,7 @@ header {
   }
 
   .card {
-    width: 500vw;
+    min-width: 70vw;
   }
 }
 
@@ -606,6 +614,9 @@ header {
 }
 
 @media screen and (max-width: 1000px) {
+  header {
+    margin-bottom: 6vh;
+  }
   .main-content {
     flex-direction: column;
     align-items: center;
@@ -614,6 +625,52 @@ header {
   .game-image {
     width: 80vw; 
     height: 50vh;
+  }
+
+  .logo {
+    width: 70vw;
+    height: auto;
+  }
+
+  b.text { 
+    font-size: 4vw;
+  }
+
+  .home-icon {
+    max-width: 2vw;
+    height: auto;
+    margin-right: auto;
+  }
+
+  /* Shrink home icon */
+  .home-icon img {
+    width: 30vw; /* Adjust width as needed */
+    height: auto;
+  }
+  
+  /* Shrink nav items */
+  .nav-item img, 
+  .nav-item span {
+    font-size: 2vw;
+    text-align: center;
+    max-width: 6vw; /* Adjust width as needed */
+    height: auto;
+    margin-left: 2vw; /* Adjust spacing */
+  }
+
+  .instructions {
+    min-width: 80vw;
+  }
+
+  .rules-button {
+  font-size: 4vw;
+  }
+
+  [data-alttext] > span {
+    display: none;
+  }
+  [data-alttext]::before {
+    content: attr(data-alttext);
   }
 
   .map {
@@ -633,12 +690,12 @@ header {
   }
 
   .user-stats {
-    width: 60vw; /* Adjust as needed */
+    min-width: 80vw; /* Adjust as needed */
     height: 50vh;
   }
 
   .top-players {
-    width: 60vw; /* Adjust as needed */
+    min-width: 80vw; /* Adjust as needed */
     height: 50vh;
   }
 
