@@ -139,8 +139,8 @@ def get_players():
 
     return user_ids
 
-def main():
-    reset_player_total_points("cl7359")
+# def main():
+#     reset_player_total_points("cl7359")
 
-if __name__=="__main__":
-    main()
+# if __name__=="__main__":
+#     main()

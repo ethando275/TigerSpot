@@ -12,15 +12,15 @@
     #exampleCarousel {
         width: 100%;  /* Full width */
         max-width: 800px; /* Maximum width but can be smaller on smaller screens */
-        height: 650x; /* Fixed height */
+        height: 650px; /* Fixed height */
         margin: auto; /* Centering if not full width */
     }
 
     /* Ensure images fill the carousel */
     .carousel-item img {
-        width: 100%;  /* Make images fill the container */
-        height: 650px; /* Fixed height to match the carousel */
-        object-fit: cover; /* Ensures images cover the area without distorting aspect ratios */
+      width: 100%;  /* Make images fill the container */
+      height: 650px; /* Fixed height to match the carousel */
+      object-fit: cover; /* Ensures images cover the area without distorting aspect ratios */
     }
     .winner {
         text-align: center;
@@ -37,12 +37,25 @@
     <main class="main-content d-flex justify-content-center align-items-center">
         <!-- Text on the left side -->
         <div class="side-text left-text">
-            <div class="row">Challenger: {{results.challenger_id}}</div>
-            {% for points in results.challenger_pic_points %}
-            <div class="row">Picture {{loop.index}}: {{points}} Points</div>
+          <table>
+            <tr>
+              <th valign="top">Picture #<br> </th>
+              <th valign="top">Challenger Points <br>({{results.challenger_id}})</th>
+              <th valign="top">Challengee Points <br>({{results.challengee_id}})</th>
+              <!-- <th>Challenger Distance {{results.challenger_id}}</th>
+              <th>Challengee Distance {{results.challengee_id}}</th> -->
+            </tr>
+            {% for index in range(1,6) %}
+            <tr>
+              <th>{{index}}</th>
+              <th>{{results.challenger_pic_points[index-1]}}</th>
+              <th>{{results.challengee_pic_points[index-1]}}</th>
+            </tr>
             {% endfor %}
-            <div class="row">Total: {{results.challenger_points}} Points</div>
-        </div>
+          </table>
+          </div>
+            
+
         
         <!-- Carousel -->
         <div id="exampleCarousel" class="carousel slide" data-bs-ride="carousel">
@@ -59,6 +72,7 @@
             {% else %}
             <b><p class="winner">Winner: {{results.winner}}</p>
             {% endif %}
+
             <div class="carousel-inner">
                 {% for image in images %}
                 <div class="carousel-item {% if loop.first %}active{% endif %}">
@@ -66,6 +80,7 @@
                 </div>
                 {% endfor %}
             </div>
+
     
             <!-- Left and right controls/icons -->
             <button class="carousel-control-prev" type="button" data-bs-target="#exampleCarousel" data-bs-slide="prev">
@@ -79,13 +94,13 @@
         </div>
     
         <!-- Text on the right side -->
-        <div class="side-text right-text">
-            <div class="row">Challengee: {{results.challengee_id}}</div>
+        <!-- <div class="side-text right-text">
+            <div class="row">Challengee: </div>
             {% for points in results.challengee_pic_points %}
             <div class="row">Picture {{loop.index}}: {{points}} Points</div>
             {% endfor %}
             <div class="row">Total: {{results.challengee_points}} Points</div>
-        </div>
+        </div> -->
     </main>
     
     <script>
