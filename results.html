@@ -23,7 +23,7 @@
         }
         #distance {
             height: 3vh;
-            font-size: 2vh;
+            font-size: 1.75vh;
             text-align: center;
         }
         #buttons {
@@ -51,7 +51,7 @@
       <b><div id="distance"></div></b>
       <div id="distance"><b>You have scored {{today_points}} points!</b></div>
       <div id="distance"><b>Picture Taken Near: {{place}}</b></div>
-      <div class="map">
+      <div class="map result">
         <!-- Add map ad-->
         <div id="map"></div>
         <br>
@@ -148,7 +148,7 @@
 
         if (window.pageYOffset >= sticky) {
             navbar.classList.add('sticky');
-            document.body.style.paddingTop = (navbar.offsetHeight - 30) + 'px'; // Add padding equal to navbar height
+            document.body.style.paddingTop = (navbar.offsetHeight - 100) + 'px'; // Add padding equal to navbar height
         } else {
             navbar.classList.remove('sticky');
             document.body.style.paddingTop = '0'; // Reset padding
