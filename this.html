@@ -28,11 +28,12 @@
                     <div class="name"><u>Status</u></div>
                     <div class="score2"><u>Winner</u></div>
                 </div>
+                <div class="challenges-list">
                     {% if challenges.initiated %}
                         {% for challenge in challenges.initiated %}
                         <div class="input-row">
-                            <div class="user-id">{{ challenge.challengee_id }}</div>
-                            <div class="name">{{ challenge.status }}</div>
+                            <div class="user-id output">{{ challenge.challengee_id }}</div>
+                            <div class="name output">{{ challenge.status }}</div>
                             {% if challenge.winner_id != None %}
                             <a href="{{ url_for('versus_stats', challenge_id=challenge.id) }}" class="score link-style">
                             {{ challenge.winner_id }}
@@ -49,6 +50,7 @@
                     {% else %}
                         <p class="no-challenges">No initiated challenges.</p>
                     {% endif %}
+                </div>
                 </div>
             </div>
         </section>
@@ -67,7 +69,7 @@
                                 <div class="user-id output">{{ challenge.challenger_id }}</div>
                                 <div class="name output">{{ challenge.status }}</div>
                                 {% if challenge.winner_id != None %}
-                                <a href="{{ url_for('versus_stats', challenge_id=challenge.id) }}" class="score output">
+                                <a href="{{ url_for('versus_stats', challenge_id=challenge.id) }}" class="score link-style">
                                 {{ challenge.winner_id }}
                                 </a>
                                 {% endif %}
