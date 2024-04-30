@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="{{url_for('static', filename = 'styles/styles.css')}}" />
 </head>
 <body>
-    {% include "navbar.html" %}
+      <header class="versus-header">
+        {% include "navbar.html" %}
+      </header>
     
     <main class="main-content versus">
         <form id="versusForm" method="get" action="/create-challenge" onsubmit="">
@@ -39,7 +41,7 @@
                             {% if challenge.status == 'accepted' and not challenge.challenger_finished %}
                                 <form method="post" action="/play_button">
                                     <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
-                                    <button type="submit" class="submit"><b>Play</b></button>
+                                    <button type="submit" class="submit challenge"><b>Play</b></button>
                                 </form>
                             {% endif %}
                         </div>
@@ -62,23 +64,23 @@
                         {% if challenges.received %}
                             {% for challenge in challenges.received %}
                             <div class="input-row">
-                                <div class="user-id">{{ challenge.challenger_id }}</div>
-                                <div class="name">{{ challenge.status }}</div>
+                                <div class="user-id output">{{ challenge.challenger_id }}</div>
+                                <div class="name output">{{ challenge.status }}</div>
                                 {% if challenge.winner_id != None %}
-                                <a href="{{ url_for('versus_stats', challenge_id=challenge.id) }}" class="score">
+                                <a href="{{ url_for('versus_stats', challenge_id=challenge.id) }}" class="score output">
                                 {{ challenge.winner_id }}
                                 </a>
                                 {% endif %}
                                 {% if challenge.status == 'accepted' and not challenge.challengee_finished %}
                                     <form method="post" action="/play_button">
                                         <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
-                                        <button type="submit" class="submit"><b>Play</b></button>
+                                        <button type="submit" class="submit challenge"><b>Play</b></button>
                                     </form>
                                 {% elif challenge.status != 'completed' and not challenge.challengee_finished and challenge.status != 'declined'%}
                                     <div class="duo-buttons">
                                         <form id="accept" method="post" action="/accept_challenge">
                                             <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
-                                            <button type="submit" class="submit"><b>Accept</b></button>
+                                            <button type="submit" class="submit challenge"><b>Accept</b></button>
                                         </form>
                                         <form id="decline" method="post" action="/decline_challenge">
                                             <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
@@ -152,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (window.pageYOffset >= sticky) {
             navbar.classList.add('sticky');
-            document.body.style.paddingTop = navbar.offsetHeight + 'px'; // Add padding equal to navbar height
+            document.body.style.paddingTop = (navbar.offsetHeight - 100) + 'px'; // Add padding equal to navbar height
         } else {
             navbar.classList.remove('sticky');
             document.body.style.paddingTop = '0'; // Reset padding

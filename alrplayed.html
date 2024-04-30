@@ -17,12 +17,13 @@
     </style>
   </head>
   <body>
-    <div class="page">
-
+    <div class="game page">
+      <header class="played-header">
       {% include "navbar.html" %}
+      </header>
 
       <input type = "hidden" id="username" name = "username" value ="{{username}}">
-      <main>
+      <main class="main game">
         <div class="home">
           <img class="logo" src="static\styles\logo.png" alt="Logo" />
           <p>
@@ -65,7 +66,7 @@
 
         if (window.pageYOffset >= sticky) {
             navbar.classList.add('sticky');
-            document.body.style.paddingTop = (navbar.offsetHeight - 60) + 'px'; // Add padding equal to navbar height
+            document.body.style.paddingTop = (navbar.offsetHeight - 100) + 'px'; // Add padding equal to navbar height
         } else {
             navbar.classList.remove('sticky');
             document.body.style.paddingTop = '0'; // Reset padding

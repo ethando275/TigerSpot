@@ -20,11 +20,13 @@
   <body>
     <div class="page">
 
-    {% include "navbar.html" %}
+      <header class="mainmenu-header">
+        {% include "navbar.html" %}
+      </header>
 
 
       <input type = "hidden" id="username" name = "username" value ="{{username}}">
-      <main>
+      <main class="mainmenu">
         <div class="home">
           <img class="logo" src="static\styles\logo.png" alt="Logo" />
           <p>
@@ -52,7 +54,7 @@ window.addEventListener('scroll', function() {
 
     if (window.pageYOffset >= sticky) {
         navbar.classList.add('sticky');
-        document.body.style.paddingTop = navbar.offsetHeight + 'px'; // Add padding equal to navbar height
+        document.body.style.paddingTop = (navbar.offsetHeight - 70) + 'px'; // Add padding equal to navbar height
     } else {
         navbar.classList.remove('sticky');
         document.body.style.paddingTop = '0'; // Reset padding

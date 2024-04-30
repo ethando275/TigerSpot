@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="{{url_for('static', filename = 'styles/styles.css')}}" />
 </head>
 <body>
-    {% include "navbar.html" %}
+      <header class="board-header">
+        {% include "navbar.html" %}
+      </header>
     
     <main>
         <div class="leaderboard">
@@ -64,7 +66,7 @@
 
             if (window.pageYOffset >= sticky) {
                 navbar.classList.add('sticky');
-                document.body.style.paddingTop = (navbar.offsetHeight - 80) + 'px'; // Add padding equal to navbar height
+                document.body.style.paddingTop = (navbar.offsetHeight - 100) + 'px'; // Add padding equal to navbar height
             } else {
                 navbar.classList.remove('sticky');
                 document.body.style.paddingTop = '0'; // Reset padding
