@@ -43,6 +43,7 @@ def update_versus_points(challenge_id, user_id, additional_points):
         
         conn.commit()
         print("User points incremented successfully.")
+        return {"status": "success"}
         
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
@@ -122,6 +123,7 @@ def update_versus_pic_status(challenge_id, user_id, index):
         
         conn.commit()
         print("Finish status updated successfully.")
+        return {"status": "success"}
         
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
@@ -221,6 +223,7 @@ def store_versus_pic_points(challenge_id, user_id, index, points):
         
         conn.commit()
         print("Points updated successfully.")
+        return {"status": "success"}
         
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
@@ -270,6 +273,7 @@ def store_versus_pic_points(challenge_id, user_id, index, points):
 
         conn.commit()
         print("Versus pic points updated successfully.")
+        return {"status": "success"}
 
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
@@ -277,5 +281,9 @@ def store_versus_pic_points(challenge_id, user_id, index, points):
         if conn is not None:
             conn.close()
 
-
 #-----------------------------------------------------------------------
+def main():
+    print()
+    
+if __name__=="__main__":
+    main()
