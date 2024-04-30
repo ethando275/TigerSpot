@@ -150,7 +150,7 @@ main {
 }
 
 .button:hover, .result-btn:hover, .rules-button:hover, #share:hover, 
-#share-submit:hover, .game.result-btn {
+#share-submit:hover, .game.result-btn:hover {
   background-color: rgb(219, 128, 16);
 }
 
@@ -387,6 +387,7 @@ table {
   width: 90%;
   max-height: 90%;
   margin-top: 0;
+  margin-bottom: 2vh;
   padding: 0vh 4vw;
 }
 
@@ -434,6 +435,10 @@ header {
 
 .board-header {
   margin-bottom: -8vh;
+}
+
+.daily-result-header {
+  margin-top: 14vh;
 }
 
 .board {
