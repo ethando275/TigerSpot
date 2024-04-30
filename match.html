@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="{{url_for('static', filename = 'styles/styles.css')}}" />
 </head>
 <body>
-    {% include "navbar.html" %}
+    <header class="match">
+        {% include "navbar.html" %}
+    </header>
     
     <main class="main-content">
         <form method="post" action="/end_challenge">
