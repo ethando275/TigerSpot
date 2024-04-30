@@ -635,6 +635,10 @@ header {
     margin: 0vh 2vw;
   }
 
+  .team-row.margin {
+    margin: 0vh 2vw;
+  }
+
   .card {
     min-width: 70vw;
   }
@@ -678,6 +682,10 @@ header {
 @media screen and (max-width: 1000px) {
   header {
     margin-bottom: 11vh;
+  }
+
+  .team-header {
+    margin-bottom: 6vh;
   }
 
   .header-container p {
@@ -823,10 +831,6 @@ header {
     margin: 0;
   }
 
-  .team-header {
-    margin-bottom: 23vh;
-  }
-
   .daily-result-header {
     margin-bottom: 12vh;
   }
@@ -847,13 +851,14 @@ header {
   }
 }
 
+
 @media screen and (max-height: 770px) {
   .board-header {
     margin-bottom: 5vh;
   }
 
   .team-header {
-    margin-bottom: 8vh;
+    margin-bottom: 15vh;
   }
 
   .mainmenu-header {
@@ -900,6 +905,10 @@ header {
 
   .versus-stats-header {
     margin-bottom: 28vh;
+  }
+
+  .team-header {
+    margin-bottom: 21vh;
   }
   
   .team-row:nth-child(even) {
