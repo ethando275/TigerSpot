@@ -149,7 +149,7 @@ main {
   cursor: pointer;
 }
 
-.button:hover, .result-btn:hover, .rules-button:hover, #share:hover, 
+.button:hover, .rules-button:hover, #share:hover, 
 #share-submit:hover, .game.result-btn:hover {
   background-color: rgb(219, 128, 16);
 }
@@ -747,6 +747,10 @@ header {
     padding-bottom: 4vh;
   }
 
+  .map.result {
+    padding-bottom: 0;
+  }
+
   #map {
     width: 85vw;
     }
@@ -824,7 +828,11 @@ header {
   }
 
   .daily-result-header {
-    margin-bottom: 2vh;
+    margin-bottom: 12vh;
+  }
+
+  .result-content {
+    margin-top: 14vh;
   }
 
   .card:first-child {
@@ -856,6 +864,10 @@ header {
     margin-top: 19vh;
   }
 
+  .result-content {
+    margin-top: 20vh;
+  }
+
   .leaderboard {
     margin-top: 2vh;
   }
@@ -879,7 +891,11 @@ header {
   }
 
   .daily-result-header {
-    margin-bottom: 20vh;
+    margin-bottom: 22vh;
+  }
+
+  .result-content {
+    margin-top: 28vh;
   }
 
   .versus-stats-header {
