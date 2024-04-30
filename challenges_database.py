@@ -29,6 +29,15 @@ def clear_challenges_table():
         cur.execute("DELETE FROM challenges;")
         conn.commit()  # Commit the transaction to make changes permanent
         print("Challenges table cleared.")
+        cur.execute("DELETE FROM matches;")
+        conn.commit()  # Commit the transaction to make changes permanent
+        print("Matches table cleared.")
+        cur.execute("ALTER SEQUENCE challenges_id_seq RESTART WITH 1;")
+        conn.commit()  # Commit the change to make it permanent
+        print("Challenges id sequence reset.")
+        cur.execute("ALTER SEQUENCE matches_id_seq RESTART WITH 1;")
+        conn.commit()  # Commit the change to make it permanent
+        print("Matches id sequence reset.")
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error clearing challenges table: {error}")
     finally:
@@ -82,7 +91,6 @@ def create_challenge(challenger_id, challengee_id):
 # Accept a challenge
 def accept_challenge(challenge_id):
     status = "failed"  # Default status in case of error
-    arr = [False, False, False, False, False]
     conn = None
     try:
         conn = psycopg2.connect(DATABASE_URL)
@@ -90,11 +98,9 @@ def accept_challenge(challenge_id):
         cur.execute("""
             UPDATE challenges 
             SET status = 'accepted', 
-                versusList = %s,
-                    challenger_bool = %s,
-                    challengee_bool = %s
+                versusList = %s
             WHERE id = %s;
-        """, (create_random_versus(), arr, arr, challenge_id))
+        """, (create_random_versus(), challenge_id))
         conn.commit()
         cur.close()
         status = "accepted"  # Update status on success
@@ -105,6 +111,7 @@ def accept_challenge(challenge_id):
         if conn is not None:
             conn.close()
     return status
+
 
 #-----------------------------------------------------------------------
 
@@ -208,7 +215,7 @@ def update_finish_status(challenge_id, user_id):
         result = cur.fetchone()
         if result is None:
             print("Challenge not found.")
-            return
+            return 
         
         challenger_id, challengee_id = result
         
@@ -320,7 +327,7 @@ def get_challenge_results(challenge_id):
         result = cur.fetchone()
         if result is None:
             print("Challenge not found.")
-            return {"error": "Challenge not found"}
+            return 
 
         challenger_id, challengee_id, challenger_points, challengee_points, challenger_pic_points, challengee_pic_points = result
         
@@ -375,14 +382,14 @@ def get_random_versus(challenge_id):
         result = cur.fetchone()
         if result is None:
             print("Challenge not found.")
-            return {"error": "Challenge not found"}
+            return 
         
         versusList = result[0]
         return versusList
         
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
-        return {"error": str(error)}
+        return
     finally:
         if conn is not None:
             conn.close()
@@ -486,10 +493,10 @@ def get_playbutton_status(challenge_id, user_id):
             conn.close()
 
 def main():
-    #clear_challenges_table()
+    clear_challenges_table()
     #reset_challenges_id_sequence()
     print()
-    create_challenge('asdf', 'jy3107')
+    #create_challenge('ajkjs', 'ed8205')
     
 if __name__=="__main__":
     main()
