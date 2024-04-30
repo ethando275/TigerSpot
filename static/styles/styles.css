@@ -323,7 +323,8 @@ footer {
 
 .main-content.game, 
 .main.game, 
-.mainmenu {
+.mainmenu, 
+.main-content.vs-results {
   margin-top: 0;
 }
 
@@ -361,6 +362,24 @@ footer {
   flex-direction: row;
 }
 
+.nav-versus {
+  width: 100%;
+}
+
+.side-text {
+  margin: 0vh 2vw;
+  width: 80vw;
+  height: auto;
+}
+
+.winner {
+  margin-top: 2vh;
+}
+
+table {
+  border: 0.25vw solid black;
+}
+
 .result-content {
   display: flex;
   flex-direction: column;
@@ -387,7 +406,7 @@ footer {
 /* Leaderboard styles */
 
 /* Sticky navbar */
-#navbar {
+nav {
   position: fixed;
   top: 0;
   width: 97%; /* Adjusted width to accommodate border */
@@ -501,9 +520,12 @@ header {
   text-align: start;
 }
 
-.user-id.output, 
 .name.output {
-  padding-left: 2.5vw;
+  padding-left: 1vw;
+}
+
+.user-id.output {
+  padding-left: 1.25vw;
 }
 
 .submit.challenge, 
@@ -527,10 +549,10 @@ header {
 }
 
 .link-style {
-  flex: 1;
   align-items: center;
   justify-content: center;
   text-decoration: none; 
+  padding-right: 0.5vw;
 }
 
 .score {
@@ -605,6 +627,7 @@ header {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin: 0vh 2vw;
   }
 
   .card {
@@ -641,6 +664,10 @@ header {
   display: flex;
   justify-content: center;
   margin: 7vh 2vw;
+}
+
+.team-row:nth-child(odd) {
+  margin: 0vh 2vw 10vh 0vw;
 }
 
 @media screen and (max-width: 1000px) {
@@ -794,6 +821,17 @@ header {
   .daily-result-header {
     margin-bottom: 2vh;
   }
+
+  .card:first-child {
+    margin-top: 10vh;
+  }
+
+  #exampleCarousel {
+    width: 100%;  /* Full width */
+    max-width: 80vw; /* Maximum width but can be smaller on smaller screens */
+    height: auto; /* Fixed height */
+    margin: 0vh 2vw 2vh 2vw; /* Centering if not full width */
+  }
 }
 
 @media screen and (max-height: 770px) {
@@ -837,6 +875,10 @@ header {
 
   .daily-result-header {
     margin-bottom: 20vh;
+  }
+
+  .versus-stats-header {
+    margin-bottom: 28vh;
   }
   
   .team-row:nth-child(even) {
