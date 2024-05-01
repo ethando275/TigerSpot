@@ -44,7 +44,43 @@ def clear_challenges_table():
         if conn is not None:
             conn.close()
         
+
+def clear_user_challenges(user_id):
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+
+        # Query to find challenges related to the user_id
+        cur.execute("""
+            SELECT id FROM challenges 
+            WHERE challenger_id = %s OR challengee_id = %s;
+        """, (user_id, user_id))
+
+        challenge_ids = [row[0] for row in cur.fetchall()]
         
+        if challenge_ids:
+            # Delete matching entries from the matches table
+            cur.execute("""
+                DELETE FROM matches 
+                WHERE challenge_id IN %s;
+            """, (tuple(challenge_ids),))
+            
+            # Delete entries from the challenges table
+            cur.execute("""
+                DELETE FROM challenges 
+                WHERE id IN %s;
+            """, (tuple(challenge_ids),))
+
+        conn.commit()  # Commit the transaction to make changes permanent
+        print(f"Entries related to user_id {user_id} cleared from challenges and matches tables.")
+    
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error clearing entries for user_id {user_id}: {error}")
+    finally:
+        if conn is not None:
+            conn.close()
+
 #-----------------------------------------------------------------------
 
 def create_challenge(challenger_id, challengee_id):
