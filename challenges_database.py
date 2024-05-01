@@ -239,6 +239,7 @@ def update_finish_status(challenge_id, user_id):
         
         conn.commit()
         print("Finish status updated successfully.")
+        return {"status": "success"}
         
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
@@ -493,10 +494,11 @@ def get_playbutton_status(challenge_id, user_id):
             conn.close()
 
 def main():
-    clear_challenges_table()
+    #clear_challenges_table()
     #reset_challenges_id_sequence()
     print()
-    create_challenge('ab1234', 'jy3107')
+    create_challenge('a', 'ed8205')
+    update_finish_status(1, 'a')
     
 if __name__=="__main__":
     main()
