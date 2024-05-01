@@ -74,7 +74,7 @@ def reset_player(username):
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
 
-    cur.execute("UPDATE usersDaily SET played=%s, points=%s, distance=%s, last_played=NULL WHERE username=%s;", (False, 0, 0, username))
+    cur.execute("UPDATE usersDaily SET played=%s, points=%s, distance=%s, last_played=NULL, current_streak = %s WHERE username=%s;", (False, 0, 0, 0, username))
     print(f"Player {username} has been reset for the daily round")
 
     conn.commit()
@@ -214,8 +214,8 @@ def remove_daily_user(username):
 
 def main():
     # update_player_daily('wn4759', 100, 30)
-    reset_player('jy3107')
-    #reset_player('fl9971')
+    # reset_player('jy3107')
+    reset_player('cl7359')
     # print(get_last_played_date('fl9971'))
     #reset_player('wn4759')
     # remove_daily_user('fl9971')
