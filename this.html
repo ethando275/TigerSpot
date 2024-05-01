@@ -34,17 +34,19 @@
                         <div class="input-row">
                             <div class="user-id output">{{ challenge.challengee_id }}</div>
                             <div class="name output">{{ challenge.status }}</div>
-                            {% if challenge.winner_id != None %}
-                            <a href="{{ url_for('versus_stats', challenge_id=challenge.id) }}" class="score link-style">
-                            {{ challenge.winner_id }}
-                            </a>
-                            {% endif %}
-                            {% if challenge.status == 'accepted' and not challenge.challenger_finished %}
-                                <form method="post" action="/play_button">
-                                    <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
-                                    <button type="submit" class="submit challenge"><b>Play</b></button>
-                                </form>
-                            {% endif %}
+                            <div class="winner-vs">
+                                {% if challenge.winner_id != None %}
+                                <a href="{{ url_for('versus_stats', challenge_id=challenge.id) }}" class="score link-style">
+                                {{ challenge.winner_id }}
+                                </a>
+                                {% endif %}
+                                {% if challenge.status == 'accepted' and not challenge.challenger_finished %}
+                                    <form method="post" action="/play_button">
+                                        <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+                                        <button type="submit" class="submit challenge"><b>Play</b></button>
+                                    </form>
+                                {% endif %}
+                            </div>
                         </div>
                         {% endfor %}
                     {% else %}
@@ -68,28 +70,30 @@
                             <div class="input-row">
                                 <div class="user-id output">{{ challenge.challenger_id }}</div>
                                 <div class="name output">{{ challenge.status }}</div>
-                                {% if challenge.winner_id != None %}
-                                <a href="{{ url_for('versus_stats', challenge_id=challenge.id) }}" class="score link-style">
-                                {{ challenge.winner_id }}
-                                </a>
-                                {% endif %}
-                                {% if challenge.status == 'accepted' and not challenge.challengee_finished %}
-                                    <form method="post" action="/play_button">
-                                        <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
-                                        <button type="submit" class="submit challenge"><b>Play</b></button>
-                                    </form>
-                                {% elif challenge.status != 'completed' and not challenge.challengee_finished and challenge.status != 'declined'%}
-                                    <div class="duo-buttons">
-                                        <form id="accept" method="post" action="/accept_challenge">
+                                <div class="winner-vs">
+                                    {% if challenge.winner_id != None %}
+                                    <a href="{{ url_for('versus_stats', challenge_id=challenge.id) }}" class="score link-style">
+                                    {{ challenge.winner_id }}
+                                    </a>
+                                    {% endif %}
+                                    {% if challenge.status == 'accepted' and not challenge.challengee_finished %}
+                                        <form method="post" action="/play_button">
                                             <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
-                                            <button type="submit" class="submit challenge"><b>Accept</b></button>
+                                            <button type="submit" class="submit challenge"><b>Play</b></button>
                                         </form>
-                                        <form id="decline" method="post" action="/decline_challenge">
-                                            <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
-                                            <button type="submit" class="submit decline"><b>Decline</b></button>
-                                        </form>
-                                    </div>
-                                {% endif %}
+                                    {% elif challenge.status != 'completed' and not challenge.challengee_finished and challenge.status != 'declined'%}
+                                        <div class="duo-buttons">
+                                            <form id="accept" method="post" action="/accept_challenge">
+                                                <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+                                                <button type="submit" class="submit challenge"><b>Accept</b></button>
+                                            </form>
+                                            <form id="decline" method="post" action="/decline_challenge">
+                                                <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+                                                <button type="submit" class="submit decline"><b>Decline</b></button>
+                                            </form>
+                                        </div>
+                                    {% endif %}
+                                </div>
                             </div>
                             {% endfor %}
                         {% else %}

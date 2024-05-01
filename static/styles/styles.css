@@ -506,7 +506,7 @@ header {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 1vh 1.5vw;
+  padding: 1vh 0.5vw;
 }
 
 .duo-buttons {
@@ -526,11 +526,17 @@ header {
 }
 
 .name.output {
-  padding-left: 1vw;
+  padding-left: 3vw;
 }
 
 .user-id.output {
-  padding-left: 1.25vw;
+  padding-left: 2.75vw;
+}
+
+.winner-vs {
+  padding-left: 1vw;
+  width: 6vw;
+  margin-right: 0.25vw;
 }
 
 .submit.challenge, 
