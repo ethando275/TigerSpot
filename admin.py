@@ -39,7 +39,7 @@ def reset_game(username):
 
     current_date = pictures_database.get_current_date()
     print(f"CURRENT DATE IS: {current_date}")
-    
+
     if  played_date != current_date:
         daily_user_database.reset_player(username)
         user_played = daily_user_database.player_played(username)
@@ -48,6 +48,8 @@ def reset_game(username):
         matches_database.clear_matches_table()
         id = pictures_database.pic_of_day()
         print(f"RESET ID IS NOW: {id}")
+
+    
 
 @app.route('/sam', methods=['GET'])
 def sam():
@@ -115,6 +117,7 @@ def game():
     today_distance = daily_user_database.get_daily_distance(username)
 
     print(f"ID WAS: {id}")
+
 
     # if  played_date != current_date:
     #     daily_user_database.reset_player(username)
