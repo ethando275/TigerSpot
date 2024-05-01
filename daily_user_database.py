@@ -175,6 +175,8 @@ def get_daily_points(username):
                 cur.execute('''SELECT points FROM usersDaily WHERE username=%s;''', (username,))
                 points = cur.fetchone()
 
+
+
         if points is None:
             return 0
 
@@ -282,4 +284,5 @@ def main():
 #-----------------------------------------------------------------------
 
 if __name__=="__main__":
-    main()
+if __name__=="__main__":
+    main()
