@@ -43,8 +43,7 @@ def reset_game(username):
     if  played_date != current_date:
         daily_user_database.reset_player(username)
         user_played = daily_user_database.player_played(username)
-        challenges_database.clear_challenges_table()
-        challenges_database.reset_challenges_id_sequence()
+        challenges_database.clear_user_challenges(username)
         matches_database.clear_matches_table()
         id = pictures_database.pic_of_day()
         print(f"RESET ID IS NOW: {id}")
