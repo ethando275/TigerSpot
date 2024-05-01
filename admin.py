@@ -30,6 +30,27 @@ app.secret_key = os.environ['APP_SECRET_KEY']
 id = 1
 #-----------------------------------------------------------------------
 
+def reset_game(username):
+
+    global id 
+
+    played_date = daily_user_database.get_last_played_date(username)
+    print(f"LAST PLAYED DATE WAS: {played_date}")
+
+    current_date = pictures_database.get_current_date()
+    print(f"CURRENT DATE IS: {current_date}")
+
+    if  played_date != current_date:
+        daily_user_database.reset_player(username)
+        user_played = daily_user_database.player_played(username)
+        challenges_database.clear_challenges_table()
+        challenges_database.reset_challenges_id_sequence()
+        matches_database.clear_matches_table()
+        id = pictures_database.pic_of_day()
+        print(f"RESET ID IS NOW: {id}")
+
+    
+
 @app.route('/sam', methods=['GET'])
 def sam():
     html_code = flask.render_template('sam.html')
@@ -62,6 +83,8 @@ def menu():
     username = auth.authenticate()
     user_database.insert_player(username)
     daily_user_database.insert_player_daily(username)
+
+    reset_game(username)
     
     html_code = flask.render_template('menu.html', username = username)
     # html_code = flask.render_template('index.html')
@@ -95,20 +118,15 @@ def game():
 
     print(f"ID WAS: {id}")
 
-    played_date = daily_user_database.get_last_played_date(username)
-    print(f"LAST PLAYED DATE WAS: {played_date}")
 
-    current_date = pictures_database.get_current_date()
-    print(f"CURRENT DATE IS: {current_date}")
-
-    if  played_date != current_date:
-        daily_user_database.reset_player(username)
-        user_played = daily_user_database.player_played(username)
-        challenges_database.clear_challenges_table()
-        challenges_database.reset_challenges_id_sequence()
-        matches_database.clear_matches_table()
-        id = pictures_database.pic_of_day()
-        print(f"RESET ID IS NOW: {id}")
+    # if  played_date != current_date:
+    #     daily_user_database.reset_player(username)
+    #     user_played = daily_user_database.player_played(username)
+    #     challenges_database.clear_challenges_table()
+    #     challenges_database.reset_challenges_id_sequence()
+    #     matches_database.clear_matches_table()
+    #     id = pictures_database.pic_of_day()
+    #     print(f"RESET ID IS NOW: {id}")
 
     if user_played:
         html_code = flask.render_template('alrplayed.html', username = username, today_points = today_points, today_distance = today_distance)
