@@ -33,7 +33,13 @@ id = 1
 def reset_game(username):
 
     global id 
-    
+
+    played_date = daily_user_database.get_last_played_date(username)
+    print(f"LAST PLAYED DATE WAS: {played_date}")
+
+    current_date = pictures_database.get_current_date()
+    print(f"CURRENT DATE IS: {current_date}")
+
     if  played_date != current_date:
         daily_user_database.reset_player(username)
         user_played = daily_user_database.player_played(username)
@@ -42,6 +48,8 @@ def reset_game(username):
         matches_database.clear_matches_table()
         id = pictures_database.pic_of_day()
         print(f"RESET ID IS NOW: {id}")
+
+    
 
 @app.route('/sam', methods=['GET'])
 def sam():
@@ -110,11 +118,6 @@ def game():
 
     print(f"ID WAS: {id}")
 
-    played_date = daily_user_database.get_last_played_date(username)
-    print(f"LAST PLAYED DATE WAS: {played_date}")
-
-    current_date = pictures_database.get_current_date()
-    print(f"CURRENT DATE IS: {current_date}")
 
     # if  played_date != current_date:
     #     daily_user_database.reset_player(username)
