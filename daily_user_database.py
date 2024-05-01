@@ -42,11 +42,11 @@ def update_player_daily(username, points, distance):
                 points=%s,
                 distance=%s,
                 played=%s,
-                last_played= CURRENT_DATE,
                 current_streak = CASE
                     WHEN last_played IS NULL THEN 1 
                     WHEN last_played = CURRENT_DATE - INTERVAL '1 day' THEN current_streak + 1 
-                    ELSE 1 
+                    ELSE 1                 
+                last_played= CURRENT_DATE,
                 END
                 WHERE username=%s;''', (points, distance, True, username))
     print("EXECUTED DAILY UPDATE")
