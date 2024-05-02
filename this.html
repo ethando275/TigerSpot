@@ -134,20 +134,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: `challenger_id=${encodeURIComponent(challengerID)}&challengee_id=${encodeURIComponent(challengeeID)}`
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                console.log(data); // Handle your JSON data here
+                console.log(data);  // Log data to see what's being returned from the server
+                if (data.status === 'error' || challengeeID == "") {
+                    console.log("Handling error");  // Check if this part gets executed
+                    alert(data.message);
+                } else {
+                    alert("Match created successfully.");
+                    window.location.reload();
+                }
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.error('Error:', error);  // Log errors if fetch itself fails
                 alert('Error making request: ' + error.message);
             });
-
 
                 });
             });
@@ -159,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (window.pageYOffset >= sticky) {
             navbar.classList.add('sticky');
-            document.body.style.paddingTop = (navbar.offsetHeight - 100) + 'px'; // Add padding if extends beyond offset for sticky navbar
+            document.body.style.paddingTop = (navbar.offsetHeight - 100) + 'px'; // Add padding equal to navbar height
         } else {
             navbar.classList.remove('sticky');
             document.body.style.paddingTop = '0'; // Reset padding
