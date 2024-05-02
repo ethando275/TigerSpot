@@ -1,5 +1,11 @@
+#-----------------------------------------------------------------------
+# cloud.py
+#-----------------------------------------------------------------------
+
 import cloudinary.api
 import json
+
+#-----------------------------------------------------------------------
 
 # extracts the url, latitude, longitude, and place metadata from
 # each image in the cloudinary folder
@@ -10,6 +16,8 @@ def image_data(resource):
   longitude = float(custom_metadata.get('Longitude'))
   place = custom_metadata.get('Place')
   return url, latitude, longitude, place
+
+#-----------------------------------------------------------------------
 
 def main():
 

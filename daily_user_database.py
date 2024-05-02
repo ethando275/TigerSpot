@@ -29,6 +29,8 @@ def create_daily_user_table():
         print(error)
         return "database error"
 
+#-----------------------------------------------------------------------
+
 def insert_player_daily(username):
 
     try:
@@ -173,8 +175,6 @@ def get_daily_points(username):
                 cur.execute('''SELECT points FROM usersDaily WHERE username=%s;''', (username,))
                 points = cur.fetchone()
 
-
-
         if points is None:
             return 0
 
@@ -281,6 +281,5 @@ def main():
 
 #-----------------------------------------------------------------------
 
-if __name__=="__main__":
 if __name__=="__main__":
     main()

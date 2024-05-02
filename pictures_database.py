@@ -110,7 +110,7 @@ def get_pic_info(col, id):
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
 
-                cur.execute("SELECT %s FROM pictures WHERE pictureID = %s", (col, id))
+                cur.execute(f"SELECT {col} FROM pictures WHERE pictureID = {id}")
                 rows = cur.fetchall()
                 row = rows[0][0]
                 
@@ -126,27 +126,24 @@ def main():
 
     # create_pic_table()
 
-    current_date = get_current_date
-    pic_of_day = pic_of_day()
-    pic_place = get_pic_info("place", "1")
-    pic_coords = get_pic_info("coordinates", "1")
-    pic_url = get_pic_info("url", "1")
+    current_date = get_current_date()
+    today_id = pic_of_day()
+    pic_place = get_pic_info("place", 1)
+    pic_coords = get_pic_info("coordinates", 1)
+    pic_url = get_pic_info("link", 1)
 
     print(f"Current date: {current_date}")
-    print(f"Picture ID Today: {pic_of_day}")
+
+    print(f"Picture ID Today: {today_id}")
+
+    # Effron Music Building
     print(f"Place: {pic_place}")
+
+    # 40.342396, -74.659527
     print(f"Coordinates: {pic_coords}")
+
+    # http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640742/TigerSpot/Checked/91271FD2-F874-4AAE-B589-F6FD7BB0920B_1_201_a_r2hcfr.jpg
     print(f"URL: {pic_url}")
 
-    # pic_of_day()
-    # eastern_timezone = get_current_date()
-    # print(eastern_timezone)
-    # check = daily_user_database.get_last_played_date('wn4759')
-    # print(check)
-    # if eastern_timezone == check:
-    #     print("SUCCESS")
-    # else: 
-    #     print("FAIL")
-    
 if __name__=="__main__":
     main()
