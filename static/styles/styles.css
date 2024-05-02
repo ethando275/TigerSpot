@@ -100,7 +100,6 @@ header {
     border-right: none; /* Remove border from last child */
 }
 
-
 main {
   margin-top: 15vh;
   padding: 4vh 4vw;
@@ -291,18 +290,24 @@ hr {
 }
 
 /* Styling for Main of Each Page */
+
 .main-content {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
-  width: 100%; 
+  width: 100%; /* Ensure the container takes up the full width */
   max-height: 90%;
   padding: 4vh 0vw;
 }
 
 .main-content.versus {
+  display: flex;
   flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%; /* Ensure the container takes up the full width */
+  max-height: 90%;
   padding: 3vh 0vw;
   margin-top: 0vh;
 }
@@ -438,10 +443,15 @@ nav {
   display: flex;
   flex-direction: column;
   margin-right: 1.5vh;
+  max-height: calc(100vh - 6vh);
+  width: 50vw;
+  padding-bottom: 1vh;
+}
+
+.top-players.challenges {
   max-height: calc(45vh - 6vh);
   width: 45vw;
   overflow: auto; /* Add scroll when more than 5 user challenges */
-  padding-bottom: 1vh;
 }
 
 .user-stats {
@@ -458,14 +468,14 @@ nav {
   border-top: 0.25vw solid black;
 }
 
-/* Versus Game/Challenges Styles */
+/* Versus Invites/Challenges Styles */
 .row {
   font-size: 2vh;
   font-weight: bold;
   display: flex;
   justify-content: space-between;
   padding: 2vh 2vw;
-  border-bottom: 0.25vh solid black;
+  border-bottom: 0.25vw solid black;
   align-items: center;
 }
 
@@ -531,7 +541,9 @@ nav {
   padding-right: 0.5vw;
 }
 
-.score, 
+.score {
+  text-align: right;
+}
 .score2 {
   text-align: right;
 }
