@@ -18,6 +18,19 @@ def create_matches_table():
     conn.close()
 
 #--------------------------------------------------------------
+def clear_matches_table():
+    conn = None
+    try:
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
+                # Deletes all records from the matches table
+                cur.execute("DELETE FROM matches;")
+                conn.commit()  # Commit the transaction to make changes permanent
+                print("Matches table cleared.")
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error clearing matches table: {error}")
+   
+#--------------------------------------------------------------
             
 # Complete a match
 def complete_match(challenge_id, winner_id, challenger_score, challengee_score):
