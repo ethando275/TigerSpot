@@ -29,8 +29,6 @@ def create_daily_user_table():
         print(error)
         return "database error"
 
-#-----------------------------------------------------------------------
-
 def insert_player_daily(username):
 
     try:
@@ -285,4 +283,4 @@ def main():
 
 if __name__=="__main__":
 if __name__=="__main__":
-    main()
+    main()
