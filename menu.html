@@ -9,10 +9,10 @@
     <style>
       #username {
             height: 50vh;
-            width: 50.5%; /* New container takes up remaining space */
+            width: 50.5%; 
             margin-left: auto;
             margin-right: auto;
-            padding: 2vh 2vw; /* Add some padding */
+            padding: 2vh 2vw;
         }
 
     </style>
@@ -39,8 +39,9 @@
           <a href="/game">
           <button class="button">
             <b>Let's Go!</b>
+          </button>
+          </a>
         </div>
-        <!-- Add any content specific to the index page here -->
       </main>
     </div>
   </body>
@@ -54,7 +55,7 @@ window.addEventListener('scroll', function() {
 
     if (window.pageYOffset >= sticky) {
         navbar.classList.add('sticky');
-        document.body.style.paddingTop = (navbar.offsetHeight - 70) + 'px'; // Add padding equal to navbar height
+        document.body.style.paddingTop = (navbar.offsetHeight - 70) + 'px'; // Add padding after scrolling past offset
     } else {
         navbar.classList.remove('sticky');
         document.body.style.paddingTop = '0'; // Reset padding

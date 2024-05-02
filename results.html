@@ -148,7 +148,7 @@
 
         if (window.pageYOffset >= sticky) {
             navbar.classList.add('sticky');
-            document.body.style.paddingTop = (navbar.offsetHeight - 100) + 'px'; // Add padding equal to navbar height
+            document.body.style.paddingTop = (navbar.offsetHeight - 100) + 'px'; // Add padding if extends beyond offset for sticky navbar
         } else {
             navbar.classList.remove('sticky');
             document.body.style.paddingTop = '0'; // Reset padding
