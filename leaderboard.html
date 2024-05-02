@@ -38,9 +38,9 @@
             </div>
 
             <div class="top-players">
-                <div class="dropdown">
+                <div class="duo-leaderboard">
                     <h2>Top Daily Players</h2>
-                    <div class="dropdown-content">
+                    <div class="leaderboard-content">
                         <a href="/leaderboard"><b class="center highlight">Daily Leaderboard</b></a>
                         <a href="/totalboard"><b class="center">Overall Leaderboard</b></a>
                     </div>
@@ -66,7 +66,7 @@
 
             if (window.pageYOffset >= sticky) {
                 navbar.classList.add('sticky');
-                document.body.style.paddingTop = (navbar.offsetHeight - 100) + 'px'; // Add padding equal to navbar height
+                document.body.style.paddingTop = (navbar.offsetHeight - 100) + 'px'; // Add padding if extends beyond offset for sticky navbar
             } else {
                 navbar.classList.remove('sticky');
                 document.body.style.paddingTop = '0'; // Reset padding

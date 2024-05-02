@@ -4,15 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Index Page</title>
-    <!-- Link to external CSS file -->
     <link rel="stylesheet" href="{{url_for('static', filename = 'styles/styles.css')}}" />
     <style>
       #username {
             height: 50vh;
-            width: 50.5%; /* New container takes up remaining space */
+            width: 50.5%; 
             margin-left: auto;
             margin-right: auto;
-            padding: 2vh 2vw; /* Add some padding */
+            padding: 2vh 2vw;
         }
     </style>
   </head>
@@ -35,7 +34,6 @@
           </p>
           <p>
             <b class="text">
-                <!-- REPLACE DAILY_SCORE VAR WITH WHATEVER IT'S CALLED -->
                 Your Today's Score is: {{ today_points }}. 
                 <br>
                 Your distance from the actual point was {{ today_distance }} meters away.
@@ -66,7 +64,7 @@
 
         if (window.pageYOffset >= sticky) {
             navbar.classList.add('sticky');
-            document.body.style.paddingTop = (navbar.offsetHeight - 100) + 'px'; // Add padding equal to navbar height
+            document.body.style.paddingTop = (navbar.offsetHeight - 100) + 'px'; // Add padding if extends beyond offset for sticky navbar
         } else {
             navbar.classList.remove('sticky');
             document.body.style.paddingTop = '0'; // Reset padding
