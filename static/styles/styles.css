@@ -3,7 +3,6 @@ body {
   margin: 0;
   padding: 0;
   background-color: orange;
-  /* border: 0.6vw solid black; */
   box-sizing: border-box;
 }
 
@@ -17,18 +16,24 @@ body {
   margin-bottom: 0;
 } 
 
+header {
+  margin-bottom: 9vh;
+}
+
+.board-header {
+  margin-bottom: -8vh;
+}
+
+.daily-result-header {
+  margin-top: 14vh;
+}
+
+/* Navigation Bar styles */
+
 .home-icon {
   max-width: 150px;
   height: auto;
   margin-right: auto;
-}
-
-/* Navigation styles */
-nav {
-  background-color: white;
-  display: flex;
-  justify-content: right;
-  align-items: center;
 }
 
 .nav-icons {
@@ -52,13 +57,15 @@ nav {
   margin-left: 1vw;
 }
 
-.dropdown {
+/* Leaderboard Styles */
+
+.duo-leaderboard {
     position: relative;
     display: inline-block;
     padding-left: 1vw;
 }
 
-.dropdown-content {
+.leaderboard-content {
     background-color: white;
     min-width: 120px;
     box-shadow: 0 0.2vw 0.5vw rgba(0, 0, 0, 0.2);
@@ -69,7 +76,7 @@ nav {
     align-items: center;
 }
 
-.dropdown-content a {
+.leaderboard-content a {
     color: black;
     padding: 1vh 1vw;
     text-decoration: none;
@@ -89,7 +96,7 @@ nav {
   color: rgb(235, 135, 28);
 }
 
-.dropdown-content a:last-child {
+.leaderboard-content a:last-child {
     border-right: none; /* Remove border from last child */
 }
 
@@ -120,9 +127,7 @@ main {
   margin-top: 12vh;
 }
 
-.game.page {
-  margin-top: 0;
-}
+/* Menu Page Styles */
 
 .logo {
   width: 40vw;
@@ -140,7 +145,6 @@ main {
 
 .button {
   background-color: orange;
-  color: black;
   border: 0.6vw solid black;
   border-radius: 1vw;
   font-size: 4vw;
@@ -149,18 +153,10 @@ main {
   cursor: pointer;
 }
 
+/* Show darker orange when hovering over orange buttons */
 .button:hover, .rules-button:hover, #share:hover, 
 #share-submit:hover, .game.result-btn:hover {
   background-color: rgb(219, 128, 16);
-}
-
-@media screen and (max-width: 800px) {
-  .page {
-    width: 100%; /* The width is 100%, when the viewport is 800px or smaller */
-  }
-  .home {
-    width: 100%;
-  }
 }
 
 /* Rules Page CSS*/
@@ -294,35 +290,26 @@ hr {
   right: 10vw;
 }
 
-footer {
-  position: fixed;
-  width: 100%;
-  bottom: 10vh;
-}
-
+/* Styling for Main of Each Page */
 .main-content {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
-  width: 100%; /* Ensure the container takes up the full width */
+  width: 100%; 
   max-height: 90%;
   padding: 4vh 0vw;
 }
 
 .main-content.versus {
-  display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  width: 100%; /* Ensure the container takes up the full width */
-  max-height: 90%;
   padding: 3vh 0vw;
   margin-top: 0vh;
 }
 
 .main-content.game, 
 .main.game, 
+.game.page, 
 .mainmenu, 
 .main-content.vs-results {
   margin-top: 0;
@@ -408,6 +395,9 @@ table {
 
 /* Sticky navbar */
 nav {
+  display: flex;
+  justify-content: right;
+  align-items: center;
   position: fixed;
   top: 0;
   width: 97%; /* Adjusted width to accommodate border */
@@ -418,33 +408,15 @@ nav {
   margin-bottom: 2vh 0vw;
 }
 
-#navbar-stats {
-  position: fixed;
-  top: 0;
-  width: 100%; /* Adjusted width to accommodate border */
-  background-color: white;
-  border: 0.6vw solid black;
-  padding: 1vh 1vw;
-  z-index: 1000; /* Ensure the navbar is on top of other content */
-  margin-bottom: 2vh 0vw;
-}
-
-header {
-  margin-bottom: 9vh;
-}
-
-.board-header {
-  margin-bottom: -8vh;
-}
-
-.daily-result-header {
-  margin-top: 14vh;
-}
-
 .board {
   margin-bottom: 2vh;
 }
 
+.instructions {
+  max-width: 60vw;
+}
+
+/* Leaderboard Styles */
 .leaderboard {
   display: flex;
   justify-content: space-between;
@@ -466,9 +438,9 @@ header {
   display: flex;
   flex-direction: column;
   margin-right: 1.5vh;
-  max-height: calc(100vh - 6vh);
-  width: 35vw;
-  overflow: auto; /* Hide overflow content */
+  max-height: calc(45vh - 6vh);
+  width: 45vw;
+  overflow: auto; /* Add scroll when more than 5 user challenges */
   padding-bottom: 1vh;
 }
 
@@ -477,19 +449,16 @@ header {
   flex-direction: column;
 }
 
-.instructions {
-  max-width: 60vw;
-}
-
 #container {
   display: flex;
   flex-direction: column;
   max-height: calc(80vh - 6vh);
-  border-right: 0.25vh solid black;
-  border-left: 0.25vh solid black;
-  border-top: 0.25vh solid black;
+  border-right: 0.25vw solid black;
+  border-left: 0.25vw solid black;
+  border-top: 0.25vw solid black;
 }
 
+/* Versus Game/Challenges Styles */
 .row {
   font-size: 2vh;
   font-weight: bold;
@@ -519,10 +488,6 @@ header {
 .challenges-list {
   font-size: 2vh;
   text-align: center;
-}
-
-.input-row {
-  text-align: start;
 }
 
 .name.output {
@@ -566,9 +531,7 @@ header {
   padding-right: 0.5vw;
 }
 
-.score {
-  text-align: right;
-}
+.score, 
 .score2 {
   text-align: right;
 }
@@ -685,7 +648,10 @@ header {
   margin: 0vh 2vw 10vh 0vw;
 }
 
+
+/* Adjusted Styles for when screen has shrunk os on mobile*/
 @media screen and (max-width: 1000px) {
+  /* Header Styles */
   header {
     margin-bottom: 11vh;
   }
@@ -744,12 +710,15 @@ header {
   }
 
   .rules-button {
-  font-size: 4vw;
+    font-size: 4vw;
   }
 
+  /* When screen shrinks, change "leaderboard"to 
+  "leader board" to fit screen better*/
   [data-alttext] > span {
     display: none;
   }
+
   [data-alttext]::before {
     content: attr(data-alttext);
   }
@@ -801,7 +770,7 @@ header {
   }
 
   .user-stats h2, 
-  .dropdown h2 
+  .duo-leaderboard h2 
   {
     font-size: 10vw;
   }
@@ -830,6 +799,10 @@ header {
     margin-bottom: 10vh;
   }
 
+  .home, 
+  .page {
+    width: 100%;
+  }
 }
 
 @media screen and (max-width: 500px) {
@@ -837,6 +810,7 @@ header {
     margin: 0;
   }
 
+  /* Header Styles */
   .daily-result-header {
     margin-bottom: 12vh;
   }
@@ -850,15 +824,16 @@ header {
   }
 
   #exampleCarousel {
-    width: 100%;  /* Full width */
-    max-width: 80vw; /* Maximum width but can be smaller on smaller screens */
-    height: auto; /* Fixed height */
-    margin: 0vh 2vw 2vh 2vw; /* Centering if not full width */
+    width: 100%;  
+    max-width: 80vw;
+    height: auto; 
+    margin: 0vh 2vw 2vh 2vw; 
   }
 }
 
 
 @media screen and (max-height: 770px) {
+  /* Header Styles */
   .board-header {
     margin-bottom: 5vh;
   }
@@ -868,9 +843,10 @@ header {
   }
 
   .mainmenu-header {
-    margin-bottom: 15vh;
+    margin-bottom: 20vh;
   }
 
+  /* Game Page and Results Styles */
   .main.game {
     margin-top: 19vh;
   }
@@ -879,20 +855,25 @@ header {
     margin-top: 20vh;
   }
 
+  /* Leaderboard Styles */
+
   .leaderboard {
     margin-top: 2vh;
   }
 
+  /* Team Page Styles */
   .card img {
     height: 20vh;
     width: auto;
   }
+
   .column {
     min-height: 35vh;
   }
 }
 
 @media screen and (max-height: 600px) {
+  /* Header Styles */
   .rules-header {
     margin-bottom: 29vh;
   }
@@ -916,19 +897,8 @@ header {
   .team-header {
     margin-bottom: 21vh;
   }
-  
-  .team-row:nth-child(even) {
-    margin-top: 25vh;
-  }
 
-  .rules-button, 
-  .instructions .title {
-    font-size: 1.5vw;
-  }
-  .top-players h2  {
-    font-size: 2vw;
-  }
-
+  /* Index Page Styles */
   .home img {
     width: 20vw;
     height: auto;
@@ -936,6 +906,23 @@ header {
 
   .home .text {
     font-size: 5vh;
+  }
+
+  /* Team Page Styles */
+  
+  .team-row:nth-child(even) {
+    margin-top: 25vh;
+  }
+
+  /* Instructions/Rules Styles */
+  .rules-button, 
+  .instructions .title {
+    font-size: 1.5vw;
+  }
+
+  /* Leaderboard Styles */
+  .top-players h2  {
+    font-size: 2vw;
   }
 }
 
