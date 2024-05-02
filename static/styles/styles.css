@@ -467,8 +467,8 @@ header {
   flex-direction: column;
   margin-right: 1.5vh;
   max-height: calc(100vh - 6vh);
-  width: 50vw;
-  overflow: hidden; /* Hide overflow content */
+  width: 35vw;
+  overflow: auto; /* Hide overflow content */
   padding-bottom: 1vh;
 }
 
