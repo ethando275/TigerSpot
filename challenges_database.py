@@ -523,7 +523,6 @@ def main():
     #reset_challenges_id_sequence()
     print()
     create_challenge('a', 'ed8205')
-    update_finish_status(1, 'a')
     
 if __name__=="__main__":
     main()
