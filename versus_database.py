@@ -2,7 +2,7 @@ import psycopg2
 
 DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
 
-
+# Update cumulative points for a given user in a given challenge
 def update_versus_points(challenge_id, user_id, additional_points):
     conn = None
     try:
@@ -47,24 +47,31 @@ def update_versus_points(challenge_id, user_id, additional_points):
         
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
+        return "database error"
     finally:
         if conn is not None:
             conn.close()
 #-----------------------------------------------------------------------
 
+# Equation to calculate points for a versus challenge
 def calculate_versus(distance, time):
+    # Gain maximum points if within this range
     if time < 10 and distance < 10:
         return 1000
     else:
         if distance < 0:
             raise ValueError("Distance cannot be negative")
+        # Points for distance
         dis_points = max(0, 1 - distance / 110) * 900
         if time < 0 or time > 120:
             raise ValueError("Time taken must be between 0 and the maximum allowed time")
+        # Points for time
         time_points = max(0, 1 - time / 120) * 100
 
+        # Return the sum of the two points
         return dis_points + time_points
 
+# Return winner of a given challenge
 def get_winner(challenge_id):
     conn = None
     try:
@@ -79,10 +86,12 @@ def get_winner(challenge_id):
         
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
+        return "database error"
     finally:
         if conn is not None:
             conn.close()
 
+# Update the if a user has submitted a guess for a given picture in a given challenge
 def update_versus_pic_status(challenge_id, user_id, index):
     conn = None
     try:
@@ -127,10 +136,12 @@ def update_versus_pic_status(challenge_id, user_id, index):
         
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
+        return "database error"
     finally:
         if conn is not None:
             conn.close()
         
+# Get the status of a user's submission for a given picture in a given challenge
 def get_versus_pic_status(challenge_id, user_id, index):
     conn = None
     try:
@@ -178,11 +189,13 @@ def get_versus_pic_status(challenge_id, user_id, index):
         
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
+        return "database error"
     finally:
         if conn is not None:
             conn.close()
 #-----------------------------------------------------------------------
 
+# Store the points for a user's guess for a given picture in a given challenge
 def store_versus_pic_points(challenge_id, user_id, index, points):
     conn = None
     try:
@@ -227,12 +240,14 @@ def store_versus_pic_points(challenge_id, user_id, index, points):
         
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
+        return "database error"
     finally:
         if conn is not None:
             conn.close()
 
 #-----------------------------------------------------------------------
 
+# Store the points for a user's guess for a given picture in a given challenge
 def store_versus_pic_points(challenge_id, user_id, index, points):
     conn = None
     try:
@@ -277,6 +292,7 @@ def store_versus_pic_points(challenge_id, user_id, index, points):
 
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
+        return "database error"
     finally:
         if conn is not None:
             conn.close()
