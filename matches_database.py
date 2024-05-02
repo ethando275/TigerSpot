@@ -30,6 +30,7 @@ def clear_matches_table():
         print("Matches table cleared.")
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error clearing matches table: {error}")
+        return "database error"
     finally:
         if conn is not None:
             conn.close()
@@ -41,7 +42,9 @@ def complete_match(challenge_id, winner_id, challenger_score, challengee_score):
     try:
         conn = psycopg2.connect(DATABASE_URL)
         cur = conn.cursor()
+        # Update the status of the challenge to 'completed'
         cur.execute("UPDATE challenges SET status = 'completed' WHERE id = %s;", (challenge_id,))
+        # Insert the match into the matches table
         cur.execute("INSERT INTO matches (challenge_id, winner_id, challenger_score, challengee_score) VALUES (%s, %s, %s, %s) RETURNING id;", (challenge_id, winner_id, challenger_score, challengee_score))
         match_id = cur.fetchone()[0]
         conn.commit()
@@ -49,6 +52,7 @@ def complete_match(challenge_id, winner_id, challenger_score, challengee_score):
         print(f"Match completed with ID: {match_id}")
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
+        return "database error"
     finally:
         if conn is not None:
             conn.close()
