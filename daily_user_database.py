@@ -12,30 +12,28 @@ DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-c
 #-----------------------------------------------------------------------
 
 def create_daily_user_table():
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
-    cur.execute('''CREATE TABLE IF NOT EXISTS usersDaily (
-                    username varchar(255),
-                    points int,
-                    distance int,
-                    played boolean,
-                    last_played date,
-                    current_streak int);''')
-    conn.commit()
-    cur.close()
-    conn.close()
-
-#-----------------------------------------------------------------------
-
-def insert_player_daily(username):
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
+    cur.execute('''CREATE TABLE IF NOT EXISTS usersDaily (
+    username varchar(255),
+    points int,
+    distance int,
+    played boolean,
+    last_played date,
+    current_streak int);''')
+    conn.commit()
+    cur.close()
+    conn.close()
 
-    cur.execute("SELECT points FROM usersDaily WHERE username=%s;", (username,))
-    result = cur.fetchone()
+def insert_player_daily(username):
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
 
-    if result is None:
-        cur.execute("INSERT INTO usersDaily (username, points, distance, played, last_played, current_streak) VALUES (%s, %s, %s, %s, NULL, %s);", (username, 0, 0, False, 0))
+    cur.execute("SELECT points FROM usersDaily WHERE username=%s;", (username,))
+    result = cur.fetchone()
+
+    if result is None:
+        cur.execute("INSERT INTO usersDaily (username, points, distance, played, last_played, current_streak) VALUES (%s, %s, %s, %s, NULL, %s);", (username, 0, 0, False, 0))
 
     conn.commit()
     conn.close()
@@ -43,10 +41,10 @@ def insert_player_daily(username):
 #-----------------------------------------------------------------------
 
 def update_player_daily(username, points, distance):
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
-    
-    cur.execute("SET TIME ZONE 'America/New_York';")
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+    cur.execute("SET TIME ZONE 'America/New_York';")
 
     cur.execute('''UPDATE usersDaily
                     SET 
@@ -244,4 +242,4 @@ def main():
 
 if __name__=="__main__":
 if __name__=="__main__":
-    main()
+    main()
