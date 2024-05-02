@@ -78,11 +78,15 @@ def clear_user_challenges(user_id):
 
                 conn.commit()  # Commit the transaction to make changes permanent
                 print(f"Entries related to user_id {user_id} cleared from challenges and matches tables.")
+                # Reset the sequences to maintain consistency
+                cur.execute("ALTER SEQUENCE challenges_id_seq RESTART WITH 1;")
+                cur.execute("ALTER SEQUENCE matches_id_seq RESTART WITH 1;")
+                conn.commit()  # Commit the change to make it permanent
+                print("Sequences reset.")
     
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error clearing entries for user_id {user_id}: {error}")
         return "database error"
-
 
 #-----------------------------------------------------------------------
 
