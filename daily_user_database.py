@@ -12,217 +12,252 @@ DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-c
 #-----------------------------------------------------------------------
 
 def create_daily_user_table():
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
-    cur.execute('''CREATE TABLE IF NOT EXISTS usersDaily (
-                    username varchar(255),
-                    points int,
-                    distance int,
-                    played boolean,
-                    last_played date,
-                    current_streak int);''')
-    conn.commit()
-    cur.close()
-    conn.close()
+    
+    try:
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
+                cur.execute('''CREATE TABLE IF NOT EXISTS usersDaily (
+                                username varchar(255),
+                                points int,
+                                distance int,
+                                played boolean,
+                                last_played date,
+                                current_streak int);''')
+                conn.commit()
+    
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return "database error"
 
 #-----------------------------------------------------------------------
 
 def insert_player_daily(username):
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
 
-    cur.execute("SELECT points FROM usersDaily WHERE username=%s;", (username,))
-    result = cur.fetchone()
+    try:
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
 
-    if result is None:
-        cur.execute("INSERT INTO usersDaily (username, points, distance, played, last_played, current_streak) VALUES (%s, %s, %s, %s, NULL, %s);", (username, 0, 0, False, 0))
+                cur.execute("SELECT points FROM usersDaily WHERE username=%s;", (username,))
+                result = cur.fetchone()
 
-    conn.commit()
-    conn.close()
+                if result is None:
+                    cur.execute("INSERT INTO usersDaily (username, points, distance, played, last_played, current_streak) VALUES (%s, %s, %s, %s, NULL, %s);", (username, 0, 0, False, 0))
+
+                conn.commit()
+    
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return "database error"
+
     
 #-----------------------------------------------------------------------
 
 def update_player_daily(username, points, distance):
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
+    
+    try:
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
 
-    cur.execute("SET TIME ZONE 'America/New_York';")
+                cur.execute("SET TIME ZONE 'America/New_York';")
 
-    cur.execute('''UPDATE usersDaily
-                    SET 
-                        points=%s,
-                        distance=%s,
-                        played=%s,
-                        current_streak = CASE
-                            WHEN last_played IS NULL THEN 1 
-                            WHEN last_played::date = (CURRENT_DATE - INTERVAL '1 day')::date THEN current_streak + 1 
-                            ELSE 1
-                        END,                        
-                        last_played= CURRENT_DATE
-                    WHERE username=%s;''', (points, distance, True, username))
-    print("EXECUTED DAILY UPDATE")
-    conn.commit()
-    conn.close()
+                cur.execute('''UPDATE usersDaily
+                                SET 
+                                    points=%s,
+                                    distance=%s,
+                                    played=%s,
+                                    current_streak = CASE
+                                        WHEN last_played IS NULL THEN 1 
+                                        WHEN last_played::date = (CURRENT_DATE - INTERVAL '1 day')::date THEN current_streak + 1 
+                                        ELSE 1
+                                    END,                        
+                                    last_played= CURRENT_DATE
+                                WHERE username=%s;''', (points, distance, True, username))
+                conn.commit()
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return "database error"
 
 #-----------------------------------------------------------------------
 
 def player_played(username):
 
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
+    try:
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
 
-    cur.execute("SELECT played FROM usersDaily WHERE username=%s;", (username, ))
-    result = cur.fetchall()[0][0]
+                cur.execute("SELECT played FROM usersDaily WHERE username=%s;", (username, ))
+                result = cur.fetchall()[0][0]
 
-    conn.close()
+        return result
 
-    return result
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return "database error"
+
 
 #-----------------------------------------------------------------------
 
 #resets the user's daily points
 def reset_player(username):
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
 
-    cur.execute("UPDATE usersDaily SET played=%s, points=%s, distance=%s, last_played=NULL, current_streak = %s WHERE username=%s;", (False, 0, 0, 0, username))
-    print(f"Player {username} has been reset for the daily round")
+    try:
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
+                cur.execute("UPDATE usersDaily SET played=%s, points=%s, distance=%s, last_played=NULL, current_streak = %s WHERE username=%s;", (False, 0, 0, 0, username))
+                print(f"Player {username} has been reset for the daily round")
+                conn.commit()
 
-    conn.commit()
-    conn.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return "database error"
 
 #-----------------------------------------------------------------------
 
 # server wide player reset
 def reset_players():
 
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
+    try:
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
+                cur.execute("UPDATE usersDaily SET played=%s, points=%s, distance=%s, last_played=NULL, current_streak = %s;", (False, 0, 0, 0))
+                conn.commit()
 
-    cur.execute("UPDATE usersDaily SET played=%s, points=%s, distance=%s, last_played=NULL, current_streak = %s;", (False, 0, 0, 0))
-
-    conn.commit()
-    conn.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return "database error"
 
 #-----------------------------------------------------------------------
 
 def get_last_played_date(username):
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
 
-    cur.execute('''SELECT last_played FROM usersDaily WHERE username=%s;''', (username,))
-    date = cur.fetchone()
+    try:
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
+                cur.execute('''SELECT last_played FROM usersDaily WHERE username=%s;''', (username,))
+                date = cur.fetchone()
 
-    conn.close()
-
-    if date is None:
-        return 0
-
-    return date[0]
+        if date is None:
+            return 0
+    
+        return date[0]
+    
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return "database error"
 
 #-----------------------------------------------------------------------
 
 def get_streak(username):
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
 
-    cur.execute('''SELECT current_streak FROM usersDaily WHERE username=%s;''', (username,))
-    streak = cur.fetchone()
+    try:
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
+                cur.execute('''SELECT current_streak FROM usersDaily WHERE username=%s;''', (username,))
+                streak = cur.fetchone()
 
-    conn.close()
+        if streak is None:
+            return 0
 
-    if streak is None:
-        return 0
+        return streak[0]
 
-    return streak[0]
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return "database error"
+
 #-----------------------------------------------------------------------
 
 def get_daily_points(username):
 
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
+    try:
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
+                cur.execute('''SELECT points FROM usersDaily WHERE username=%s;''', (username,))
+                points = cur.fetchone()
 
-    cur.execute('''SELECT points FROM usersDaily WHERE username=%s;''', (username,))
-    points = cur.fetchone()
+        if points is None:
+            return 0
 
-    # Disconnect
-    conn.close()
-
-    if points is None:
-        return 0
-
-    return points[0]
+        return points[0]
+    
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return "database error"
 
 #-----------------------------------------------------------------------
 
 def get_daily_distance(username):
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
 
-    cur.execute('''SELECT distance FROM usersDaily WHERE username=%s;''', (username,))
-    distance = cur.fetchone()
+    try:
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
+                cur.execute('''SELECT distance FROM usersDaily WHERE username=%s;''', (username,))
+                distance = cur.fetchone()
 
-    # Disconnect
-    conn.close()
+        if distance is None:
+            return 0
 
-    if distance is None:
-        return 0
+        return distance[0]
 
-    return distance[0]
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return "database error"
 
 #-----------------------------------------------------------------------
 
 def get_daily_top_players():
 
-    # Connect to database
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
+    try:
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
+                daily_top_players = []
+                cur.execute("SET TIME ZONE 'America/New_York';")
+                cur.execute("SELECT username, points FROM usersDaily WHERE last_played = CURRENT_DATE ORDER BY points DESC, username ASC LIMIT 10;")
+                table = cur.fetchall()
+                for row in table:
+                    username, points = row
+                    player_stats = {'username': username, 'points': points}
+                    daily_top_players.append(player_stats)
 
-    daily_top_players = []
-    cur.execute("SET TIME ZONE 'America/New_York';")
-    cur.execute("SELECT username, points FROM usersDaily WHERE last_played = CURRENT_DATE ORDER BY points DESC, username ASC LIMIT 10;")
-    table = cur.fetchall()
-    for row in table:
-        username, points = row
-        player_stats = {'username': username, 'points': points}
-        daily_top_players.append(player_stats)
+        return daily_top_players
 
-    # Disconnect
-    conn.close()
-
-    return daily_top_players
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return "database error"
 
 #-----------------------------------------------------------------------
 
 def get_daily_rank(username):
 
-    # Connect to database
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
-
     try:
-        cur.execute("SET TIME ZONE 'America/New_York';")
-        cur.execute("SELECT username, points, DENSE_RANK() OVER (ORDER BY points DESC, username ASC) as rank FROM usersDaily WHERE last_played = CURRENT_DATE;")
-        players = cur.fetchall()
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
+                cur.execute("SET TIME ZONE 'America/New_York';")
+                cur.execute("SELECT username, points, DENSE_RANK() OVER (ORDER BY points DESC, username ASC) as rank FROM usersDaily WHERE last_played = CURRENT_DATE;")
+                players = cur.fetchall()
 
         for player in players:
             if player[0] == username:
                 return player[2]
         return "Play Today's Game!"
 
-    finally:
-        conn.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return "database error"
 
 #-----------------------------------------------------------------------
 
 def remove_daily_user(username):
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
+    try:
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
 
-    cur.execute("DELETE FROM usersDaily WHERE username=%s;", (username,))
-
-    conn.commit()
-    conn.close()
+                cur.execute("DELETE FROM usersDaily WHERE username=%s;", (username,))
+                conn.commit()
+  
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return "database error"
 
 #-----------------------------------------------------------------------
 
