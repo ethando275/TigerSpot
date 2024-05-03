@@ -272,7 +272,6 @@ def main():
     # remove_daily_user('fl9971')
     #reset_player('jy1365')
     #create_daily_user_table()
-    reset_player_streak('fl9971')
     date = get_last_played_date('fl9971')
     print(date)
     streak = get_streak('fl9971')
