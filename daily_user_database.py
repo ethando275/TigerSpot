@@ -45,7 +45,7 @@ def insert_player_daily(username):
 def update_player_daily(username, points, distance):
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
-    
+
     cur.execute("SET TIME ZONE 'America/New_York';")
 
     cur.execute('''UPDATE usersDaily
@@ -55,7 +55,7 @@ def update_player_daily(username, points, distance):
                         played=%s,
                         current_streak = CASE
                             WHEN last_played IS NULL THEN 1 
-                            WHEN last_played = CURRENT_DATE - INTERVAL '1 day' THEN current_streak + 1 
+                            WHEN last_played::date = (CURRENT_DATE - INTERVAL '1 day')::date THEN current_streak + 1 
                             ELSE 1
                         END,                        
                         last_played= CURRENT_DATE
@@ -232,13 +232,15 @@ def main():
     #reset_player('jy3107')
     #reset_player('fl9971')
     #print(get_last_played_date('fl9971'))
-    reset_player('wn4759')
+    #reset_player('wn4759')
     #reset_player('ed8205')
     # remove_daily_user('fl9971')
     #reset_player('jy1365')
     #create_daily_user_table()
-    # date = get_last_played_date('fl9971')
-    # print(date)
+    date = get_last_played_date('fl9971')
+    print(date)
+    streak = get_streak('fl9971')
+    print(streak)
 
 #-----------------------------------------------------------------------
 
