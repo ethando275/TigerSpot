@@ -126,7 +126,7 @@ def create_challenge(challenger_id, challengee_id):
 
 # Accept a challenge
 def accept_challenge(challenge_id):
-    status = "failed"  # Default status in case of error
+    status = "database error"  # Default status in case of error
     conn = None
     try:
         conn = psycopg2.connect(DATABASE_URL)
@@ -153,7 +153,7 @@ def accept_challenge(challenge_id):
 
 # Decline a challenge
 def decline_challenge(challenge_id):
-    status = "failed"  # Default status in case of error
+    status = "database error"  # Default status in case of error
     conn = None
     try:
         conn = psycopg2.connect(DATABASE_URL)
@@ -533,8 +533,8 @@ def main():
     #clear_challenges_table()
     #reset_challenges_id_sequence()
     print()
-    create_challenge('a', 'ed8205')
-    update_finish_status(1, 'a')
+    create_challenge('c', 'cl7359')
+    update_finish_status(1, 'c')
     
 if __name__=="__main__":
     main()
