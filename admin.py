@@ -30,21 +30,12 @@ app.secret_key = os.environ['APP_SECRET_KEY']
 id = 1
 #-----------------------------------------------------------------------
 
-def reset_game(username):
+def database_check(list):
+    if "database error" in list:
+        return False
+    return True
 
-    global id 
-
-    played_date = daily_user_database.get_last_played_date(username)
-    print(f"LAST PLAYED DATE WAS: {played_date}")
-
-    current_date = pictures_database.get_current_date()
-    print(f"CURRENT DATE IS: {current_date}")
-
-    if  played_date != current_date:
-        daily_user_database.reset_player(username)
-        user_played = daily_user_database.player_played(username)
-        id = pictures_database.pic_of_day()
-        print(f"RESET ID IS NOW: {id}")
+#-----------------------------------------------------------------------
 
 def reset_versus(username):
 
@@ -57,11 +48,15 @@ def reset_versus(username):
         challenges_database.clear_user_challenges(username)
         daily_user_database.update_player_versus(username)
 
+#-----------------------------------------------------------------------
+
 @app.route('/sam', methods=['GET'])
 def sam():
     html_code = flask.render_template('sam.html')
     response = flask.make_response(html_code)
     return response
+
+#-----------------------------------------------------------------------
 
 # Routes for authentication.
 @app.route('/logoutapp', methods=['GET'])
@@ -86,14 +81,28 @@ def index():
 
 @app.route('/menu', methods=['GET'])
 def menu():
+    global id
     username = auth.authenticate()
-    user_database.insert_player(username)
-    daily_user_database.insert_player_daily(username)
-
-    reset_game(username)
+    user_insert = user_database.insert_player(username)
+    daily_insert = daily_user_database.insert_player_daily(username)
+    played_date = daily_user_database.get_last_played_date(username)
+    current_date = pictures_database.get_current_date()
     
+    check = database_check([user_insert, daily_insert, played_date, current_date])
+    if check is False:
+        html_code = flask.render_template('sam.html')
+        return flask.make_response(html_code)
+    
+    if  played_date != current_date:
+        reset = daily_user_database.reset_player(username)
+        user_played = daily_user_database.player_played(username)
+        id = pictures_database.pic_of_day()
+        check = database_check([reset, user_played, id])
+        if check is False:
+            html_code = flask.render_template('sam.html')
+            return flask.make_response(html_code)
+
     html_code = flask.render_template('menu.html', username = username)
-    # html_code = flask.render_template('index.html')
     response = flask.make_response(html_code)
     return response
 
@@ -106,9 +115,17 @@ def requests():
     reset_versus(username_auth)
     pending_challenges = challenges_database.get_user_challenges(username_auth)
     users = user_database.get_players()
-    html_code = flask.render_template('this.html', challenges=pending_challenges, user=username_auth, users=flask.json.dumps(users), username=username)
+    
+    check = database_check([pending_challenges, users])
+    if check is False:
+        html_code = flask.render_template('sam.html')
+    else:
+        html_code = flask.render_template('this.html', challenges=pending_challenges, user=username_auth, users=flask.json.dumps(users), username=username)
+
     response = flask.make_response(html_code)
     return response
+
+#-----------------------------------------------------------------------
 
 @app.route('/game', methods=['GET'])
 def game():
@@ -117,42 +134,30 @@ def game():
 
     username = auth.authenticate()
 
-    # get link from database
-    # link = database.query()
-
     user_played = daily_user_database.player_played(username)
     today_points = daily_user_database.get_daily_points(username)
     today_distance = daily_user_database.get_daily_distance(username)
 
-    print(f"ID WAS: {id}")
-
-
-    # if  played_date != current_date:
-    #     daily_user_database.reset_player(username)
-    #     user_played = daily_user_database.player_played(username)
-    #     challenges_database.clear_challenges_table()
-    #     challenges_database.reset_challenges_id_sequence()
-    #     matches_database.clear_matches_table()
-    #     id = pictures_database.pic_of_day()
-    #     print(f"RESET ID IS NOW: {id}")
-
+    check = database_check([user_played, today_points, today_distance])
+    if check is False:
+            html_code = flask.render_template('sam.html')
+            return flask.make_response(html_code)
+    
     if user_played:
         html_code = flask.render_template('alrplayed.html', username = username, today_points = today_points, today_distance = today_distance)
         response = flask.make_response(html_code)
         return response
 
-    print(f"CURRENT ID IS {id}")
-
-    # coor = database.get_pic_info("coordinates", id)
     link = pictures_database.get_pic_info("link", id)
 
-    # get user input using flask.request.args.get('')
-    html_code = flask.render_template('gamepage.html', link = link, id = id)
-    response = flask.make_response(html_code)
-    # distance = flask.request.args.get('distance')
-    # print('Distance: ' + distance)
-    return response
+    check = database_check([link])
+    if check is False:
+        html_code = flask.render_template('sam.html')
+    else:
+        html_code = flask.render_template('gamepage.html', link = link, id = id)
 
+    response = flask.make_response(html_code)
+    return response
 
 #-----------------------------------------------------------------------
 
@@ -165,7 +170,10 @@ def submit():
     today_points = daily_user_database.get_daily_points(username)
     today_distance = daily_user_database.get_daily_distance(username)
 
-    print(f"INSIDE SUBMIT: user played is {user_played}")
+    check = database_check([user_played, today_points, today_distance])
+    if check is False:
+        html_code = flask.render_template('sam.html')
+        return flask.make_response(html_code)
 
     if user_played:
         html_code = flask.render_template('alrplayed.html', username = username, today_points = today_points, today_distance = today_distance)
@@ -173,30 +181,26 @@ def submit():
         return response
 
     # get user input using flask.request.args.get('')
-    #once user clicks submit then get coordinates 
+    #once user clicks submit then get coordinates
     currLat = flask.request.form.get('currLat')  # Use .get for safe retrieval
-    # print(currLat)
     currLon = flask.request.form.get('currLon')
-    # print(currLon)
     if not currLat or not currLon:
-        return 
-    
-    # id = flask.request.form.get('id')
+        return
+
     coor = pictures_database.get_pic_info("coordinates", id)
     place = pictures_database.get_pic_info("place", id)
-    # print(coor)
-
     distance = round(distance_func.calc_distance(currLat, currLon, coor))
-    username = auth.authenticate()
-
     today_points = round(points.calculate_today_points(distance))
     total_points = round(points.calculate_total_points(username, today_points))
-    
-    user_database.update_player(username, total_points)
-    daily_user_database.update_player_daily(username, today_points, distance)
-    print("UPDATED")
+    update= user_database.update_player(username, total_points)
+    daily_update = daily_user_database.update_player_daily(username, today_points, distance)
 
-    html_code = flask.render_template('results.html', dis = distance, lat = currLat, lon = currLon, coor=coor, today_points = today_points, place = place, today_distance = distance)
+    check = database_check([coor, place, update, daily_update])
+    if check is False:
+        html_code = flask.render_template('sam.html')
+    else:
+        html_code = flask.render_template('results.html', dis = distance, lat = currLat, lon = currLon, coor=coor, today_points = today_points, place = place, today_distance = distance)
+
     response = flask.make_response(html_code)
     return response
 
@@ -227,7 +231,14 @@ def leaderboard():
     rank = user_database.get_rank(username)
     daily_rank = daily_user_database.get_daily_rank(username)
     streak = daily_user_database.get_streak(username)
-    html_code = flask.render_template('totalboard.html', top_players = top_players, points = points, daily_points = daily_points, rank = rank, daily_rank = daily_rank, streak = streak)
+    
+    check = database_check([top_players, points, daily_points, rank, daily_rank, streak])
+    
+    if check is False:
+        html_code = flask.render_template('sam.html')
+    else:
+        html_code = flask.render_template('totalboard.html', top_players = top_players, points = points, daily_points = daily_points, rank = rank, daily_rank = daily_rank, streak = streak)
+    
     response = flask.make_response(html_code)
     return response
 
@@ -242,7 +253,13 @@ def totalleaderboard():
     rank = user_database.get_rank(username)
     daily_rank = daily_user_database.get_daily_rank(username)
     streak = daily_user_database.get_streak(username)
-    html_code = flask.render_template('leaderboard.html', top_players = top_players, points = points, daily_points = daily_points, rank = rank, daily_rank = daily_rank, streak = streak)
+    
+    check = database_check([top_players, points, daily_points, rank, daily_rank, streak])
+    if check is False:
+        html_code = flask.render_template('sam.html')
+    else:
+        html_code = flask.render_template('leaderboard.html', top_players = top_players, points = points, daily_points = daily_points, rank = rank, daily_rank = daily_rank, streak = streak)
+    
     response = flask.make_response(html_code)
     return response
 
@@ -252,15 +269,28 @@ def totalleaderboard():
 def versus_func():
     users = user_database.get_players()
     username = flask.request.args.get('username')
-    html_code = flask.render_template('versus.html', users=flask.json.dumps(users), username=username)
+    
+    check = database_check([users])
+    if check is False:
+        html_code = flask.render_template('sam.html')
+    else:
+        html_code = flask.render_template('versus.html', users=flask.json.dumps(users), username=username)
+
     response = flask.make_response(html_code)
     return response
+
+#-----------------------------------------------------------------------
 
 @app.route('/create-challenge', methods=['POST'])
 def create_challenge_route():
     challengee_id = flask.request.form['challengee_id'].strip()  # Trim whitespace
-    users = user_database.get_players()  # Assuming this returns a list of usernames
+    users = user_database.get_players()
     
+    check = database_check([users])
+    if check is False:
+        html_code = flask.render_template('sam.html')
+        return flask.make_response(html_code)
+
     # Ensure challengee_id is not empty and exists in the users list
     if challengee_id == None or challengee_id not in users or challengee_id == auth.authenticate():
         response = {'status': 'error', 'message': 'Invalid challengee ID'}
@@ -274,25 +304,43 @@ def create_challenge_route():
     else:
         return flask.jsonify({'status': 'success', 'message': result['success'], 'challenge_id': result['challenge_id']}), 200
 
+#-----------------------------------------------------------------------
+
 @app.route('/accept_challenge', methods=['POST'])
 def accept_challenge_route():
     challenge_id = flask.request.form.get('challenge_id')
     result = challenges_database.accept_challenge(challenge_id)  # Assuming this returns some result
+    
+    check = database_check([result])
+    if check is False:
+        html_code = flask.render_template('sam.html')
+        return flask.make_response(html_code)
+
     if result == "accepted":
         flash('Challenge accepted successfully.')
     else:
         flash('Error accepting challenge.')
     return redirect(url_for('requests'))  # Assuming this is your route name
 
+#-----------------------------------------------------------------------
+
 @app.route('/decline_challenge', methods=['POST'])
 def decline_challenge_route():
     challenge_id = flask.request.form.get('challenge_id')
-    result = challenges_database.decline_challenge(challenge_id)  # Assuming this returns some result
+    result = challenges_database.decline_challenge(challenge_id)
+
+    check = database_check([result])
+    if check is False:
+        html_code = flask.render_template('sam.html')
+        return flask.make_response(html_code)
+
     if result == "declined":
         flash('Challenge declined successfully.')
     else:
         flash('Error declining challenge.')
     return redirect(url_for('requests'))
+
+#-----------------------------------------------------------------------
 
 @app.route('/play_button', methods=['POST'])
 def play_button():
@@ -314,6 +362,8 @@ def play_button():
         else:
             return redirect(url_for('requests'))
 
+#-----------------------------------------------------------------------
+
 @app.route('/start_challenge', methods=['GET'])
 def start_challenge():
     challenge_id = request.args.get('challenge_id')
@@ -332,6 +382,8 @@ def start_challenge():
     else:
         return redirect(url_for('requests'))  
 
+#-----------------------------------------------------------------------
+
 @app.route('/end_challenge', methods=['POST'])
 def end_challenge():
     challenge_id = flask.request.form.get('challenge_id')
@@ -346,7 +398,9 @@ def end_challenge():
         return redirect(url_for('requests'))
     else:
         return redirect(url_for('requests'))
-    
+
+#-----------------------------------------------------------------------
+ 
 @app.route('/submit2', methods=['POST'])
 def submit2():
     currLat = flask.request.form.get('currLat')  
@@ -412,7 +466,8 @@ def submit2():
     html_code = flask.render_template('versusresults.html', dis = distance, lat = currLat, lon = currLon, coor=coor, index=index, challenge_id=challenge_id, points=str(points))
     response = flask.make_response(html_code)
     return response
-    
+
+#-----------------------------------------------------------------------
 
 @app.route('/versus_stats', methods=['GET'])
 def versus_stats():
