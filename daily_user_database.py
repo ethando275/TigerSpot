@@ -229,10 +229,10 @@ def remove_daily_user(username):
 def main():
     # update_player_daily('wn4759', 100, 30)
     #reset_player('cl7359')
-    #reset_player('jy3107')
+    reset_player('jy3107')
     #reset_player('fl9971')
     #print(get_last_played_date('fl9971'))
-    reset_player('wn4759')
+    #reset_player('wn4759')
     #reset_player('ed8205')
     # remove_daily_user('fl9971')
     #reset_player('jy1365')
