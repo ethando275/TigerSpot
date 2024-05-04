@@ -9,6 +9,7 @@ import psycopg2
 DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
 
 #-----------------------------------------------------------------------
+#drops a specified table
 def drop_table(table):
     try:
         with psycopg2.connect(DATABASE_URL) as conn:
@@ -20,6 +21,8 @@ def drop_table(table):
         print(error)
         return "database error"
 
+#updates a specific row in a table
+#id_type can be pictureID or challenge_id for example
 def update(table, col, value, id_type, id_num):
     try:
         with psycopg2.connect(DATABASE_URL) as conn:
@@ -31,19 +34,20 @@ def update(table, col, value, id_type, id_num):
         print(error)
         return "database error"
 
+#returns all the values from a specified column in a table in the form of an array of tuples
 def query(column, table):
     try:
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
                 cur.execute("SELECT %s FROM %s" % (column, table))
                 rows = cur.fetchall()
-                print(f"Returning values in column '{column}' from table '{table}' in the form of an array of tuples")
+                print(f"Returning values in column '{column}' from table '{table}'")
                 return rows
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
         return "database error"
 
-#Returns the number of rows from a table
+#Returns the number of rows in a table
 def get_table_size(table):
     try:
         with psycopg2.connect(DATABASE_URL) as conn:
@@ -57,8 +61,7 @@ def get_table_size(table):
         print(error)
         return "database error"
 
-#-----------------------------------------------------------------------
-
+#prints out all rows in the users, usersDaily, pictures, challenges, and matches tables
 def show_rows():
     print("Showing all rows in users, usersDaily, pictures, challenges, and matches tables")
     print()
@@ -78,7 +81,8 @@ def show_rows():
     print(query("*", "matches"))
     print()
 
-
+#-----------------------------------------------------------------------
+#tests the above functions that do not commit changes to the tables
 def testing():
     print('-----Testing query()-----')
     print(query('pictureID', 'pictures'))
@@ -97,9 +101,9 @@ def testing():
 def main():
     testing()
 
-    
 if __name__=="__main__":
     main()
+
 
 
     
