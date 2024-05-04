@@ -441,10 +441,12 @@ def submit2():
     currLat = flask.request.form.get('currLat')  
     currLon = flask.request.form.get('currLon')
     points = 0
+    index = int(flask.request.form.get('index'))
+    challenge_id = flask.request.form.get('challenge_id')
+    versusList = challenges_database.get_random_versus(challenge_id)
+    coor = pictures_database.get_pic_info("coordinates", versusList[index])
+    place = pictures_database.get_pic_info("place", versusList[index])
     if not currLat or not currLon:
-        index = int(flask.request.form.get('index'))
-        challenge_id = flask.request.form.get('challenge_id')
-        distance = 0
         pic_status = versus_database.get_versus_pic_status(challenge_id, auth.authenticate(), index+1)
         if pic_status is None:
             return flask.redirect(flask.url_for('requests'))
@@ -464,19 +466,14 @@ def submit2():
         else:
             points = "Already submitted."
         index = int(index) + 1
-        html_code = flask.render_template('versusresults.html', dis = distance, lat = None, lon = None, coor=None, index=index, challenge_id=challenge_id, points=str(points))
+        html_code = flask.render_template('versusresults.html', dis = "No Submission", lat = None, lon = None, coor=coor, index=index, challenge_id=challenge_id, points=str(points), place=place)
         response = flask.make_response(html_code)
         return response
-    
-    index = int(flask.request.form.get('index'))
-    challenge_id = flask.request.form.get('challenge_id')
     time = int(flask.request.form.get('time'))
-    versusList = challenges_database.get_random_versus(challenge_id)
-    print(versusList)
     if versusList is None:
         return flask.redirect(flask.url_for('requests'))
-    coor = pictures_database.get_pic_info("coordinates", versusList[index])
     distance = round(distance_func.calc_distance(currLat, currLon, coor))
+    print(distance)
     pic_status = versus_database.get_versus_pic_status(challenge_id, auth.authenticate(), index+1)
     print(pic_status)
     if pic_status is None:
@@ -498,7 +495,7 @@ def submit2():
     else:
         points = "Already submitted."
     index = int(index) + 1
-    html_code = flask.render_template('versusresults.html', dis = distance, lat = currLat, lon = currLon, coor=coor, index=index, challenge_id=challenge_id, points=str(points))
+    html_code = flask.render_template('versusresults.html', dis = distance, lat = currLat, lon = currLon, coor=coor, index=index, challenge_id=challenge_id, points=str(points), place=place)
     response = flask.make_response(html_code)
     return response
 

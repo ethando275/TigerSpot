@@ -35,6 +35,13 @@
             margin-left: auto;
             margin-right: auto;
         }
+        #place {
+            height: 4vh;
+            text-align: center;
+            width: 50.5%;
+            margin-left: auto;
+            margin-right: auto;
+        }
         #next {
             display: flex;
             justify-content: center;
@@ -55,6 +62,7 @@
         <div id="map"></div>
         <div id="distance"></div>
         <div id="points"> </div>
+        <div id="distance">Picture Taken Near: {{place}}</div>
         {% if index < 5 %}
         <form id="next" method="get" action="/start_challenge">
             <input type = "hidden" id="challenge_id" name = "challenge_id" value ="{{challenge_id}}">
@@ -100,10 +108,15 @@
     var lat = "{{ lat }}";
     var lon = "{{ lon }}";
     var distance = "{{ dis }}";
+    if (distance == "No Submission") {
+        document.getElementById('distance').innerHTML = "Distance: No Submission";
+    }
+    else{
     distance = parseFloat(distance); // Formats the distance to 2 decimal places
     document.getElementById('distance').innerHTML =  "Distance from actual point: "+ distance + " meters";
+    }
     check = "{{ points }}";
-    if (check =="Already submitted.") {
+    if (check == "Already submitted.") {
     document.getElementById('points').innerHTML = "You earned: " + "{{points}}";
     }
     else {
