@@ -1,28 +1,31 @@
 #-----------------------------------------------------------------------
 # admin.py
+# Contains Flask App Routing
 #-----------------------------------------------------------------------
 
+#external libraries
 import flask
+import os 
+import auth
+import dotenv
+import random
+
+#Tiger Spot files
 import database
 import challenges_database
 import matches_database
 import versus_database
 import pictures_database
 import user_database
-import os 
-import auth
-import dotenv
 import distance_func
 import daily_user_database
 import points
 import user_database
-import random
-from flask import Flask, flash, redirect, url_for, request, render_template
 
 #-----------------------------------------------------------------------
-
 app = flask.Flask(__name__, template_folder='.')
 dotenv.load_dotenv()
+#used for CAS login
 app.secret_key = os.environ['APP_SECRET_KEY']
 
 #-----------------------------------------------------------------------
@@ -30,6 +33,8 @@ app.secret_key = os.environ['APP_SECRET_KEY']
 id = 1
 #-----------------------------------------------------------------------
 
+# For error handling
+# checks if a function call had a database error based on function's return value
 def database_check(list):
     if "database error" in list:
         return False
@@ -37,6 +42,7 @@ def database_check(list):
 
 #-----------------------------------------------------------------------
 
+# If the user is playing the game for the first time of today, their matches and challenges are cleared
 def reset_versus(username):
 
     last_date = daily_user_database.get_last_versus_date(username)
@@ -68,7 +74,7 @@ def logoutcas():
     return auth.logoutcas()
 
 #-----------------------------------------------------------------------
-
+# Displays page with log in button
 @app.route('/', methods=['GET'])
 @app.route('/index', methods=['GET'])
 def index():
@@ -79,6 +85,7 @@ def index():
 
 #-----------------------------------------------------------------------
 
+# Home page after user logs in through Princeton's CAS
 @app.route('/menu', methods=['GET'])
 def menu():
     global id
@@ -108,6 +115,7 @@ def menu():
 
 #-----------------------------------------------------------------------
 
+# if there are no database errors, renders versus page listing a user's challenges. Otherwise, renders error page
 @app.route('/requests', methods=['GET'])
 def requests():
     username = flask.request.args.get('username')
@@ -139,6 +147,8 @@ def requests():
 
 #-----------------------------------------------------------------------
 
+# if there are no errors, loads the daily game 
+# or if user has already played today's game, loads a page stating their points and distance between their guess and correct location
 @app.route('/game', methods=['GET'])
 def game():
 
@@ -173,6 +183,8 @@ def game():
 
 #-----------------------------------------------------------------------
 
+# if there are no errors with database, calculates distance and points and updates usersDaily table with points and adds today's points to total points column in users table
+# Then loads the results page which displays the correct location, the distance from guess to acutal location, points earned, place where picture was taken
 @app.route('/submit', methods=['POST'])
 def submit():
 
@@ -218,22 +230,29 @@ def submit():
 
 #-----------------------------------------------------------------------
 
+# Displays rules page for both daily game and versus mode
 @app.route('/rules', methods=['GET'])
 def rules():
+    # user must be logged in to access page
+    auth.authenticate()
     html_code = flask.render_template('rules.html')
     response = flask.make_response(html_code)
     return response
 
 #-----------------------------------------------------------------------
 
+# Displays about the team page
 @app.route('/team', methods=['GET'])
 def team():
+    # user must be logged in to access page
+    auth.authenticate()
     html_code = flask.render_template('team.html')
     response = flask.make_response(html_code)
     return response
 
 #-----------------------------------------------------------------------
 
+# Displays the leaderboard for overall points
 @app.route('/totalboard', methods=['GET'])
 def leaderboard():
     top_players = user_database.get_top_players()
@@ -256,6 +275,7 @@ def leaderboard():
 
 #-----------------------------------------------------------------------
 
+# Displays the leaderboard for today's daily game points
 @app.route('/leaderboard', methods=['GET'])   
 def totalleaderboard():
     top_players = daily_user_database.get_daily_top_players()
