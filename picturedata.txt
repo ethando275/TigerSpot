@@ -1,40 +1,32 @@
-Tile in Fountain of Freedom
-40.348786, -74.654992
-http://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781260/TigerSpot/Checked%20but%20not%20added%20to%20folder%20yet/IMG_2993_hkkse7.jpg
-
-Double Sights Exhibit near Fountain of Freedom
-40.348675, -74.655083
-http://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781260/TigerSpot/Checked%20but%20not%20added%20to%20folder%20yet/IMG_3007_pug42w.jpg
-
-Inside of Jones Hall
-40.346442, -74.656047
-http://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781489/TigerSpot/Checked%20but%20not%20added%20to%20folder%20yet/IMG_9693_hwhknx.jpg
-
-Outside of Julis Romo Rabinowitz Building
-40.34889, -74.65581
-http://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781498/TigerSpot/Checked%20but%20not%20added%20to%20folder%20yet/IMG_9694_ui5yes.jpg
-
-Green Hall
-40.34978, -74.65558
-http://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781505/TigerSpot/Checked%20but%20not%20added%20to%20folder%20yet/IMG_9695_cvibcl.jpg
-
-Lewis Center for the Arts (Near Nassau Street)
-40.3503, -74.655
-http://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781513/TigerSpot/Checked%20but%20not%20added%20to%20folder%20yet/IMG_9696_jksvwe.jpg
-
-Laura Wooten Hall
-40.34805, -74.6557
-http://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781520/TigerSpot/Checked%20but%20not%20added%20to%20folder%20yet/IMG_9697_kf2cim.jpg
-
 Effron Music Building
 40.342396, -74.659527
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640742/TigerSpot/Checked/91271FD2-F874-4AAE-B589-F6FD7BB0920B_1_201_a_r2hcfr.jpg
+
+Inside of Firestone Library
+40.349592, -74.657684
+http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594814/TigerSpot/Checked/IMG_0012_gyeoc8.jpg
+
+Doors of Jones Hall
+40.346512, -74.655917
+http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594814/TigerSpot/Checked/IMG_0013_a2lgwj.jpg
+
+Parking Lot outside of Lewis Center for the Arts (near Nassau Street)
+40.350237, -74.655107
+http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594814/TigerSpot/Checked/IMG_0014_mhbsia.jpg
+
+Outside of Tower Club
+40.347844, -74.653992
+http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594813/TigerSpot/Checked/IMG_0015_iuoka0.jpg
+
+Gate outside of Tower Club
+40.347947, -74.654023
+http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712594813/TigerSpot/Checked/IMG_0016_pvpuan.jpg
 
 Prospect Ave
 40.348082, -74.654071
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640745/TigerSpot/Checked/IMG_0264_Original_m9mzqo.jpg
 
-Near Wawa and Lewis Center of the Arts
+Wawa and Lewis Center of the Arts
 40.342038, -74.659217
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640727/TigerSpot/Checked/IMG_0291_Original_sczwdc.jpg
 
@@ -58,11 +50,19 @@ Goheen Walk
 40.345215, -74.653916
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640723/TigerSpot/Checked/IMG_2867_bgsttv.jpg
 
-Streicker Bridge near Icahn Laboratory
+Tile in Fountain of Freedom
+40.348786, -74.654992
+http://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781260/TigerSpot/Checked/IMG_2993_hkkse7.jpg
+
+Double Sights Exhibit and Fountain of Freedom
+40.348675, -74.655083
+http://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781260/TigerSpot/Checked/IMG_3007_pug42w.jpg
+
+Streicker Bridge and Icahn Laboratory
 40.343867, -74.652752
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712768920/TigerSpot/Checked/IMG_3096_mzyivd.jpg
 
-Courtyard near McCosh Hall
+McCosh Courtyard
 40.34856, -74.65633
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640775/TigerSpot/Checked/IMG_3302_mkimua.jpg
 
@@ -74,11 +74,11 @@ Computer Science Building
 40.3498889, -74.6522778
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712768919/TigerSpot/Checked/IMG_3985_yfh0ad.jpg
 
-Path near Seeley G. Mudd Manuscript Library and Friend Center
+Seeley G. Mudd Manuscript Library and Friend Center
 40.34997, -74.652
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712768916/TigerSpot/Checked/IMG_3986_dok195.jpg
 
-Path near Computer Science Building
+Computer Science Building
 40.35, -74.65183
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712768918/TigerSpot/Checked/IMG_3987_xhbz6k.jpg
 
@@ -90,11 +90,11 @@ Path looking towards Poe Field
 40.343361, -74.655839
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640759/TigerSpot/Checked/IMG_5385_racr2y.jpg
 
-Outside near Kwanza Jones Hall of New College West
+Kwanza Jones Hall of New College West
 40.341815, -74.654992
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640735/TigerSpot/Checked/IMG_5388_psyikq.jpg
 
-Near Fountain of Freedom and SPIA Building
+Fountain of Freedom and School of Public and International Affairs Building
 40.348867, -74.654839
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640757/TigerSpot/Checked/IMG_5404_zy1typ.jpg
 
@@ -110,7 +110,7 @@ Gate of the Andlinger Center For Energy And Environment, overlooking Charter Clu
 40.349251, -74.650248
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640762/TigerSpot/Checked/IMG_5928_xxl7oq.jpg
 
-Inside of School of Architecture
+School of Architecture
 40.347722, -74.656028
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640748/TigerSpot/Checked/IMG_5959_ldndwq.jpg
 
@@ -126,11 +126,11 @@ Stairs inside Fisher Hall
 40.348448, -74.654075
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640721/TigerSpot/Checked/IMG_6964_rgurtg.jpg
 
-Path toward Lewis Center of the Arts and Forbes College
+Lewis Center of the Arts and Forbes College
 40.342841, -74.65988
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640681/TigerSpot/Checked/IMG_6985_u764bb.jpg
 
-Path near New South Building
+New South Building
 40.34366, -74.65968
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640769/TigerSpot/Checked/IMG_7070_wyi5dt.jpg
 
@@ -138,19 +138,19 @@ Stairs of Jadwin Hall
 40.345447, -74.652752
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640763/TigerSpot/Checked/IMG_7109_rbwfxu.jpg
 
-Path near Whig Hall and looking towards Cannon Green
+Whig Hall and Cannon Green
 40.34776, -74.65805
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640782/TigerSpot/Checked/IMG_7200_hs2ygz.jpg
 
-Near Murray-Dodge Hall
+Murray-Dodge Hall
 40.348114, -74.657539
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640764/TigerSpot/Checked/IMG_7207_c4cgnr.jpg
 
-Hinds Plaza near Princeton Public Library
+Hinds Plaza and Princeton Public Library
 40.351263, -74.660361
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640690/TigerSpot/Checked/IMG_7233_ruglee.jpg
 
-Inside of Richardson Auditorium
+Richardson Auditorium
 40.348374, -74.660695
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640728/TigerSpot/Checked/IMG_7335_psdpcm.jpg
 
@@ -158,19 +158,19 @@ Charter Club Library
 40.3487359, -74.6500846
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640732/TigerSpot/Checked/IMG_7348_oqeysu.jpg
 
-Frist Campus Center North Lawn
+North Lawn of Frist Campus Center
 40.347855, -74.65568
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640743/TigerSpot/Checked/IMG_7372_hst9qd.jpg
 
-Path near Lewis Center for the Arts and Forbes
+Lewis Center for the Arts and Forbes College
 40.343419, -74.659683
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640712/TigerSpot/Checked/IMG_7375_lrjv5d.jpg
 
-Inside of Fisher Hall
+Fisher Hall
 40.348389, -74.654028
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640752/TigerSpot/Checked/IMG_7377_yxppw2.jpg
 
-Louis A. Simpson International Building looking towards the SPIA building and Fountain of Freedom
+Louis A. Simpson International Building
 40.349003, -74.654805
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640744/TigerSpot/Checked/IMG_7658_atrgh6.jpg
 
@@ -238,6 +238,10 @@ Princeton Station aka "The Dinky"
 40.34204, -74.658802
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640698/TigerSpot/Checked/IMG_9183_hgx5h9.jpg
 
+Inside of Icahn Laboratory
+40.344445, -74.653664
+http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640678/TigerSpot/Checked/IMG_9279_Original_zvqnie.jpg
+
 Friend Center
 40.350157, -74.653082
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640683/TigerSpot/Checked/IMG_9287_nhxuo8.jpg
@@ -270,7 +274,7 @@ Firestone Library
 40.3493999, -74.6575946
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640786/TigerSpot/Checked/IMG_9559_zpnx1l.jpg
 
-Outside of Firestone Library facing East Pyne Hall
+Firestone Library
 40.34888, -74.65721
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640785/TigerSpot/Checked/IMG_9560_2_asqdkg.jpg
 
@@ -294,7 +298,7 @@ Nassau Street
 40.351517, -74.653556
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712867710/TigerSpot/Checked/IMG_9576_k0rhpg.jpg
 
-Forbes Main Inn Laundry Room
+Forbes College Main Inn Laundry Room
 40.342312, -74.661336
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640692/TigerSpot/Checked/IMG_9595_me0ixd.jpg
 
@@ -310,7 +314,27 @@ School of Public and International Affairs & Fountain of Freedom
 40.348681, -74.654316
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712867710/TigerSpot/Checked/IMG_9617_wyiw6z.jpg
 
-Outside of Friend Center
+Friend Center
 40.350522, -74.651986
 http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712867710/TigerSpot/Checked/IMG_9631_enocfs.jpg
+
+Inside of Jones Hall
+40.346442, -74.656047
+http://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781489/TigerSpot/Checked/IMG_9693_hwhknx.jpg
+
+Outside of Julis Romo Rabinowitz Building
+40.34889, -74.65581
+http://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781498/TigerSpot/Checked/IMG_9694_ui5yes.jpg
+
+Green Hall
+40.34978, -74.65558
+http://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781505/TigerSpot/Checked/IMG_9695_cvibcl.jpg
+
+Lewis Center for the Arts (Near Nassau Street)
+40.3503, -74.655
+http://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781513/TigerSpot/Checked/IMG_9696_jksvwe.jpg
+
+Laura Wooten Hall
+40.34805, -74.6557
+http://res.cloudinary.com/dmiaxw4rr/image/upload/v1710781520/TigerSpot/Checked/IMG_9697_kf2cim.jpg
 
