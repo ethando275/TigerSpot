@@ -1,28 +1,31 @@
 #-----------------------------------------------------------------------
 # admin.py
+# Contains Flask App Routing
 #-----------------------------------------------------------------------
 
+#external libraries
 import flask
+import os 
+import auth
+import dotenv
+import random
+
+#Tiger Spot files
 import database
 import challenges_database
 import matches_database
 import versus_database
 import pictures_database
 import user_database
-import os 
-import auth
-import dotenv
 import distance_func
 import daily_user_database
 import points
 import user_database
-import random
-from flask import Flask, flash, redirect, url_for, request, render_template
 
 #-----------------------------------------------------------------------
-
 app = flask.Flask(__name__, template_folder='.')
 dotenv.load_dotenv()
+#used for CAS login
 app.secret_key = os.environ['APP_SECRET_KEY']
 
 #-----------------------------------------------------------------------
@@ -37,6 +40,7 @@ def database_check(list):
 
 #-----------------------------------------------------------------------
 
+# If the user is playing the game for the first time of today, their matches and challenges are cleared
 def reset_versus(username):
 
     last_date = daily_user_database.get_last_versus_date(username)
@@ -68,7 +72,7 @@ def logoutcas():
     return auth.logoutcas()
 
 #-----------------------------------------------------------------------
-
+# Displays page with log in button
 @app.route('/', methods=['GET'])
 @app.route('/index', methods=['GET'])
 def index():
@@ -79,6 +83,7 @@ def index():
 
 #-----------------------------------------------------------------------
 
+# Home page after usr logs in through Princeton's CAS
 @app.route('/menu', methods=['GET'])
 def menu():
     global id
@@ -107,7 +112,7 @@ def menu():
     return response
 
 #-----------------------------------------------------------------------
-
+#
 @app.route('/requests', methods=['GET'])
 def requests():
     username = flask.request.args.get('username')
