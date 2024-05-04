@@ -501,17 +501,23 @@ nav {
 }
 
 .name.output {
-  padding-left: 6vw;
-}
-
-.user-id.output {
-  padding-left: 2vw;
+  padding-left: 22vw;
+  padding-right: 20vw;
 }
 
 .winner-vs {
+  width: 6vw;
   display: flex;
-  padding-left: 1vw;
   margin-right: 0vw;
+}
+
+.user-id.output,
+.name.output,
+.winner-vs {
+  flex: 1; /* Take up equal space */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .submit.challenge, 
@@ -791,11 +797,7 @@ nav {
     margin-right: 10vw;
   }
 
-  .winner-vs {
-    display: flex;
-    padding-left: 1vw;
-    margin-right: 1vw;
-  }
+
 
   .form-group {
     margin-left: 5vw;
@@ -833,10 +835,16 @@ nav {
     margin-bottom: 12vh;
   }
 
+  .input-row {
+    width: 70vw;
+  }
+
+  .user-id.output {
+    margin-left: 1vw;
+  }
+
   .winner-vs {
-    display: flex;
-    padding-left: 0vw;
-    margin-right: 2vw;
+    width: 1vw;
   }
 
   .result-content {
