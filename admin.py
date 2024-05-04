@@ -327,7 +327,7 @@ def create_challenge_route():
 
     # Ensure challengee_id is not empty and exists in the users list
     if challengee_id == None or challengee_id not in users or challengee_id == auth.authenticate():
-        response = {'status': 'error', 'message': 'Invalid challengee ID'}
+        response = {'status': 'error', 'message': 'Invalid challengee ID -- Must enter a valid NetID and user must have logged into Tiger Spot before'}
         return flask.jsonify(response), 400  # Including a 400 Bad Request status code
     else:
         result = challenges_database.create_challenge(auth.authenticate(), challengee_id)
