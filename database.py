@@ -1,117 +1,109 @@
 #-----------------------------------------------------------------------
 # database.py
+# This file is for general actions with tables
+# Tables in Tiger Spot: pictures, users, usersDaily, challenges, matches
 #-----------------------------------------------------------------------
 import psycopg2
 #-----------------------------------------------------------------------
 
 DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
 
-# TABLE 1: pictures
-# TABLE 2: users
-# TABLE 3: usersDaily
 #-----------------------------------------------------------------------
+#drops a specified table
 def drop_table(table):
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
-    cur.execute(f"DROP TABLE {table}; ")
+    try:
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
+                cur.execute("DROP TABLE %s;" % (table))
+                conn.commit()
+                print(f"{table} has been dropped")
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return "database error"
 
-    conn.commit()
-    cur.close()
-    conn.close()
-
-def insert():
-   conn = psycopg2.connect(DATABASE_URL)
-   cur = conn.cursor()
-
-   #this is alr inserted into table so change before executing so we dont have duplicates
-#    cur.execute('''INSERT INTO pictures (pictureID, coordinates, link, chosen)
-#    VALUES ('1', '{40.34805, -74.65570}',
-#    'https://res.cloudinary.com/dmiaxw4rr/image/upload/c_pad,b_auto:predominant,fl_preserve_transparency/v1710781520/TigerSpot/IMG_9697_kf2cim.jpg?_s=public-apps',
-#    'False');''')
-
-   conn.commit()
-   cur.close()
-   conn.close()
-
+#updates a specific row in a table
+#id_type can be pictureID or challenge_id for example
 def update(table, col, value, id_type, id_num):
-   conn = psycopg2.connect(DATABASE_URL)
-   cur = conn.cursor()
-   cur.execute(f"UPDATE {table} SET {col} = {value} WHERE {id_type} = {id_num};")
-   conn.commit()
-   cur.close()
-   conn.close()
+    try:
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
+                cur.execute("UPDATE %s SET %s = %s WHERE %s = %s;" % (table, col, value, id_type, id_num))
+                print(f"Updated with value as {value}")
+                conn.commit()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return "database error"
 
-def query(col, table):
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
+#returns all the values from a specified column in a table in the form of an array of tuples
+def query(column, table):
+    try:
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT %s FROM %s" % (column, table))
+                rows = cur.fetchall()
+                print(f"Returning values in column '{column}' from table '{table}'")
+                return rows
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return "database error"
 
-    cur.execute(f"SELECT {col} FROM {table}")
-
-    rows = cur.fetchall()
-
-    row = rows[0][0]
-    return row
-    cur.close()
-    conn.close()
-
-#Returns the number of rows from a table
+#Returns the number of rows in a table
 def get_table_size(table):
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
+    try:
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT COUNT(*) FROM %s;" % (table))
+                print(f"Returning number of rows in table '{table}'")
+                result = cur.fetchone()
+                pic_num = result[0]
+                return pic_num
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return "database error"
 
-    cur.execute(f"SELECT COUNT(*) FROM {table};")
-    result = cur.fetchone()
-
-    pic_num = result[0]
-
-    return pic_num
-
-    conn.close()
+#prints out all rows in the users, usersDaily, pictures, challenges, and matches tables
+def show_rows():
+    print("Showing all rows in users, usersDaily, pictures, challenges, and matches tables")
+    print()
+    print("USERS TABLE")
+    print(query("*", "users"))
+    print()
+    print("DAILY USERS TABLE")
+    print(query("*", "usersDaily"))
+    print()
+    print("PICTURES TABLE")
+    print(query("*", "pictures"))
+    print()
+    print("CHALLENGES TABLE")
+    print(query("*", "challenges"))
+    print()
+    print("MATCHES TABLE")
+    print(query("*", "matches"))
+    print()
 
 #-----------------------------------------------------------------------
-
-def show_rows():
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
-
-    print("USERS TABLE")
-    cur.execute("SELECT * FROM users;")
-    rows = cur.fetchall()
-    for row in rows:
-        print(row)
-    
-    print("DAILY USERS TABLE")
-    cur.execute("SELECT * FROM usersDaily;")
-    rows = cur.fetchall()
-    for row in rows:
-        print(row)
-    
-    print("PICTURES TABLE")
-    cur.execute("SELECT * FROM pictures;")
-    rows = cur.fetchall()
-    for row in rows:
-        print(row)
-    
-    print("CHALLENGES TABLE")
-    cur.execute("SELECT * FROM challenges;")
-    for row in cur.fetchall():
-        print(row)
-
-    print("MATCHES TABLE")
-    cur.execute("SELECT * FROM matches;")
-    for row in cur.fetchall():
-        print(row)
-
-    conn.commit()
-    cur.close()
-    conn.close()
+#tests the above functions that do not commit changes to the tables
+def testing():
+    print('-----Testing query()-----')
+    print(query('pictureID', 'pictures'))
+    print(query('place', 'pictures'))
+    print()
+    print('-----Testing get_table_size()-----')
+    print(get_table_size('pictures'))
+    print(get_table_size('users'))
+    print(get_table_size('usersDaily'))
+    print(get_table_size('challenges'))
+    print(get_table_size('matches'))
+    print()
+    print('-----Testing show_rows()-----')
+    show_rows()
 
 def main():
-    show_rows()
-    # drop_table("pictures")
-    
+    testing()
+
 if __name__=="__main__":
     main()
+
 
 
     
