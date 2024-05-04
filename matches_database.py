@@ -22,36 +22,30 @@ def create_matches_table():
 def clear_matches_table():
     conn = None
     try:
-        conn = psycopg2.connect(DATABASE_URL)
-        cur = conn.cursor()
-        # Deletes all records from the matches table
-        cur.execute("DELETE FROM matches;")
-        conn.commit()  # Commit the transaction to make changes permanent
-        print("Matches table cleared.")
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
+                # Deletes all records from the matches table
+                cur.execute("DELETE FROM matches;")
+                conn.commit()  # Commit the transaction to make changes permanent
+                print("Matches table cleared.")
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error clearing matches table: {error}")
-    finally:
-        if conn is not None:
-            conn.close()
+        return "database error"
 
-            
 # Complete a match
 def complete_match(challenge_id, winner_id, challenger_score, challengee_score):
     conn = None
     try:
-        conn = psycopg2.connect(DATABASE_URL)
-        cur = conn.cursor()
-        cur.execute("UPDATE challenges SET status = 'completed' WHERE id = %s;", (challenge_id,))
-        cur.execute("INSERT INTO matches (challenge_id, winner_id, challenger_score, challengee_score) VALUES (%s, %s, %s, %s) RETURNING id;", (challenge_id, winner_id, challenger_score, challengee_score))
-        match_id = cur.fetchone()[0]
-        conn.commit()
-        cur.close()
-        print(f"Match completed with ID: {match_id}")
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
+                cur.execute("UPDATE challenges SET status = 'completed' WHERE id = %s;", (challenge_id,))
+                cur.execute("INSERT INTO matches (challenge_id, winner_id, challenger_score, challengee_score) VALUES (%s, %s, %s, %s) RETURNING id;", (challenge_id, winner_id, challenger_score, challengee_score))
+                match_id = cur.fetchone()[0]
+                conn.commit()
+                print(f"Match completed with ID: {match_id}")
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
-    finally:
-        if conn is not None:
-            conn.close()
+        return "database error"
 
 def main():
     #clear_matches_table()
