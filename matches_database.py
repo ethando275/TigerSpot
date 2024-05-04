@@ -1,7 +1,14 @@
+#-----------------------------------------------------------------------
+# matches_database.py
+#-----------------------------------------------------------------------
+
 import psycopg2
+
+#-----------------------------------------------------------------------
 
 DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
 
+#-----------------------------------------------------------------------
 
 #dont run again
 def create_matches_table():
@@ -32,6 +39,8 @@ def clear_matches_table():
         print(f"Error clearing matches table: {error}")
         return "database error"
 
+#-----------------------------------------------------------------------
+
 # Complete a match
 def complete_match(challenge_id, winner_id, challenger_score, challengee_score):
     conn = None
@@ -47,9 +56,13 @@ def complete_match(challenge_id, winner_id, challenger_score, challengee_score):
         print(error)
         return "database error"
 
+#-----------------------------------------------------------------------
+
 def main():
     #clear_matches_table()
     print()
-    
+
+#-----------------------------------------------------------------------
+
 if __name__=="__main__":
     main()

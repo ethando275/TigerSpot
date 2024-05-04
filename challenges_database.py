@@ -1,9 +1,17 @@
+#-----------------------------------------------------------------------
+# challenges_database.py
+#-----------------------------------------------------------------------
+
 import psycopg2
 import random
 import database
 import versus_database
 
+#-----------------------------------------------------------------------
+
 DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
+
+#-----------------------------------------------------------------------
 
 #dont run again
 def create_challenges_table():
@@ -41,7 +49,9 @@ def clear_challenges_table():
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error clearing challenges table: {error}")
         return "database error"
-        
+ 
+#-----------------------------------------------------------------------
+
 def clear_user_challenges(user_id):
     conn = None
     try:
@@ -153,6 +163,8 @@ def decline_challenge(challenge_id):
         return "database error"
     return status
 
+#-----------------------------------------------------------------------
+
 def reset_challenges_id_sequence():
     conn = None
     try:
@@ -219,6 +231,8 @@ def get_user_challenges(user_id):
         return "database error"
     return user_challenges
 
+#-----------------------------------------------------------------------
+
 def update_finish_status(challenge_id, user_id):
     conn = None
     try:
@@ -262,7 +276,9 @@ def update_finish_status(challenge_id, user_id):
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
         return "database error"
-   
+
+#-----------------------------------------------------------------------
+
 def check_finish_status(challenge_id):
     conn = None
     status = {"status": "unfinished"}  # Default status
@@ -288,6 +304,8 @@ def check_finish_status(challenge_id):
         print(f"Error checking finish status: {error}")
         return "database error"  
     return status
+
+#-----------------------------------------------------------------------
 
 def get_challenge_participants(challenge_id):
     conn = None
@@ -317,6 +335,7 @@ def get_challenge_participants(challenge_id):
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Database error: {error}")
         return "database error"
+
 #-----------------------------------------------------------------------
 
 def get_challenge_results(challenge_id):
@@ -361,6 +380,8 @@ def get_challenge_results(challenge_id):
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
         return "database error"
+    
+#-----------------------------------------------------------------------
 
 def create_random_versus():
     
@@ -370,6 +391,8 @@ def create_random_versus():
     random_indices = random.sample(range(1, row_count + 1), 5)
     
     return random_indices
+
+#-----------------------------------------------------------------------
         
 def get_random_versus(challenge_id):
     conn = None
@@ -394,6 +417,8 @@ def get_random_versus(challenge_id):
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
         return "database error"
+
+#-----------------------------------------------------------------------
 
 def update_playbutton_status(challenge_id, user_id):
     conn = None
@@ -438,6 +463,8 @@ def update_playbutton_status(challenge_id, user_id):
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
         return "database error"
+    
+#-----------------------------------------------------------------------
 
 def get_playbutton_status(challenge_id, user_id):
     conn = None
@@ -486,6 +513,8 @@ def get_playbutton_status(challenge_id, user_id):
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
         return "database error"
+    
+#-----------------------------------------------------------------------
 
 def main():
     #clear_challenges_table()
@@ -493,6 +522,8 @@ def main():
     print()
     create_challenge('c', 'cl7359')
     update_finish_status(1, 'c')
+
+#-----------------------------------------------------------------------
     
 if __name__=="__main__":
     main()
