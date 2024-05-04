@@ -108,7 +108,6 @@ def update_player_versus(username):
                                     last_versus= CURRENT_DATE
                                 WHERE username=%s;''', (username, ))
                 conn.commit()
-                print(f"UPDATED VERSUS DATE IN DAILY")
         
         return "success"
 
@@ -135,7 +134,6 @@ def player_played(username):
         print(error)
         return "database error"
 
-
 #-----------------------------------------------------------------------
 
 # Resets the user's daily points, distance, and if they have played.
@@ -146,7 +144,6 @@ def reset_player(username):
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
                 cur.execute("UPDATE usersDaily SET played=%s, points=%s, distance=%s WHERE username=%s;", (False, 0, 0, username))
-                print(f"Player {username} has been reset for the daily round")
                 conn.commit()
                 
         return "success"
@@ -259,7 +256,7 @@ def get_daily_points(username):
 
 #-----------------------------------------------------------------------
 
-# Returns username's guess distance. 
+# Returns username's guess distance.
 
 def get_daily_distance(username):
 
@@ -347,31 +344,26 @@ def remove_daily_user(username):
 
 def main():
 
-    #database.drop_table("usersDaily")
-    # update_player_daily('wn4759', 100, 30)
-    #reset_player('cl7359')
-    #reset_player('jy3107')
-    #reset_player('fl9971')
-    #print(get_last_played_date('fl9971'))
-    #reset_player('wn4759')
-    #reset_player('ed8205')
-    # remove_daily_user('fl9971')
-    #reset_player('jy1365')
-    #create_daily_user_table()
-    date = get_last_played_date('fl9971')
-    # print(date)
-    # streak = get_streak('fl9971')
-    # print(streak)
-    # date1 = get_last_played_date('cl7359')
-    # print(date1)
-
-    # print(get_last_versus_date('wn4759'))
-    #update_player_versus('wn4759')
-
-    #remove_daily_user('wn4759')
+    print(get_daily_top_players())
+    print(insert_player_daily('test'))
+    print(update_player_daily('test', 1000, 3))
+    print(update_player_versus('test'))
+    print(get_daily_distance('test'))
+    print(get_daily_points('test'))
+    print(get_daily_rank('test'))
+    print(get_last_played_date('test'))
+    print(get_last_versus_date('test'))
+    print(get_streak('test'))
+    print(get_daily_top_players())
+    print(reset_player('test'))
+    print(get_daily_points('test'))
+    print(get_daily_rank('test'))
+    print(get_last_played_date('test'))
+    print(get_daily_top_players())
+    print(remove_daily_user('test'))
+    print(get_daily_top_players())
 
 #-----------------------------------------------------------------------
 
 if __name__=="__main__":
-
     main()
