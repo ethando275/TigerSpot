@@ -112,7 +112,19 @@ def menu():
 def requests():
     username = flask.request.args.get('username')
     username_auth = auth.authenticate()
-    reset_versus(username_auth)
+    last_date = daily_user_database.get_last_versus_date(username)
+    current_date = pictures_database.get_current_date()
+    
+    check = database_check([last_date, current_date])
+    if check is False:
+        html_code = flask.render_template('sam.html')
+        return flask.make_response(html_code)
+
+    if last_date != current_date:
+        challenges_database.clear_user_challenges(username)
+        daily_user_database.update_player_versus(username)
+        # Need to add check here too
+
     pending_challenges = challenges_database.get_user_challenges(username_auth)
     users = user_database.get_players()
     
