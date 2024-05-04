@@ -1,10 +1,17 @@
+#-----------------------------------------------------------------------
+# runserver.py
+# Runs Tiger Spot application
+#-----------------------------------------------------------------------
 import sys
 import argparse
 import admin
+#-----------------------------------------------------------------------
 
+# Runs the server on the specified port, which in turn runs application
+# When executed with -h as a command-line argument, displays a help message that describes the program's behavior
 def main():
     parser = argparse.ArgumentParser(
-        description="TigerSpot"
+        description="Tiger Spot"
     )
     parser.add_argument(
         "port", type=int, help="the port at which the server should \
