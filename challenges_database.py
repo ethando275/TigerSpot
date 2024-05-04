@@ -182,6 +182,8 @@ def reset_challenges_id_sequence():
         print(f"Error resetting challenges id sequence: {error}")
         return "database error"
 
+#-----------------------------------------------------------------------
+
 def get_user_challenges(user_id):
     conn = None
     try:
