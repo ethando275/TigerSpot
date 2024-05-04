@@ -1,14 +1,21 @@
-import psycopg2
-
-DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
+#-----------------------------------------------------------------------
+# versus_database.py
 #-----------------------------------------------------------------------
 
-# Update cumulative points for a given user in a given challenge
+import psycopg2
+
+#-----------------------------------------------------------------------
+
+DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
+
+#-----------------------------------------------------------------------
+
 def update_versus_points(challenge_id, user_id, additional_points):
+    conn = None
     try:
-        # Establish connection and create cursor using 'with' statement
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
+                
                 # First, determine if the user is the challenger or the challengee for this challenge
                 cur.execute('''
                     SELECT challenger_id, challengee_id
@@ -44,37 +51,31 @@ def update_versus_points(challenge_id, user_id, additional_points):
                 conn.commit()
                 print("User points incremented successfully.")
                 return {"status": "success"}
-        
+                
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
         return "database error"
 
 #-----------------------------------------------------------------------
 
-# Equation to calculate points for a versus challenge
 def calculate_versus(distance, time):
-    # Gain maximum points if within this range
     if time < 10 and distance < 10:
         return 1000
     else:
         if distance < 0:
             raise ValueError("Distance cannot be negative")
-        # Points for distance
         dis_points = max(0, 1 - distance / 110) * 900
         if time < 0 or time > 120:
             raise ValueError("Time taken must be between 0 and the maximum allowed time")
-        # Points for time
         time_points = max(0, 1 - time / 120) * 100
 
-        # Return the sum of the two points
         return dis_points + time_points
 
 #-----------------------------------------------------------------------
 
-# Return winner of a given challenge
 def get_winner(challenge_id):
+    conn = None
     try:
-        # Establish connection and create cursor using 'with' statement
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
                 cur.execute("SELECT winner_id FROM matches WHERE challenge_id = %s;", (challenge_id,))
@@ -90,12 +91,12 @@ def get_winner(challenge_id):
 
 #-----------------------------------------------------------------------
 
-# Update the if a user has submitted a guess for a given picture in a given challenge
 def update_versus_pic_status(challenge_id, user_id, index):
+    conn = None
     try:
-        # Establish connection and create cursor using 'with' statement
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
+                
                 # First, determine if the user is the challenger or the challengee for this challenge
                 cur.execute('''
                     SELECT challenger_id, challengee_id
@@ -137,12 +138,13 @@ def update_versus_pic_status(challenge_id, user_id, index):
         return "database error"
 
 #-----------------------------------------------------------------------
-# Get the status of a user's submission for a given picture in a given challenge
+
 def get_versus_pic_status(challenge_id, user_id, index):
+    conn = None
     try:
-        # Establish connection and create cursor using 'with' statement
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
+                
                 # First, determine if the user is the challenger or the challengee for this challenge
                 cur.execute('''
                     SELECT challenger_id, challengee_id
@@ -181,19 +183,18 @@ def get_versus_pic_status(challenge_id, user_id, index):
                     return
                 else:
                     return result[0]
-        
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
         return "database error"
 
 #-----------------------------------------------------------------------
 
-# Store the points for a user's guess for a given picture in a given challenge
 def store_versus_pic_points(challenge_id, user_id, index, points):
+    conn = None
     try:
-        # Establish connection and create cursor using 'with' statement
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
+                
                 # First, determine if the user is the challenger or the challengee for this challenge
                 cur.execute('''
                     SELECT challenger_id, challengee_id
@@ -209,17 +210,17 @@ def store_versus_pic_points(challenge_id, user_id, index, points):
                 challenger_id, challengee_id = result
                 
                 # Depending on whether the user is the challenger or the challengee,
-                # update the corresponding points column in the challenges table
+                # update the corresponding finished column in the matches table
                 if user_id == challenger_id:
                     cur.execute('''
                         UPDATE challenges
-                        SET challenger_pic_points[%s] = %s
+                        SET challenger_points[%s] = %s
                         WHERE id = %s;
                     ''', (index, points, challenge_id))
                 elif user_id == challengee_id:
                     cur.execute('''
                         UPDATE challenges
-                        SET challengee_pic_points[%s] = %s
+                        SET challengee_points[%s] = %s
                         WHERE id = %s;
                     ''', (index, points, challenge_id))
                 else:
@@ -227,16 +228,19 @@ def store_versus_pic_points(challenge_id, user_id, index, points):
                     return
                 
                 conn.commit()
-                print("Versus pic points updated successfully.")
+                print("Points updated successfully.")
                 return {"status": "success"}
-        
+                
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
         return "database error"
-
+      
 #-----------------------------------------------------------------------
+
 def main():
     print()
+
+#-----------------------------------------------------------------------
     
 if __name__=="__main__":
     main()
