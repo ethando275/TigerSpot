@@ -297,6 +297,7 @@ def totalleaderboard():
 
 #-----------------------------------------------------------------------
 
+# checks that users table is not corrupted and then displays the versus page where users can initiate and see challenges
 @app.route('/versus', methods=['GET'])
 def versus_func():
     users = user_database.get_players()
@@ -306,13 +307,14 @@ def versus_func():
     if check is False:
         html_code = flask.render_template('contact_admin.html')
     else:
-        html_code = flask.render_template('versus.html', users=flask.json.dumps(users), username=username)
+        html_code = flask.render_template('this.html', users=flask.json.dumps(users), username=username)
 
     response = flask.make_response(html_code)
     return response
 
 #-----------------------------------------------------------------------
 
+# checks that user table is not corrupted and 
 @app.route('/create-challenge', methods=['POST'])
 def create_challenge_route():
     challengee_id = flask.request.form['challengee_id'].strip()  # Trim whitespace
