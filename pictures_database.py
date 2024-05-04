@@ -68,6 +68,8 @@ def create_pic_table():
         print(error)
         return "database error"
 
+#-----------------------------------------------------------------------
+
 # Inserts a new row into pictures database table
 def insert_picture(pictureID, coordinates, link, place):
 
@@ -104,6 +106,8 @@ def pic_of_day():
     picture_id = (day_of_year - 1) % database.get_table_size("pictures") + 1
 
     return picture_id
+
+#-----------------------------------------------------------------------
 
 # Returns specified information of picture using its id
 def get_pic_info(col, id):
@@ -146,6 +150,8 @@ def main():
 
     # http://res.cloudinary.com/dmiaxw4rr/image/upload/v1712640742/TigerSpot/Checked/91271FD2-F874-4AAE-B589-F6FD7BB0920B_1_201_a_r2hcfr.jpg
     print(f"URL: {pic_url}")
+
+#-----------------------------------------------------------------------
 
 if __name__=="__main__":
     main()

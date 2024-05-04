@@ -47,5 +47,7 @@ def main():
     cummulative_points = calculate_total_points('wn4759', 1000)
     print(cummulative_points)
 
+#-----------------------------------------------------------------------
+
 if __name__=="__main__":
     main()
