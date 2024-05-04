@@ -11,6 +11,9 @@ DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-c
 
 #-----------------------------------------------------------------------
 
+# Creates usersDaily table with columns username, points, distance,
+# played, last_played, last_versus, and current streak.
+
 def create_daily_user_table():
     
     try:
@@ -30,6 +33,10 @@ def create_daily_user_table():
         print(error)
         return "database error"
 
+#-----------------------------------------------------------------------
+
+# Inserts username into usersDaily table.
+
 def insert_player_daily(username):
 
     try:
@@ -43,6 +50,8 @@ def insert_player_daily(username):
                     cur.execute("INSERT INTO usersDaily (username, points, distance, played, last_played, last_versus, current_streak) VALUES (%s, %s, %s, %s, NULL, NULL, %s);", (username, 0, 0, False, 0))
 
                 conn.commit()
+        
+        return "success"
     
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
@@ -50,6 +59,9 @@ def insert_player_daily(username):
 
     
 #-----------------------------------------------------------------------
+
+# Updates username's daily stats with new points and distance.
+# Updates that username has played at current date and updates streaks.
 
 def update_player_daily(username, points, distance):
     
@@ -72,12 +84,16 @@ def update_player_daily(username, points, distance):
                                     last_played= CURRENT_DATE
                                 WHERE username=%s;''', (points, distance, True, username))
                 conn.commit()
+        
+        return "success"
 
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
         return "database error"
 
 #-----------------------------------------------------------------------
+
+# Updates username's last_versus to current date.
 
 def update_player_versus(username):
 
@@ -93,12 +109,16 @@ def update_player_versus(username):
                                 WHERE username=%s;''', (username, ))
                 conn.commit()
                 print(f"UPDATED VERSUS DATE IN DAILY")
+        
+        return "success"
 
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
         return "database error"
 
 #-----------------------------------------------------------------------
+
+# Returns whether username has played for the day or not.
 
 def player_played(username):
 
@@ -118,7 +138,8 @@ def player_played(username):
 
 #-----------------------------------------------------------------------
 
-#resets the user's daily points
+# Resets the user's daily points, distance, and if they have played.
+
 def reset_player(username):
 
     try:
@@ -127,6 +148,8 @@ def reset_player(username):
                 cur.execute("UPDATE usersDaily SET played=%s, points=%s, distance=%s WHERE username=%s;", (False, 0, 0, username))
                 print(f"Player {username} has been reset for the daily round")
                 conn.commit()
+                
+        return "success"
 
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
@@ -134,7 +157,8 @@ def reset_player(username):
 
 #-----------------------------------------------------------------------
 
-# server wide player reset
+# Resets all players' daily points, distance, and if they have played. 
+
 def reset_players():
 
     try:
@@ -142,12 +166,16 @@ def reset_players():
             with conn.cursor() as cur:
                 cur.execute("UPDATE usersDaily SET played=%s, points=%s, distance=%s, last_played=NULL, current_streak = %s;", (False, 0, 0, 0))
                 conn.commit()
+        
+        return "success"
 
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
         return "database error"
 
 #-----------------------------------------------------------------------
+
+# Returns the date when the username last played.
 
 def get_last_played_date(username):
 
@@ -168,6 +196,8 @@ def get_last_played_date(username):
 
 #-----------------------------------------------------------------------
 
+# Returns the date when the username last used the versus mode.
+
 def get_last_versus_date(username):
 
     try:
@@ -186,6 +216,8 @@ def get_last_versus_date(username):
         return "database error"
 
 #-----------------------------------------------------------------------
+
+# Returns username's streak.
 
 def get_streak(username):
 
@@ -206,6 +238,8 @@ def get_streak(username):
 
 #-----------------------------------------------------------------------
 
+# Returns username's daily points.
+
 def get_daily_points(username):
 
     try:
@@ -225,6 +259,8 @@ def get_daily_points(username):
 
 #-----------------------------------------------------------------------
 
+# Returns username's guess distance. 
+
 def get_daily_distance(username):
 
     try:
@@ -243,6 +279,9 @@ def get_daily_distance(username):
         return "database error"
 
 #-----------------------------------------------------------------------
+
+# Returns a dictionary of the usernames and points of the the top 10
+# scoring players for the day.
 
 def get_daily_top_players():
 
@@ -266,6 +305,8 @@ def get_daily_top_players():
 
 #-----------------------------------------------------------------------
 
+# Returns username's daily rank among all players who played for the day.
+
 def get_daily_rank(username):
 
     try:
@@ -286,6 +327,8 @@ def get_daily_rank(username):
 
 #-----------------------------------------------------------------------
 
+# Removes username from the usersDaily table.
+
 def remove_daily_user(username):
     try:
         with psycopg2.connect(DATABASE_URL) as conn:
@@ -293,6 +336,8 @@ def remove_daily_user(username):
 
                 cur.execute("DELETE FROM usersDaily WHERE username=%s;", (username,))
                 conn.commit()
+        
+        return "success"
   
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
