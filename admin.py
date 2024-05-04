@@ -33,6 +33,7 @@ app.secret_key = os.environ['APP_SECRET_KEY']
 id = 1
 #-----------------------------------------------------------------------
 
+# For error handling
 def database_check(list):
     if "database error" in list:
         return False
@@ -83,7 +84,7 @@ def index():
 
 #-----------------------------------------------------------------------
 
-# Home page after usr logs in through Princeton's CAS
+# Home page after user logs in through Princeton's CAS
 @app.route('/menu', methods=['GET'])
 def menu():
     global id
@@ -112,7 +113,8 @@ def menu():
     return response
 
 #-----------------------------------------------------------------------
-#
+
+# if there are no database errors, renders versus page listing a user's challenges. Otherwise, renders error page
 @app.route('/requests', methods=['GET'])
 def requests():
     username = flask.request.args.get('username')
@@ -144,6 +146,7 @@ def requests():
 
 #-----------------------------------------------------------------------
 
+# 
 @app.route('/game', methods=['GET'])
 def game():
 
