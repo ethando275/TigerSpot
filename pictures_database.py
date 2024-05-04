@@ -94,6 +94,8 @@ def get_current_date():
 
     return eastern_date
     
+#-----------------------------------------------------------------------
+
 # Checks the current date and returns associated picture id
 def pic_of_day():
 
