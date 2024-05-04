@@ -178,7 +178,6 @@ def submit():
     # print(currLat)
     currLon = flask.request.form.get('currLon')
     # print(currLon)
-    # coor = database.get_distance()
     if not currLat or not currLon:
         return 
     
