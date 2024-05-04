@@ -198,15 +198,17 @@ def get_players():
 def main():
     print(get_top_players())
     print(get_players())
-    print(get_points('fl9971'))
-    print(get_rank('fl9971'))
-    print(reset_player_total_points('fl9971'))
-    print(get_points('fl9971'))
-    print(get_rank('fl9971'))
-    print(update_player('fl9971', 30000))
-    print(get_points('fl9971'))
-    print(get_rank('fl9971'))
-    
+    print(insert_player('test'))
+    print(update_player('test', 30000))
+    print(get_points('test'))
+    print(get_rank('test'))
+    print(get_top_players())
+    print(reset_player_total_points('test'))
+    print(get_points('test'))
+    print(get_rank('test'))
+    print(remove_from_user_table('test'))
+    print(get_players())
+
 #-----------------------------------------------------------------------
 
 if __name__=="__main__":

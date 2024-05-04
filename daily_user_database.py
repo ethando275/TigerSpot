@@ -108,7 +108,6 @@ def update_player_versus(username):
                                     last_versus= CURRENT_DATE
                                 WHERE username=%s;''', (username, ))
                 conn.commit()
-                print(f"UPDATED VERSUS DATE IN DAILY")
         
         return "success"
 
@@ -145,7 +144,6 @@ def reset_player(username):
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
                 cur.execute("UPDATE usersDaily SET played=%s, points=%s, distance=%s WHERE username=%s;", (False, 0, 0, username))
-                print(f"Player {username} has been reset for the daily round")
                 conn.commit()
                 
         return "success"
@@ -347,12 +345,23 @@ def remove_daily_user(username):
 def main():
 
     print(get_daily_top_players())
-    print(get_daily_distance('fl9971'))
-    print(get_daily_points('fl9971'))
-    print(get_daily_rank('fl9971'))
-    print(get_last_played_date('fl9971'))
-    print(get_last_versus_date('fl9971'))
-    print(get_streak('fl9971'))
+    print(insert_player_daily('test'))
+    print(update_player_daily('test', 1000, 3))
+    print(update_player_versus('test'))
+    print(get_daily_distance('test'))
+    print(get_daily_points('test'))
+    print(get_daily_rank('test'))
+    print(get_last_played_date('test'))
+    print(get_last_versus_date('test'))
+    print(get_streak('test'))
+    print(get_daily_top_players())
+    print(reset_player('test'))
+    print(get_daily_points('test'))
+    print(get_daily_rank('test'))
+    print(get_last_played_date('test'))
+    print(get_daily_top_players())
+    print(remove_daily_user('test'))
+    print(get_daily_top_players())
 
 #-----------------------------------------------------------------------
 
