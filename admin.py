@@ -43,12 +43,19 @@ def reset_game(username):
     if  played_date != current_date:
         daily_user_database.reset_player(username)
         user_played = daily_user_database.player_played(username)
-        challenges_database.clear_user_challenges(username)
-        matches_database.clear_matches_table()
         id = pictures_database.pic_of_day()
         print(f"RESET ID IS NOW: {id}")
 
-    
+def reset_versus(username):
+
+    last_date = daily_user_database.get_last_versus_date(username)
+    print(f"LAST VERSUS DATE IS: {last_date}")
+    current_date = pictures_database.get_current_date()
+    print(f"CURRENT DATE IS: {current_date}")
+
+    if last_date != current_date:
+        challenges_database.clear_user_challenges(username)
+        daily_user_database.update_player_versus(username)
 
 @app.route('/sam', methods=['GET'])
 def sam():
@@ -94,10 +101,12 @@ def menu():
 
 @app.route('/requests', methods=['GET'])
 def requests():
-    pending_challenges = challenges_database.get_user_challenges(auth.authenticate())
-    users = user_database.get_players()
     username = flask.request.args.get('username')
-    html_code = flask.render_template('this.html', challenges=pending_challenges, user=auth.authenticate(), users=flask.json.dumps(users), username=username)
+    username_auth = auth.authenticate()
+    reset_versus(username_auth)
+    pending_challenges = challenges_database.get_user_challenges(username_auth)
+    users = user_database.get_players()
+    html_code = flask.render_template('this.html', challenges=pending_challenges, user=username_auth, users=flask.json.dumps(users), username=username)
     response = flask.make_response(html_code)
     return response
 
