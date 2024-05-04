@@ -34,6 +34,7 @@ id = 1
 #-----------------------------------------------------------------------
 
 # For error handling
+# checks if a function call had a database error based on function's return value
 def database_check(list):
     if "database error" in list:
         return False
@@ -146,7 +147,8 @@ def requests():
 
 #-----------------------------------------------------------------------
 
-# 
+# if there are no errors, loads the daily game 
+# or if user has already played today's game, loads a page stating their points and distance between their guess and correct location
 @app.route('/game', methods=['GET'])
 def game():
 
@@ -181,6 +183,8 @@ def game():
 
 #-----------------------------------------------------------------------
 
+# if there are no errors with database, calculates distance and points and updates usersDaily table with points and adds today's points to total points column in users table
+# Then loads the results page which displays the correct location, the distance from guess to acutal location, points earned, place where picture was taken
 @app.route('/submit', methods=['POST'])
 def submit():
 
@@ -226,22 +230,29 @@ def submit():
 
 #-----------------------------------------------------------------------
 
+# Displays rules page for both daily game and versus mode
 @app.route('/rules', methods=['GET'])
 def rules():
+    # user must be logged in to access page
+    auth.authenticate()
     html_code = flask.render_template('rules.html')
     response = flask.make_response(html_code)
     return response
 
 #-----------------------------------------------------------------------
 
+# Displays about the team page
 @app.route('/team', methods=['GET'])
 def team():
+    # user must be logged in to access page
+    auth.authenticate()
     html_code = flask.render_template('team.html')
     response = flask.make_response(html_code)
     return response
 
 #-----------------------------------------------------------------------
 
+# Displays the leaderboard for overall points
 @app.route('/totalboard', methods=['GET'])
 def leaderboard():
     top_players = user_database.get_top_players()
@@ -264,6 +275,7 @@ def leaderboard():
 
 #-----------------------------------------------------------------------
 
+# Displays the leaderboard for today's daily game points
 @app.route('/leaderboard', methods=['GET'])   
 def totalleaderboard():
     top_players = daily_user_database.get_daily_top_players()
