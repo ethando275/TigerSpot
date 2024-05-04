@@ -197,7 +197,16 @@ def get_players():
 
 def main():
     print(get_top_players())
-
+    print(get_players())
+    print(get_points('fl9971'))
+    print(get_rank('fl9971'))
+    print(reset_player_total_points('fl9971'))
+    print(get_points('fl9971'))
+    print(get_rank('fl9971'))
+    print(update_player('fl9971', 30000))
+    print(get_points('fl9971'))
+    print(get_rank('fl9971'))
+    
 #-----------------------------------------------------------------------
 
 if __name__=="__main__":

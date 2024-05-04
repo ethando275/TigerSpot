@@ -135,7 +135,6 @@ def player_played(username):
         print(error)
         return "database error"
 
-
 #-----------------------------------------------------------------------
 
 # Resets the user's daily points, distance, and if they have played.
@@ -259,7 +258,7 @@ def get_daily_points(username):
 
 #-----------------------------------------------------------------------
 
-# Returns username's guess distance. 
+# Returns username's guess distance.
 
 def get_daily_distance(username):
 
@@ -347,31 +346,15 @@ def remove_daily_user(username):
 
 def main():
 
-    #database.drop_table("usersDaily")
-    # update_player_daily('wn4759', 100, 30)
-    #reset_player('cl7359')
-    #reset_player('jy3107')
-    #reset_player('fl9971')
-    #print(get_last_played_date('fl9971'))
-    #reset_player('wn4759')
-    #reset_player('ed8205')
-    # remove_daily_user('fl9971')
-    #reset_player('jy1365')
-    #create_daily_user_table()
-    date = get_last_played_date('fl9971')
-    # print(date)
-    # streak = get_streak('fl9971')
-    # print(streak)
-    # date1 = get_last_played_date('cl7359')
-    # print(date1)
-
-    # print(get_last_versus_date('wn4759'))
-    #update_player_versus('wn4759')
-
-    #remove_daily_user('wn4759')
+    print(get_daily_top_players())
+    print(get_daily_distance('fl9971'))
+    print(get_daily_points('fl9971'))
+    print(get_daily_rank('fl9971'))
+    print(get_last_played_date('fl9971'))
+    print(get_last_versus_date('fl9971'))
+    print(get_streak('fl9971'))
 
 #-----------------------------------------------------------------------
 
 if __name__=="__main__":
-
     main()
