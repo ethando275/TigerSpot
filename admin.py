@@ -340,11 +340,11 @@ def create_challenge_route():
 
 #-----------------------------------------------------------------------
 
-#
+# Accepts challenge unless there is a database error
 @app.route('/accept_challenge', methods=['POST'])
 def accept_challenge_route():
     challenge_id = flask.request.form.get('challenge_id')
-    result = challenges_database.accept_challenge(challenge_id)  # Assuming this returns some result
+    result = challenges_database.accept_challenge(challenge_id)  # Returns whether or not challenge acceptance was successful
     
     check = database_check([result])
     if check is False:
@@ -355,10 +355,11 @@ def accept_challenge_route():
         flask.flash('Challenge accepted successfully.')
     else:
         flask.flash('Error accepting challenge.')
-    return flask.redirect(flask.url_for('requests'))  # Assuming this is your route name
+    return flask.redirect(flask.url_for('requests'))  # Redirects back to the versus page with the tables of user's challenges
 
 #-----------------------------------------------------------------------
 
+# Declines challenge unless there is a database error
 @app.route('/decline_challenge', methods=['POST'])
 def decline_challenge_route():
     challenge_id = flask.request.form.get('challenge_id')
@@ -377,6 +378,7 @@ def decline_challenge_route():
 
 #-----------------------------------------------------------------------
 
+#
 @app.route('/play_button', methods=['POST'])
 def play_button():
     challenge_id = flask.request.form.get('challenge_id')
