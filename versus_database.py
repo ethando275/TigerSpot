@@ -237,53 +237,6 @@ def store_versus_pic_points(challenge_id, user_id, index, points):
       
 #-----------------------------------------------------------------------
 
-def store_versus_pic_points(challenge_id, user_id, index, points):
-    conn = None
-    try:
-        with psycopg2.connect(DATABASE_URL) as conn:
-            with conn.cursor() as cur:
-
-                # First, determine if the user is the challenger or the challengee for this challenge
-                cur.execute('''
-                    SELECT challenger_id, challengee_id
-                    FROM challenges
-                    WHERE id = %s;
-                ''', (challenge_id,))
-
-                result = cur.fetchone()
-                if result is None:
-                    print("Challenge not found.")
-                    return
-
-                challenger_id, challengee_id = result
-
-                # Depending on whether the user is the challenger or the challengee,
-                # update the corresponding points column in the challenges table
-                if user_id == challenger_id:
-                    cur.execute('''
-                        UPDATE challenges
-                        SET challenger_pic_points[%s] = %s
-                        WHERE id = %s;
-                    ''', (index, points, challenge_id))
-                elif user_id == challengee_id:
-                    cur.execute('''
-                        UPDATE challenges
-                        SET challengee_pic_points[%s] = %s
-                        WHERE id = %s;
-                    ''', (index, points, challenge_id))
-                else:
-                    print("User is not part of this challenge.")
-                    return
-
-                conn.commit()
-                print("Versus pic points updated successfully.")
-                return {"status": "success"}
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(f"Error: {error}")
-        return "database error"
-
-#-----------------------------------------------------------------------
-
 def main():
     print()
 
