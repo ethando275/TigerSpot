@@ -10,6 +10,8 @@ DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-c
 
 #-----------------------------------------------------------------------
 
+# Creates users table with columns username and points.
+
 def create_user_table():
 
     try:
@@ -26,6 +28,8 @@ def create_user_table():
     
 #-----------------------------------------------------------------------
 
+# Inserts username into users table.
+
 def insert_player(username):
 
     try:
@@ -38,12 +42,16 @@ def insert_player(username):
                 if result is None:
                     cur.execute("INSERT INTO users (username, points) VALUES (%s, %s);", (username, 0,))
                 conn.commit()
+                
+        return "success"
 
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
         return "database error"
 
 #-----------------------------------------------------------------------
+
+# Resets username's total points to 0.
 
 def reset_player_total_points(username):
 
@@ -59,6 +67,8 @@ def reset_player_total_points(username):
                 else:
                     cur.execute("UPDATE users SET points=%s WHERE username=%s;", (0, username))
                 conn.commit()
+                
+        return "success"
 
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
@@ -66,6 +76,8 @@ def reset_player_total_points(username):
 
 
 #-----------------------------------------------------------------------
+
+# Updates username's total points with points.
 
 def update_player(username, points):
 
@@ -74,12 +86,16 @@ def update_player(username, points):
             with conn.cursor() as cur:
                 cur.execute("UPDATE users SET points=%s WHERE username=%s;", (points, username))
                 conn.commit()
+                
+        return "success"
 
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
         return "database error"
 
 #-----------------------------------------------------------------------
+
+# Returns username's points.
 
 def get_points(username):
 
@@ -96,6 +112,8 @@ def get_points(username):
         return "database error"
 
 #-----------------------------------------------------------------------
+
+# Returns username's total rank among all players.
 
 def get_rank(username):
     
@@ -115,6 +133,9 @@ def get_rank(username):
         return "database error"
 
 #-----------------------------------------------------------------------
+
+# Returns a dictionary of the usernames and points of the the top 10
+# scoring players.
 
 def get_top_players():
 
@@ -137,7 +158,9 @@ def get_top_players():
         return "database error"
 
 #-----------------------------------------------------------------------
-    
+
+# Removes username from the users table.
+
 def remove_from_user_table(username):
 
     try:
@@ -145,12 +168,16 @@ def remove_from_user_table(username):
             with conn.cursor() as cur:
                 cur.execute("DELETE FROM users WHERE username=%s;", (username,))
                 conn.commit()
+                
+        return "success"
 
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
         return "database error"
 
 #-----------------------------------------------------------------------
+
+# Returns all players in users table.
 
 def get_players():
 
@@ -170,6 +197,8 @@ def get_players():
 
 def main():
     print(get_top_players())
+
+#-----------------------------------------------------------------------
 
 if __name__=="__main__":
     main()
