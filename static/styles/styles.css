@@ -450,7 +450,7 @@ nav {
 
 .top-players.challenges {
   max-height: calc(45vh - 6vh);
-  width: 45vw;
+  width: 65vw;
   overflow: auto; /* Add scroll when more than 5 user challenges */
 }
 
@@ -475,7 +475,7 @@ nav {
   display: flex;
   justify-content: space-between;
   padding: 2vh 2vw;
-  border-bottom: 0.25vw solid black;
+  border-bottom: 0.25vh solid black;
   align-items: center;
 }
 
@@ -501,7 +501,7 @@ nav {
 }
 
 .name.output {
-  padding-left: 3vw;
+  padding-left: 6vw;
 }
 
 .user-id.output {
@@ -509,9 +509,9 @@ nav {
 }
 
 .winner-vs {
+  display: flex;
   padding-left: 1vw;
-  width: 6vw;
-  margin-right: 0.25vw;
+  margin-right: 0vw;
 }
 
 .submit.challenge, 
@@ -791,6 +791,12 @@ nav {
     margin-right: 10vw;
   }
 
+  .winner-vs {
+    display: flex;
+    padding-left: 1vw;
+    margin-right: 1vw;
+  }
+
   .form-group {
     margin-left: 5vw;
   }
@@ -825,6 +831,12 @@ nav {
   /* Header Styles */
   .daily-result-header {
     margin-bottom: 12vh;
+  }
+
+  .winner-vs {
+    display: flex;
+    padding-left: 0vw;
+    margin-right: 2vw;
   }
 
   .result-content {
