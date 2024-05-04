@@ -1,7 +1,14 @@
+#-----------------------------------------------------------------------
+# versus_database.py
+#-----------------------------------------------------------------------
+
 import psycopg2
+
+#-----------------------------------------------------------------------
 
 DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
 
+#-----------------------------------------------------------------------
 
 def update_versus_points(challenge_id, user_id, additional_points):
     conn = None
@@ -48,6 +55,7 @@ def update_versus_points(challenge_id, user_id, additional_points):
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
         return "database error"
+
 #-----------------------------------------------------------------------
 
 def calculate_versus(distance, time):
@@ -62,6 +70,8 @@ def calculate_versus(distance, time):
         time_points = max(0, 1 - time / 120) * 100
 
         return dis_points + time_points
+
+#-----------------------------------------------------------------------
 
 def get_winner(challenge_id):
     conn = None
@@ -78,6 +88,8 @@ def get_winner(challenge_id):
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
         return "database error"
+
+#-----------------------------------------------------------------------
 
 def update_versus_pic_status(challenge_id, user_id, index):
     conn = None
@@ -124,7 +136,9 @@ def update_versus_pic_status(challenge_id, user_id, index):
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
         return "database error"
-        
+
+#-----------------------------------------------------------------------
+
 def get_versus_pic_status(challenge_id, user_id, index):
     conn = None
     try:
@@ -172,6 +186,7 @@ def get_versus_pic_status(challenge_id, user_id, index):
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
         return "database error"
+
 #-----------------------------------------------------------------------
 
 def store_versus_pic_points(challenge_id, user_id, index, points):
@@ -268,8 +283,11 @@ def store_versus_pic_points(challenge_id, user_id, index, points):
         return "database error"
 
 #-----------------------------------------------------------------------
+
 def main():
     print()
+
+#-----------------------------------------------------------------------
     
 if __name__=="__main__":
     main()

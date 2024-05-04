@@ -21,6 +21,8 @@ def drop_table(table):
         print(error)
         return "database error"
 
+#-----------------------------------------------------------------------
+
 #updates a specific row in a table
 #id_type can be pictureID or challenge_id for example
 def update(table, col, value, id_type, id_num):
@@ -33,6 +35,8 @@ def update(table, col, value, id_type, id_num):
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
         return "database error"
+
+#-----------------------------------------------------------------------
 
 #returns all the values from a specified column in a table in the form of an array of tuples
 def query(column, table):
@@ -47,6 +51,8 @@ def query(column, table):
         print(error)
         return "database error"
 
+#-----------------------------------------------------------------------
+
 #Returns the number of rows in a table
 def get_table_size(table):
     try:
@@ -60,6 +66,8 @@ def get_table_size(table):
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
         return "database error"
+
+#-----------------------------------------------------------------------
 
 #prints out all rows in the users, usersDaily, pictures, challenges, and matches tables
 def show_rows():
@@ -98,8 +106,12 @@ def testing():
     print('-----Testing show_rows()-----')
     show_rows()
 
+#-----------------------------------------------------------------------
+
 def main():
     testing()
+
+#-----------------------------------------------------------------------
 
 if __name__=="__main__":
     main()
