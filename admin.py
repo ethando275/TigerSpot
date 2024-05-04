@@ -97,7 +97,7 @@ def menu():
     
     check = database_check([user_insert, daily_insert, played_date, current_date])
     if check is False:
-        html_code = flask.render_template('sam.html')
+        html_code = flask.render_template('contact_admin.html')
         return flask.make_response(html_code)
     
     if  played_date != current_date:
@@ -106,7 +106,7 @@ def menu():
         id = pictures_database.pic_of_day()
         check = database_check([reset, user_played, id])
         if check is False:
-            html_code = flask.render_template('sam.html')
+            html_code = flask.render_template('contact_admin.html')
             return flask.make_response(html_code)
 
     html_code = flask.render_template('menu.html', username = username)
@@ -125,7 +125,7 @@ def requests():
     
     check = database_check([last_date, current_date])
     if check is False:
-        html_code = flask.render_template('sam.html')
+        html_code = flask.render_template('contact_admin.html')
         return flask.make_response(html_code)
 
     if last_date != current_date:
@@ -138,7 +138,7 @@ def requests():
     
     check = database_check([pending_challenges, users])
     if check is False:
-        html_code = flask.render_template('sam.html')
+        html_code = flask.render_template('contact_admin.html')
     else:
         html_code = flask.render_template('this.html', challenges=pending_challenges, user=username_auth, users=flask.json.dumps(users), username=username)
 
@@ -162,7 +162,7 @@ def game():
 
     check = database_check([user_played, today_points, today_distance])
     if check is False:
-            html_code = flask.render_template('sam.html')
+            html_code = flask.render_template('contact_admin.html')
             return flask.make_response(html_code)
     
     if user_played:
@@ -174,7 +174,7 @@ def game():
 
     check = database_check([link])
     if check is False:
-        html_code = flask.render_template('sam.html')
+        html_code = flask.render_template('contact_admin.html')
     else:
         html_code = flask.render_template('gamepage.html', link = link, id = id)
 
@@ -196,7 +196,7 @@ def submit():
 
     check = database_check([user_played, today_points, today_distance])
     if check is False:
-        html_code = flask.render_template('sam.html')
+        html_code = flask.render_template('contact_admin.html')
         return flask.make_response(html_code)
 
     if user_played:
@@ -221,7 +221,7 @@ def submit():
 
     check = database_check([coor, place, update, daily_update])
     if check is False:
-        html_code = flask.render_template('sam.html')
+        html_code = flask.render_template('contact_admin.html')
     else:
         html_code = flask.render_template('results.html', dis = distance, lat = currLat, lon = currLon, coor=coor, today_points = today_points, place = place, today_distance = distance)
 
@@ -266,7 +266,7 @@ def leaderboard():
     check = database_check([top_players, points, daily_points, rank, daily_rank, streak])
     
     if check is False:
-        html_code = flask.render_template('sam.html')
+        html_code = flask.render_template('contact_admin.html')
     else:
         html_code = flask.render_template('totalboard.html', top_players = top_players, points = points, daily_points = daily_points, rank = rank, daily_rank = daily_rank, streak = streak)
     
@@ -288,7 +288,7 @@ def totalleaderboard():
     
     check = database_check([top_players, points, daily_points, rank, daily_rank, streak])
     if check is False:
-        html_code = flask.render_template('sam.html')
+        html_code = flask.render_template('contact_admin.html')
     else:
         html_code = flask.render_template('leaderboard.html', top_players = top_players, points = points, daily_points = daily_points, rank = rank, daily_rank = daily_rank, streak = streak)
     
@@ -304,7 +304,7 @@ def versus_func():
     
     check = database_check([users])
     if check is False:
-        html_code = flask.render_template('sam.html')
+        html_code = flask.render_template('contact_admin.html')
     else:
         html_code = flask.render_template('versus.html', users=flask.json.dumps(users), username=username)
 
@@ -320,7 +320,7 @@ def create_challenge_route():
     
     check = database_check([users])
     if check is False:
-        html_code = flask.render_template('sam.html')
+        html_code = flask.render_template('contact_admin.html')
         return flask.make_response(html_code)
 
     # Ensure challengee_id is not empty and exists in the users list
@@ -345,7 +345,7 @@ def accept_challenge_route():
     
     check = database_check([result])
     if check is False:
-        html_code = flask.render_template('sam.html')
+        html_code = flask.render_template('contact_admin.html')
         return flask.make_response(html_code)
 
     if result == "accepted":
@@ -363,7 +363,7 @@ def decline_challenge_route():
 
     check = database_check([result])
     if check is False:
-        html_code = flask.render_template('sam.html')
+        html_code = flask.render_template('contact_admin.html')
         return flask.make_response(html_code)
 
     if result == "declined":
