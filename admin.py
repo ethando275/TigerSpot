@@ -229,7 +229,6 @@ def rules():
 #-----------------------------------------------------------------------
 
 # Congratulations page easter egg
-
 @app.route('/congrats', methods=['GET'])
 def congrats():
     auth.authenticate()
@@ -238,7 +237,6 @@ def congrats():
     return response
 
 #-----------------------------------------------------------------------
-
 
 # Displays about the team page
 @app.route('/team', methods=['GET'])
@@ -384,6 +382,8 @@ def decline_challenge_route():
         flask.flash('Error declining challenge.')
     return flask.redirect(flask.url_for('requests'))
 
+#-----------------------------------------------------------------------
+
 # updates if a given user has started a given challenge or not
 # and redirects accordingly if forfeitting is necessary
 @app.route('/play_button', methods=['POST'])
@@ -410,10 +410,13 @@ def play_button():
             return flask.redirect(flask.url_for('requests'))
 
 #-----------------------------------------------------------------------
+
 # Handles first game page of versus mode
 @app.route ('/play_button2', methods=['GET'])
 def play_button2():
     return next_challenge()
+
+#-----------------------------------------------------------------------
 
 # Handles all the game pages of versus mode
 @app.route('/next_challenge', methods=['POST'])
@@ -427,6 +430,8 @@ def next_challenge():
     print("Past Index")
     print(index)
     return start_challenge(challenge_id, index)
+
+#-----------------------------------------------------------------------
 
 # Handles game page functionality of versus mode
 @app.route('/start_challenge', methods=['GET', 'POST'])
@@ -442,7 +447,9 @@ def start_challenge(challenge_id=None, index=None):
         return flask.make_response(html_code)
     else:
         return flask.redirect(flask.url_for('requests'))  
+        
 #-----------------------------------------------------------------------
+
 # Handles ending the game of versus mode and updating tables
 @app.route('/end_challenge', methods=['POST'])
 def end_challenge():
@@ -523,7 +530,9 @@ def submit2():
     html_code = flask.render_template('versusresults.html', dis = distance, lat = currLat, lon = currLon, coor=coor, index=index, challenge_id=challenge_id, points=str(points), place=place)
     response = flask.make_response(html_code)
     return response
+    
 #-----------------------------------------------------------------------
+
 # Displays the results of a versus mode game
 @app.route('/versus_stats', methods=['GET'])
 def versus_stats():
