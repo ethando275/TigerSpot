@@ -35,6 +35,25 @@
         </div>
       </div>
 
+      {% if username == top_player_username or username == 'sr4508' or username == 'rdondero' or username == 'cl7359' %}
+      <div class="column">
+        <div class="card">
+          <a href="/congrats">
+          <img
+            src="static\styles\claudia.jpeg"
+            alt="Claudia"
+            width="150"
+            height="150"
+          />
+          </a>
+          <div class="container">
+            <h2>Claudia Lee</h2>
+            <p>Favorite Spot on Campus: Circle of Animals / Zodiac Heads</p>
+          </div>
+        </div>
+      </div>
+
+      {% else %}
       <div class="column">
         <div class="card">
           <img
@@ -49,6 +68,8 @@
           </div>
         </div>
       </div>
+  
+      {% endif %}
 
       <div class="column">
         <div class="card">

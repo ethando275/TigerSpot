@@ -333,7 +333,7 @@ def get_challenge_participants(challenge_id):
                     return participants
                 else:
                     print("No challenge found with the given ID.")
-                    return None     
+                    return None    
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Database error: {error}")
         return "database error"

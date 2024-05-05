@@ -227,12 +227,31 @@ def rules():
 
 #-----------------------------------------------------------------------
 
+@app.route('/congrats', methods=['GET'])
+def congrats():
+    auth.authenticate()
+    html_code = flask.render_template('congrats.html')
+    response = flask.make_response(html_code)
+    return response
+
+#-----------------------------------------------------------------------
+
+
 # Displays about the team page
 @app.route('/team', methods=['GET'])
 def team():
     # user must be logged in to access page
-    auth.authenticate()
-    html_code = flask.render_template('team.html')
+    username = auth.authenticate()
+    top_player = user_database.get_top_player()
+
+    check = database_check([top_player])
+    if check is False:
+        html_code = flask.render_template('contact_admin.html')
+        return flask.make_response(html_code)
+    
+    top_player_username = top_player["username"]
+    
+    html_code = flask.render_template('team.html', username = username, top_player_username = top_player_username)
     response = flask.make_response(html_code)
     return response
 
@@ -404,8 +423,7 @@ def start_challenge():
         html_code = flask.render_template('versusgame.html', challenge_id=challenge_id, index=index, link=link)
         return flask.make_response(html_code)
     else:
-        return flask.redirect(flask.url_for('requests'))  
-
+        return flask.redirect(flask.url_for('requests'))
 #-----------------------------------------------------------------------
 
 @app.route('/end_challenge', methods=['POST'])
@@ -441,15 +459,12 @@ def submit2():
             return flask.redirect(flask.url_for('requests'))
         if pic_status == False:
             fin1 = versus_database.update_versus_pic_status(challenge_id, auth.authenticate(), index+1)
-            print(fin1)
             if fin1 is None:
                 return flask.redirect(flask.url_for('requests'))
             fin2 = versus_database.store_versus_pic_points(challenge_id, auth.authenticate(), index+1, points)
-            print(fin2)
             if fin2 is None:
                 return flask.redirect(flask.url_for('requests'))
             fin3 = versus_database.update_versus_points(challenge_id, auth.authenticate(), points)
-            print(fin3)
             if fin3 is None:
                 return flask.redirect(flask.url_for('requests'))
         else:
@@ -462,23 +477,18 @@ def submit2():
     if versusList is None:
         return flask.redirect(flask.url_for('requests'))
     distance = round(distance_func.calc_distance(currLat, currLon, coor))
-    print(distance)
     pic_status = versus_database.get_versus_pic_status(challenge_id, auth.authenticate(), index+1)
-    print(pic_status)
     if pic_status is None:
         return flask.redirect(flask.url_for('requests'))
     if pic_status == False:
         points = round(versus_database.calculate_versus(distance, time))
         fin1 = versus_database.store_versus_pic_points(challenge_id, auth.authenticate(), index+1, points)
-        print(fin1)
         if fin1 is None:
             return flask.redirect(flask.url_for('requests'))
         fin2 = versus_database.update_versus_points(challenge_id, auth.authenticate(), points)
-        print(fin2)
         if fin2 is None:
             return flask.redirect(flask.url_for('requests'))
         fin3 = versus_database.update_versus_pic_status(challenge_id, auth.authenticate(), index+1)
-        print(fin3)
         if fin3 is None:
             return flask.redirect(flask.url_for('requests'))
     else:
