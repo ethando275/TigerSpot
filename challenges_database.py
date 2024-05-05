@@ -522,6 +522,7 @@ def main():
     #clear_challenges_table()
     #reset_challenges_id_sequence()
     print()
+    create_challenge('asdf', 'jy3107')
     create_challenge('c', 'cl7359')
     update_finish_status(1, 'c')
 

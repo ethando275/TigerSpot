@@ -213,9 +213,9 @@ def submit():
 
     coor = pictures_database.get_pic_info("coordinates", id)
     place = pictures_database.get_pic_info("place", id)
-    distance = round(distance_func.calc_distance(currLat, currLon, coor))
-    today_points = round(points.calculate_today_points(distance))
-    total_points = round(points.calculate_total_points(username, today_points))
+    distance = distance_func.calc_distance(currLat, currLon, coor)
+    today_points = points.calculate_today_points(distance)
+    total_points = points.calculate_total_points(username, today_points)
     update= user_database.update_player(username, total_points)
     daily_update = daily_user_database.update_player_daily(username, today_points, distance)
 
@@ -401,6 +401,7 @@ def play_button():
 
 #-----------------------------------------------------------------------
 
+#
 @app.route('/start_challenge', methods=['GET'])
 def start_challenge():
     challenge_id = flask.request.args.get('challenge_id')
