@@ -494,6 +494,7 @@ def submit2():
 def versus_stats():
     challenge_id = flask.request.args.get('challenge_id')
     results = challenges_database.get_challenge_results(challenge_id)
+    print(results)
     versusList = challenges_database.get_random_versus(challenge_id)
     pictures = [pictures_database.get_pic_info("link", pic) for pic in versusList]
     html_code = flask.render_template('versus_stats.html', results=results, images=pictures)
