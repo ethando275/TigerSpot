@@ -42,20 +42,6 @@ def database_check(list):
 
 #-----------------------------------------------------------------------
 
-# If the user is playing the game for the first time of today, their matches and challenges are cleared
-def reset_versus(username):
-
-    last_date = daily_user_database.get_last_versus_date(username)
-    print(f"LAST VERSUS DATE IS: {last_date}")
-    current_date = pictures_database.get_current_date()
-    print(f"CURRENT DATE IS: {current_date}")
-
-    if last_date != current_date:
-        challenges_database.clear_user_challenges(username)
-        daily_user_database.update_player_versus(username)
-
-#-----------------------------------------------------------------------
-
 @app.route('/sam', methods=['GET'])
 def sam():
     html_code = flask.render_template('sam.html')
@@ -120,7 +106,7 @@ def menu():
 def requests():
     username = flask.request.args.get('username')
     username_auth = auth.authenticate()
-    last_date = daily_user_database.get_last_versus_date(username)
+    last_date = daily_user_database.get_last_versus_date(username_auth)
     current_date = pictures_database.get_current_date()
     
     check = database_check([last_date, current_date])
@@ -129,8 +115,8 @@ def requests():
         return flask.make_response(html_code)
 
     if last_date != current_date:
-        challenges_database.clear_user_challenges(username)
-        daily_user_database.update_player_versus(username)
+        challenges_database.clear_user_challenges(username_auth)
+        daily_user_database.update_player_versus(username_auth)
         # Need to add check here too
 
     pending_challenges = challenges_database.get_user_challenges(username_auth)
