@@ -42,6 +42,7 @@ def database_check(list):
 
 #-----------------------------------------------------------------------
 
+# Easter egg for Sam Resendez 
 @app.route('/sam', methods=['GET'])
 def sam():
     html_code = flask.render_template('sam.html')
@@ -226,6 +227,8 @@ def rules():
     return response
 
 #-----------------------------------------------------------------------
+
+# Congratulations page easter egg
 
 @app.route('/congrats', methods=['GET'])
 def congrats():
