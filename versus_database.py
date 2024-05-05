@@ -210,19 +210,21 @@ def store_versus_pic_points(challenge_id, user_id, index, points):
                 challenger_id, challengee_id = result
                 
                 # Depending on whether the user is the challenger or the challengee,
-                # update the corresponding finished column in the matches table
+                # update the corresponding points column in the challenges table
                 if user_id == challenger_id:
-                    cur.execute('''
+                    sql = '''
                         UPDATE challenges
-                        SET challenger_points[%s] = %s
+                        SET challenger_pic_points[{0}] = %s
                         WHERE id = %s;
-                    ''', (index, points, challenge_id))
+                    '''.format(index)
+                    cur.execute(sql, (points, challenge_id))
                 elif user_id == challengee_id:
-                    cur.execute('''
+                    sql = '''
                         UPDATE challenges
-                        SET challengee_points[%s] = %s
+                        SET challengee_pic_points[{0}] = %s
                         WHERE id = %s;
-                    ''', (index, points, challenge_id))
+                    '''.format(index)
+                    cur.execute(sql, (points, challenge_id))
                 else:
                     print("User is not part of this challenge.")
                     return
@@ -234,6 +236,7 @@ def store_versus_pic_points(challenge_id, user_id, index, points):
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
         return "database error"
+
       
 #-----------------------------------------------------------------------
 
