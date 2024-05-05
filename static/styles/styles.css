@@ -900,10 +900,6 @@ nav {
     margin-top: 19vh;
   }
 
-  .result-content {
-    margin-top: 20vh;
-  }
-
   /* Leaderboard Styles */
 
   .leaderboard {
@@ -933,10 +929,6 @@ nav {
 
   .daily-result-header {
     margin-bottom: 22vh;
-  }
-
-  .result-content {
-    margin-top: 28vh;
   }
 
   .versus-stats-header {
