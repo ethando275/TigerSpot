@@ -401,6 +401,7 @@ def play_button():
 
 #-----------------------------------------------------------------------
 
+#
 @app.route('/start_challenge', methods=['GET'])
 def start_challenge():
     challenge_id = flask.request.args.get('challenge_id')
