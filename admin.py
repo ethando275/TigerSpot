@@ -104,6 +104,7 @@ def menu():
 # if there are no database errors, renders versus page listing a user's challenges. Otherwise, renders error page
 @app.route('/requests', methods=['GET'])
 def requests():
+    #username is the opponent's NetID
     username = flask.request.args.get('username')
     username_auth = auth.authenticate()
     last_date = daily_user_database.get_last_versus_date(username_auth)
