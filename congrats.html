@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+   <header>
+    <nav id="navbar">
+        <div class="home-icon">
+            <a href="/menu"><img src="static\styles\home.png" alt="Home Page" width="150" height="50"></a>
+        </div>
+        <div class="nav-icons">
+            <a href="/rules">
+                <div class="nav-item">
+                    <img src="static\styles\questionmark.png" alt="Rules" />
+                    <span>Rules</span>
+                </div>
+            </a>
+            <a href="/requests">
+                <div class="nav-item">
+                    <img src="static\styles\requests.png" alt="Requests" />
+                    <span>Versus</span>
+                </div>
+            </a>
+            <a href="/leaderboard">
+                <div class="nav-item">
+                    <img src="static\styles\trophy.png" alt="Leaderboard" />
+                    <span>Leaderboard</span>
+                </div>
+            </a>
+            <a href="logoutcas">
+                <div class="nav-item">
+                    <img src="static\styles\logout.png" alt="Logout" />
+                    <span>Log Out</span>
+                </div>
+            </a>
+        </div>
+    </nav>
+</header>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>For Sam <3 </title>
+    <link rel="stylesheet" href="{{url_for('static', filename = 'styles/styles.css')}}" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <style>
+       #map{
+            height: 60vh;
+            width: 80%; /* Adjusted width */
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2vh 2vw;
+        }
+        #coordinates {
+            font-size: 1em;
+            height: 4vh;
+            width: 80%; /* New container takes up remaining space */
+            float: right; /* Align to the right */
+            padding: 2vh 2vw; /* Add some padding */
+        }
+        #distance {
+            height: 4vh;
+            text-align: center;
+            width: 50.5%; /* New container takes up remaining space */
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2vh 2vw; /* Add some padding */
+        }
+        #points {
+            height: 4vh;
+            text-align: center;
+            width: 50.5%; /* New container takes up remaining space */
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+  </head>
+  <body>
+    <main class="main-content">
+      <div> <br> <br> <img class="game-image" src="/static/styles/dondero.jpeg"></div>
+    </main>
+  </body>
+</html>
+  
+
+

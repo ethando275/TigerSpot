@@ -192,11 +192,34 @@ def get_players():
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
         return "database error"
+    
+#-----------------------------------------------------------------------
+
+# Returns number one player's username and points
+
+def get_top_player():
+
+    try:
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
+                
+                cur.execute("SELECT username, points FROM users ORDER BY points DESC,  username ASC LIMIT 1;")
+                table = cur.fetchall()
+                for row in table:
+                    username, points = row
+                    player_stats = {'username': username, 'points': points}
+
+        return player_stats
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return "database error"
 
 #-----------------------------------------------------------------------
 
 def main():
     print(get_top_players())
+    print(get_top_player())
     print(get_players())
     print(insert_player('test'))
     print(update_player('test', 30000))
