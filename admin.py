@@ -384,9 +384,8 @@ def decline_challenge_route():
         flask.flash('Error declining challenge.')
     return flask.redirect(flask.url_for('requests'))
 
-#-----------------------------------------------------------------------
-
-#
+# updates if a given user has started a given challenge or not
+# and redirects accordingly if forfeitting is necessary
 @app.route('/play_button', methods=['POST'])
 def play_button():
     challenge_id = flask.request.form.get('challenge_id')
@@ -396,8 +395,11 @@ def play_button():
         return flask.redirect(flask.url_for('requests'))
     elif status is False:
         challenges_database.update_playbutton_status(challenge_id, user)
-        return flask.redirect(flask.url_for('start_challenge', challenge_id=challenge_id))
+        flask.session['challenge_id'] = challenge_id
+        return flask.redirect(flask.url_for('play_button2'))
     elif status is True:
+        for i in range(5):
+            versus_database.update_versus_pic_status(challenge_id, user, i+1)
         challenges_database.update_finish_status(challenge_id, user)
         status = challenges_database.check_finish_status(challenge_id)
         if status['status'] == "finished":
@@ -408,27 +410,40 @@ def play_button():
             return flask.redirect(flask.url_for('requests'))
 
 #-----------------------------------------------------------------------
+# Handles first game page of versus mode
+@app.route ('/play_button2', methods=['GET'])
+def play_button2():
+    return next_challenge()
 
-#
-@app.route('/start_challenge', methods=['GET'])
-def start_challenge():
-    challenge_id = flask.request.args.get('challenge_id')
-    if challenge_id is None:
-        return flask.redirect(flask.url_for('requests')) 
+# Handles all the game pages of versus mode
+@app.route('/next_challenge', methods=['POST'])
+def next_challenge():
+    challenge_id = flask.session.get('challenge_id')
+    print("Past Challenge ID")
+    print(challenge_id)
+    index = flask.request.form.get('index')
+    if index is None:
+        index = 0
+    print("Past Index")
+    print(index)
+    return start_challenge(challenge_id, index)
 
-    index = int(flask.request.args.get('index', 0))
+# Handles game page functionality of versus mode
+@app.route('/start_challenge', methods=['GET', 'POST'])
+def start_challenge(challenge_id=None, index=None):
     versusList = challenges_database.get_random_versus(challenge_id)
     if versusList is None:
         return flask.redirect(flask.url_for('requests'))  
-
+    index = int(index)
     if index < len(versusList):
         link = pictures_database.get_pic_info("link", versusList[index])
         html_code = flask.render_template('versusgame.html', challenge_id=challenge_id, index=index, link=link)
+  
         return flask.make_response(html_code)
     else:
-        return flask.redirect(flask.url_for('requests'))
+        return flask.redirect(flask.url_for('requests'))  
 #-----------------------------------------------------------------------
-
+# Handles ending the game of versus mode and updating tables
 @app.route('/end_challenge', methods=['POST'])
 def end_challenge():
     challenge_id = flask.request.form.get('challenge_id')
@@ -443,9 +458,9 @@ def end_challenge():
         return flask.redirect(flask.url_for('requests'))
     else:
         return flask.redirect(flask.url_for('requests'))
-
 #-----------------------------------------------------------------------
  
+# Handles the submission of a versus mode game, updating tables accordingly
 @app.route('/submit2', methods=['POST'])
 def submit2():
     currLat = flask.request.form.get('currLat')  
@@ -462,12 +477,15 @@ def submit2():
             return flask.redirect(flask.url_for('requests'))
         if pic_status == False:
             fin1 = versus_database.update_versus_pic_status(challenge_id, auth.authenticate(), index+1)
+            print(fin1)
             if fin1 is None:
                 return flask.redirect(flask.url_for('requests'))
             fin2 = versus_database.store_versus_pic_points(challenge_id, auth.authenticate(), index+1, points)
+            print(fin2)
             if fin2 is None:
                 return flask.redirect(flask.url_for('requests'))
             fin3 = versus_database.update_versus_points(challenge_id, auth.authenticate(), points)
+            print(fin3)
             if fin3 is None:
                 return flask.redirect(flask.url_for('requests'))
         else:
@@ -480,18 +498,23 @@ def submit2():
     if versusList is None:
         return flask.redirect(flask.url_for('requests'))
     distance = round(distance_func.calc_distance(currLat, currLon, coor))
+    print(distance)
     pic_status = versus_database.get_versus_pic_status(challenge_id, auth.authenticate(), index+1)
+    print(pic_status)
     if pic_status is None:
         return flask.redirect(flask.url_for('requests'))
     if pic_status == False:
         points = round(versus_database.calculate_versus(distance, time))
         fin1 = versus_database.store_versus_pic_points(challenge_id, auth.authenticate(), index+1, points)
+        print(fin1)
         if fin1 is None:
             return flask.redirect(flask.url_for('requests'))
         fin2 = versus_database.update_versus_points(challenge_id, auth.authenticate(), points)
+        print(fin2)
         if fin2 is None:
             return flask.redirect(flask.url_for('requests'))
         fin3 = versus_database.update_versus_pic_status(challenge_id, auth.authenticate(), index+1)
+        print(fin3)
         if fin3 is None:
             return flask.redirect(flask.url_for('requests'))
     else:
@@ -500,9 +523,8 @@ def submit2():
     html_code = flask.render_template('versusresults.html', dis = distance, lat = currLat, lon = currLon, coor=coor, index=index, challenge_id=challenge_id, points=str(points), place=place)
     response = flask.make_response(html_code)
     return response
-
 #-----------------------------------------------------------------------
-
+# Displays the results of a versus mode game
 @app.route('/versus_stats', methods=['GET'])
 def versus_stats():
     challenge_id = flask.request.args.get('challenge_id')
