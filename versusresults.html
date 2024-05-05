@@ -23,14 +23,13 @@
         }
         #distance {
             text-align: center;
-            width: 90%; 
+            width: 100%; 
             margin-left: auto;
             margin-right: auto;
         }
         #points {
-            height: 4vh;
             text-align: center;
-            width: 50.5%;
+            width: 100%;
             margin-left: auto;
             margin-right: auto;
         }
@@ -49,15 +48,19 @@
   </head>
   <body>
     <main class="main-content versus">
-        <div class="row">
-            <div>Image: {{index}}/5</div>
-            <form id="Exit" method="post" action="/play_button">
-                <input type="hidden" id="challenge_id" name="challenge_id" value="{{challenge_id}}">
-                <button type="submit" class="submit exit" onclick="return confirmExit()"><b>Exit</b></button>
-            </form>  
+        <div class="row results">
+            <div class="top-vs-content">
+                <div>Image: {{index}}/5</div>
+                <form id="Exit" method="post" action="/play_button">
+                    <input type="hidden" id="challenge_id" name="challenge_id" value="{{challenge_id}}">
+                    <button type="submit" class="submit exit" onclick="return confirmExit()"><b>Exit</b></button>
+                </form>
+            </div>
+        <div class="result-content">
             <div id="distance"><b></b></div>
             <div id="points"><b></b></div>
             <div id="distance"><b>Picture Taken Near: {{place}}</b></div>
+        </div>  
       </div> 
       <div class="map">
         <!-- Add map ad-->
@@ -66,12 +69,12 @@
         <form id="next" method="get" action="/start_challenge">
             <input type = "hidden" id="challenge_id" name = "challenge_id" value ="{{challenge_id}}">
             <input type = "hidden" id="index" name = "index" value ="{{index}}">
-            <button type = "submit" class="submit"><b>Next</b></button>
+            <button type = "submit" class="submit versus"><b>Next</b></button>
           </form>
         {% else %}
         <form id="next" method="post" action="/end_challenge">
             <input type = "hidden" id="challenge_id" name = "challenge_id" value ="{{challenge_id}}">
-            <button type = "submit" class="submit"><b>Finish</b></button>
+            <button type = "submit" class="submit versus"><b>Finish</b></button>
           </form>
         {% endif %}
       </div>
