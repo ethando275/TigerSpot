@@ -343,7 +343,6 @@ def remove_daily_user(username):
 #-----------------------------------------------------------------------
 
 def main():
-
     print(get_daily_top_players())
     print(insert_player_daily('test'))
     print(update_player_daily('test', 1000, 3))
