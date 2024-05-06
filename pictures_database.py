@@ -62,7 +62,6 @@ def create_pic_table():
                         VALUES (%s, %s, %s, %s);''', (pictureID, coordinates, link, place))
 
                 conn.commit()
-                print("Pictures database table created successfully.")
 
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
@@ -80,7 +79,6 @@ def insert_picture(pictureID, coordinates, link, place):
                 cur.execute('''INSERT INTO pictures (pictureID, coordinates, link) 
                                 VALUES (%s, %s, %s);''', (pictureID, coordinates, link, place))
                 conn.commit()
-                print("Row inserted successfully.")
 
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
@@ -90,10 +88,10 @@ def insert_picture(pictureID, coordinates, link, place):
 
 # Returns the date based on eastern time zone
 def get_current_date():
+
     eastern = pytz.timezone('America/New_York')
     eastern_timezone = datetime.datetime.now(eastern)
     eastern_date = eastern_timezone.date()
-
     return eastern_date
     
 #-----------------------------------------------------------------------

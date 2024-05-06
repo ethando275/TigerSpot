@@ -12,7 +12,6 @@ DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-c
 
 # Update cumulative points for a user in a given challenge
 def update_versus_points(challenge_id, user_id, additional_points):
-    conn = None
     try:
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
@@ -26,7 +25,7 @@ def update_versus_points(challenge_id, user_id, additional_points):
                 
                 result = cur.fetchone()
                 if result is None:
-                    print("Challenge not found.")
+                    # Challenge not found
                     return
                 
                 challenger_id, challengee_id = result
@@ -46,11 +45,10 @@ def update_versus_points(challenge_id, user_id, additional_points):
                         WHERE id = %s;
                     ''', (additional_points, challenge_id))
                 else:
-                    print("User is not part of this challenge.")
+                    # User is not part of this challenge
                     return
                 
                 conn.commit()
-                print("User points incremented successfully.")
                 return "success"
                 
     except (Exception, psycopg2.DatabaseError) as error:
@@ -75,7 +73,6 @@ def calculate_versus(distance, time):
 #-----------------------------------------------------------------------
 # Return winner of a given challenge
 def get_winner(challenge_id):
-    conn = None
     try:
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
@@ -94,7 +91,6 @@ def get_winner(challenge_id):
 
 # Update the status of a versus challenge picture
 def update_versus_pic_status(challenge_id, user_id, index):
-    conn = None
     try:
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
@@ -107,8 +103,8 @@ def update_versus_pic_status(challenge_id, user_id, index):
                 ''', (challenge_id,))
                 
                 result = cur.fetchone()
+                # Challenge not found.
                 if result is None:
-                    print("Challenge not found.")
                     return
                 
                 challenger_id, challengee_id = result
@@ -128,11 +124,10 @@ def update_versus_pic_status(challenge_id, user_id, index):
                         WHERE id = %s;
                     ''', (index, challenge_id))
                 else:
-                    print("User is not part of this challenge.")
+                    # User is not part of this challenge
                     return
                 
                 conn.commit()
-                print("Finish status updated successfully.")
                 return "success"
         
     except (Exception, psycopg2.DatabaseError) as error:
@@ -143,7 +138,6 @@ def update_versus_pic_status(challenge_id, user_id, index):
 
 # Get the status of a versus challenge picture
 def get_versus_pic_status(challenge_id, user_id, index):
-    conn = None
     try:
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
@@ -156,8 +150,8 @@ def get_versus_pic_status(challenge_id, user_id, index):
                 ''', (challenge_id,))
                 
                 result = cur.fetchone()
+                # Challenge not found
                 if result is None:
-                    print("Challenge not found.")
                     return
                 
                 challenger_id, challengee_id = result
@@ -177,12 +171,12 @@ def get_versus_pic_status(challenge_id, user_id, index):
                         WHERE id = %s;
                     ''', (index, challenge_id))
                 else:
-                    print("User is not part of this challenge.")
+                    # User is not part of this challenge
                     return
                 
                 result = cur.fetchone()
-                if result is None:
-                    print("Index not found.")
+                if result is None: 
+                    # Index not found
                     return
                 else:
                     return result[0]
@@ -194,7 +188,6 @@ def get_versus_pic_status(challenge_id, user_id, index):
 
 # Store the points for a versus challenge picture
 def store_versus_pic_points(challenge_id, user_id, index, points):
-    conn = None
     try:
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
@@ -208,7 +201,7 @@ def store_versus_pic_points(challenge_id, user_id, index, points):
                 
                 result = cur.fetchone()
                 if result is None:
-                    print("Challenge not found.")
+                    # Challenge not found
                     return
                 
                 challenger_id, challengee_id = result
@@ -230,11 +223,10 @@ def store_versus_pic_points(challenge_id, user_id, index, points):
                     '''.format(index)
                     cur.execute(sql, (points, challenge_id))
                 else:
-                    print("User is not part of this challenge.")
+                    # User is not part of this challenge
                     return
                 
                 conn.commit()
-                print("Points updated successfully.")
                 return "success"
                 
     except (Exception, psycopg2.DatabaseError) as error:
