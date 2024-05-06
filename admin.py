@@ -534,9 +534,9 @@ def submit2():
 #-----------------------------------------------------------------------
 
 # Displays the results of a versus mode game
-@app.route('/versus_stats', methods=['GET'])
+@app.route('/versus_stats', methods=['POST'])
 def versus_stats():
-    challenge_id = flask.request.args.get('challenge_id')
+    challenge_id = flask.request.form.get('challenge_id')
     results = challenges_database.get_challenge_results(challenge_id)
     print(results)
     versusList = challenges_database.get_random_versus(challenge_id)
