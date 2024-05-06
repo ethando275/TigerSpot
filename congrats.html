@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-
    <header>
     {% include "navbar.html" %}
     </header>
@@ -9,38 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Congrats</title>
     <link rel="stylesheet" href="{{url_for('static', filename = 'styles/styles.css')}}" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <style>
-       #map{
-            height: 60vh;
-            width: 80%; 
-            margin-left: auto;
-            margin-right: auto;
-            padding: 2vh 2vw;
-        }
-        #coordinates {
-            font-size: 1em;
-            height: 4vh;
-            width: 80%; 
-            float: right; 
-            padding: 2vh 2vw; 
-        }
-        #distance {
-            height: 4vh;
-            text-align: center;
-            width: 50.5%;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 2vh 2vw; 
-        }
-        #points {
-            height: 4vh;
-            text-align: center;
-            width: 50.5%; 
-            margin-left: auto;
-            margin-right: auto;
-        }
-    </style>
   </head>
   <body>
     <main class="main-content">
