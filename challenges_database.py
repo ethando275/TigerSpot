@@ -498,10 +498,10 @@ def get_playbutton_status(challenge_id, user_id):
 #-----------------------------------------------------------------------
 
 def main():
-
-    create_challenge('asdf', 'jy3107')
-    create_challenge('c', 'cl7359')
-    update_finish_status(1, 'c')
+    #clear_challenges_table()
+    #reset_challenges_id_sequence()
+    print()
+    clear_user_challenges('cl7359')
 
 #-----------------------------------------------------------------------
     

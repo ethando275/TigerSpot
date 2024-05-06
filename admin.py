@@ -28,7 +28,7 @@ dotenv.load_dotenv()
 app.secret_key = os.environ['APP_SECRET_KEY']
 
 #-----------------------------------------------------------------------
-# GLOBAL VAR DEFAULT VAL FOR ID, NEED TO RESOLVE SECURITY MEASURES
+#default value for id, needed for daily reset
 id = 1
 #-----------------------------------------------------------------------
 
@@ -38,15 +38,6 @@ def database_check(list):
     if "database error" in list:
         return False
     return True
-
-#-----------------------------------------------------------------------
-
-# Easter egg for Sam Resendez 
-@app.route('/sam', methods=['GET'])
-def sam():
-    html_code = flask.render_template('sam.html')
-    response = flask.make_response(html_code)
-    return response
 
 #-----------------------------------------------------------------------
 
@@ -116,12 +107,9 @@ def requests():
         return flask.make_response(html_code)
 
     if last_date != current_date:
-        clear = challenges_database.clear_user_challenges(username_auth)
-        update = daily_user_database.update_player_versus(username_auth)
-        check = database_check([clear, update])
-        if check is False:
-            html_code = flask.render_template('contact_admin.html')
-            return flask.make_response(html_code)
+        challenges_database.clear_user_challenges(username_auth)
+        daily_user_database.update_player_versus(username_auth)
+        # Need to add check here too
 
     pending_challenges = challenges_database.get_user_challenges(username_auth)
     users = user_database.get_players()
@@ -231,31 +219,12 @@ def rules():
 
 #-----------------------------------------------------------------------
 
-# Congratulations page easter egg
-@app.route('/congrats', methods=['GET'])
-def congrats():
-    auth.authenticate()
-    html_code = flask.render_template('congrats.html')
-    response = flask.make_response(html_code)
-    return response
-
-#-----------------------------------------------------------------------
-
 # Displays about the team page
 @app.route('/team', methods=['GET'])
 def team():
     # user must be logged in to access page
-    username = auth.authenticate()
-    top_player = user_database.get_top_player()
-
-    check = database_check([top_player])
-    if check is False:
-        html_code = flask.render_template('contact_admin.html')
-        return flask.make_response(html_code)
-    
-    top_player_username = top_player["username"]
-    
-    html_code = flask.render_template('team.html', username = username, top_player_username = top_player_username)
+    auth.authenticate()
+    html_code = flask.render_template('team.html')
     response = flask.make_response(html_code)
     return response
 
@@ -341,11 +310,6 @@ def create_challenge_route():
     else:
         result = challenges_database.create_challenge(auth.authenticate(), challengee_id)
     
-    check = database_check([result])
-    if check is False:
-        html_code = flask.render_template('contact_admin.html')
-        return flask.make_response(html_code)
-    
     # Handle the response from the database function
     if 'error' in result:
         return flask.jsonify({'status': 'error', 'message': result['error']}), 400 
@@ -392,129 +356,70 @@ def decline_challenge_route():
 
 #-----------------------------------------------------------------------
 
-# updates if a given user has started a given challenge or not
-# and redirects accordingly if forfeitting is necessary
+#
 @app.route('/play_button', methods=['POST'])
 def play_button():
     challenge_id = flask.request.form.get('challenge_id')
     user = auth.authenticate()
     status = challenges_database.get_playbutton_status(challenge_id, user)
-    check = database_check([status])
-    if check is False:
-        html_code = flask.render_template('contact_admin.html')
-        return flask.make_response(html_code)
     if status is None:
         return flask.redirect(flask.url_for('requests'))
     elif status is False:
-        button = challenges_database.update_playbutton_status(challenge_id, user)
-        check = database_check([button])
-        if check is False:
-            html_code = flask.render_template('contact_admin.html')
-            return flask.make_response(html_code)
-        flask.session['challenge_id'] = challenge_id
-        return flask.redirect(flask.url_for('play_button2'))
+        challenges_database.update_playbutton_status(challenge_id, user)
+        return flask.redirect(flask.url_for('start_challenge', challenge_id=challenge_id))
     elif status is True:
-        for i in range(5):
-            pic = versus_database.update_versus_pic_status(challenge_id, user, i+1)
-            check = database_check([pic])
-            if check is False:
-                html_code = flask.render_template('contact_admin.html')
-                return flask.make_response(html_code)
-        update = challenges_database.update_finish_status(challenge_id, user)
+        challenges_database.update_finish_status(challenge_id, user)
         status = challenges_database.check_finish_status(challenge_id)
-        check = database_check([update, status])
-        if check is False:
-            html_code = flask.render_template('contact_admin.html')
-            return flask.make_response(html_code)
         if status['status'] == "finished":
             result = challenges_database.get_challenge_results(challenge_id)
-            complete = matches_database.complete_match(challenge_id, result['winner'], result['challenger_points'], result['challengee_points'])
-            check = database_check([status, complete])
-            if check is False:
-                html_code = flask.render_template('contact_admin.html')
-                return flask.make_response(html_code)
+            matches_database.complete_match(challenge_id, result['winner'], result['challenger_points'], result['challengee_points'])
             return flask.redirect(flask.url_for('requests'))
         else:
             return flask.redirect(flask.url_for('requests'))
 
 #-----------------------------------------------------------------------
 
-# Handles first game page of versus mode
-@app.route ('/play_button2', methods=['GET'])
-def play_button2():
-    return next_challenge()
+#
+@app.route('/start_challenge', methods=['GET'])
+def start_challenge():
+    challenge_id = flask.request.args.get('challenge_id')
+    if challenge_id is None:
+        return flask.redirect(flask.url_for('requests')) 
 
-#-----------------------------------------------------------------------
-
-# Handles all the game pages of versus mode
-@app.route('/next_challenge', methods=['POST'])
-def next_challenge():
-    challenge_id = flask.session.get('challenge_id')
-    index = flask.request.form.get('index')
-    if index is None:
-        index = 0
-    return start_challenge(challenge_id, index)
-
-#-----------------------------------------------------------------------
-
-# Handles game page functionality of versus mode
-@app.route('/start_challenge', methods=['GET', 'POST'])
-def start_challenge(challenge_id=None, index=None):
+    index = int(flask.request.args.get('index', 0))
     versusList = challenges_database.get_random_versus(challenge_id)
-    check = database_check([versusList])
-    if check is False:
-        html_code = flask.render_template('contact_admin.html')
-        return flask.make_response(html_code)
     if versusList is None:
         return flask.redirect(flask.url_for('requests'))  
-    index = int(index)
+
     if index < len(versusList):
         link = pictures_database.get_pic_info("link", versusList[index])
-        check = database_check([link])
-        if check is False:
-            html_code = flask.render_template('contact_admin.html')
-            return flask.make_response(html_code)
         html_code = flask.render_template('versusgame.html', challenge_id=challenge_id, index=index, link=link)
-  
         return flask.make_response(html_code)
     else:
         return flask.redirect(flask.url_for('requests'))  
-        
+
 #-----------------------------------------------------------------------
 
-# Handles ending the game of versus mode and updating tables
 @app.route('/end_challenge', methods=['POST'])
 def end_challenge():
     challenge_id = flask.request.form.get('challenge_id')
     user = auth.authenticate()
     finish = challenges_database.update_finish_status(challenge_id, user)
-    check = database_check([finish])
-    if check is False:
-        html_code = flask.render_template('contact_admin.html')
-        return flask.make_response(html_code)
-    if finish is None:
+    if finish == None:
         return flask.redirect(flask.url_for('requests'))
     status = challenges_database.check_finish_status(challenge_id)
-    check = database_check([status])
-    if check is False:
-        html_code = flask.render_template('contact_admin.html')
-        return flask.make_response(html_code)
     if status['status'] == "finished":
         result = challenges_database.get_challenge_results(challenge_id)
-        complete = matches_database.complete_match(challenge_id, result['winner'], result['challenger_points'], result['challengee_points'])
-        check = database_check([result, complete])
-        if check is False:
-            html_code = flask.render_template('contact_admin.html')
-            return flask.make_response(html_code)
+        matches_database.complete_match(challenge_id, result['winner'], result['challenger_points'], result['challengee_points'])
         return flask.redirect(flask.url_for('requests'))
     else:
         return flask.redirect(flask.url_for('requests'))
+
 #-----------------------------------------------------------------------
  
-# Handles the submission of a versus mode game, updating tables accordingly
 @app.route('/submit2', methods=['POST'])
 def submit2():
-    currLat = flask.request.form.get('currLat')
+    currLat = flask.request.form.get('currLat')  
     currLon = flask.request.form.get('currLon')
     points = 0
     index = int(flask.request.form.get('index'))
@@ -522,87 +427,68 @@ def submit2():
     versusList = challenges_database.get_random_versus(challenge_id)
     coor = pictures_database.get_pic_info("coordinates", versusList[index])
     place = pictures_database.get_pic_info("place", versusList[index])
-    check = database_check([versusList, coor, place])
-    if check is False:
-        html_code = flask.render_template('contact_admin.html')
-        return flask.make_response(html_code)
     if not currLat or not currLon:
         pic_status = versus_database.get_versus_pic_status(challenge_id, auth.authenticate(), index+1)
-        check = database_check([pic_status])
-        if check is False:
-            html_code = flask.render_template('contact_admin.html')
-            return flask.make_response(html_code)
         if pic_status is None:
             return flask.redirect(flask.url_for('requests'))
-        if pic_status is False:
+        if pic_status == False:
             fin1 = versus_database.update_versus_pic_status(challenge_id, auth.authenticate(), index+1)
+            print(fin1)
             if fin1 is None:
                 return flask.redirect(flask.url_for('requests'))
             fin2 = versus_database.store_versus_pic_points(challenge_id, auth.authenticate(), index+1, points)
+            print(fin2)
             if fin2 is None:
                 return flask.redirect(flask.url_for('requests'))
             fin3 = versus_database.update_versus_points(challenge_id, auth.authenticate(), points)
+            print(fin3)
             if fin3 is None:
                 return flask.redirect(flask.url_for('requests'))
-            check = database_check([fin1, fin2, fin3])
-            if check is False:
-                html_code = flask.render_template('contact_admin.html')
-                return flask.make_response(html_code)
         else:
             points = "Already submitted."
         index = int(index) + 1
         html_code = flask.render_template('versusresults.html', dis = "No Submission", lat = None, lon = None, coor=coor, index=index, challenge_id=challenge_id, points=str(points), place=place)
         response = flask.make_response(html_code)
         return response
-
     time = int(flask.request.form.get('time'))
     if versusList is None:
         return flask.redirect(flask.url_for('requests'))
     distance = round(distance_func.calc_distance(currLat, currLon, coor))
+    print(distance)
     pic_status = versus_database.get_versus_pic_status(challenge_id, auth.authenticate(), index+1)
-    check = database_check([pic_status])
-    if check is False:
-        html_code = flask.render_template('contact_admin.html')
-        return flask.make_response(html_code)
+    print(pic_status)
     if pic_status is None:
         return flask.redirect(flask.url_for('requests'))
-    if pic_status is False:
+    if pic_status == False:
         points = round(versus_database.calculate_versus(distance, time))
         fin1 = versus_database.store_versus_pic_points(challenge_id, auth.authenticate(), index+1, points)
+        print(fin1)
         if fin1 is None:
             return flask.redirect(flask.url_for('requests'))
         fin2 = versus_database.update_versus_points(challenge_id, auth.authenticate(), points)
+        print(fin2)
         if fin2 is None:
             return flask.redirect(flask.url_for('requests'))
         fin3 = versus_database.update_versus_pic_status(challenge_id, auth.authenticate(), index+1)
+        print(fin3)
         if fin3 is None:
             return flask.redirect(flask.url_for('requests'))
-        check = database_check([fin1, fin2, fin3])
-        if check is False:
-            html_code = flask.render_template('contact_admin.html')
-            return flask.make_response(html_code)
     else:
         points = "Already submitted."
     index = int(index) + 1
     html_code = flask.render_template('versusresults.html', dis = distance, lat = currLat, lon = currLon, coor=coor, index=index, challenge_id=challenge_id, points=str(points), place=place)
     response = flask.make_response(html_code)
     return response
-    
+
 #-----------------------------------------------------------------------
 
-# Displays the results of a versus mode game
-@app.route('/versus_stats', methods=['POST'])
+@app.route('/versus_stats', methods=['GET'])
 def versus_stats():
-    challenge_id = flask.request.form.get('challenge_id')
+    challenge_id = flask.request.args.get('challenge_id')
     results = challenges_database.get_challenge_results(challenge_id)
+    print(results)
     versusList = challenges_database.get_random_versus(challenge_id)
     pictures = [pictures_database.get_pic_info("link", pic) for pic in versusList]
-
-    check = database_check([results, versusList, pictures])
-    if check is False:
-        html_code = flask.render_template('contact_admin.html')
-    else:
-        html_code = flask.render_template('versus_stats.html', results=results, images=pictures)
-
+    html_code = flask.render_template('versus_stats.html', results=results, images=pictures)
     response = flask.make_response(html_code)
     return response
