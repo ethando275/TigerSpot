@@ -28,7 +28,7 @@ dotenv.load_dotenv()
 app.secret_key = os.environ['APP_SECRET_KEY']
 
 #-----------------------------------------------------------------------
-# GLOBAL VAR DEFAULT VAL FOR ID, NEED TO RESOLVE SECURITY MEASURES
+# default value for id needed for daily reset
 id = 1
 #-----------------------------------------------------------------------
 
@@ -38,15 +38,6 @@ def database_check(list):
     if "database error" in list:
         return False
     return True
-
-#-----------------------------------------------------------------------
-
-# Easter egg for Sam Resendez 
-@app.route('/sam', methods=['GET'])
-def sam():
-    html_code = flask.render_template('sam.html')
-    response = flask.make_response(html_code)
-    return response
 
 #-----------------------------------------------------------------------
 
