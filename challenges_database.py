@@ -13,23 +13,24 @@ DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-c
 
 #-----------------------------------------------------------------------
 
-#dont run again
+# Creates challenge table
 def create_challenges_table():
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor()
-    cur.execute('''CREATE TABLE IF NOT EXISTS challenges(
-    id SERIAL PRIMARY KEY,
-    challenger_id VARCHAR(255),
-    challengee_id VARCHAR(255),
-    status VARCHAR(50));''')
-    conn.commit()
-    cur.close()
-    conn.close()
+    try:
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
+                cur.execute('''CREATE TABLE IF NOT EXISTS challenges(
+                id SERIAL PRIMARY KEY,
+                challenger_id VARCHAR(255),
+                challengee_id VARCHAR(255),
+                status VARCHAR(50));''')
+                conn.commit()
     
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error clearing challenges table: {error}")
+        return "database error"
 #-----------------------------------------------------------------------
 # Reset challenges tables
 def clear_challenges_table():
-    conn = None
     try:
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
@@ -54,7 +55,6 @@ def clear_challenges_table():
 #-----------------------------------------------------------------------
 # Reset challenges pertaining to a certain user
 def clear_user_challenges(user_id):
-    conn = None
     try:
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
@@ -81,7 +81,6 @@ def clear_user_challenges(user_id):
                     """, (tuple(challenge_ids),))
 
                 conn.commit()  # Commit the transaction to make changes permanent
-                print(f"Entries related to user_id {user_id} cleared from challenges and matches tables.")
                 return "success"
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error clearing entries for user_id {user_id}: {error}")
@@ -91,7 +90,6 @@ def clear_user_challenges(user_id):
 
 # Create a new challenge row between new users
 def create_challenge(challenger_id, challengee_id):
-    conn = None
     try:
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
@@ -119,7 +117,6 @@ def create_challenge(challenger_id, challengee_id):
                 
                 challenge_id = cur.fetchone()[0]
                 conn.commit()
-                print(f"Challenge created with ID: {challenge_id}")
                 return {'success': 'Challenge created successfully', 'challenge_id': challenge_id}
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
@@ -130,7 +127,6 @@ def create_challenge(challenger_id, challengee_id):
 # Accept a challenge
 def accept_challenge(challenge_id):
     status = "database error"  # Default status in case of error
-    conn = None
     try:
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
@@ -143,34 +139,32 @@ def accept_challenge(challenge_id):
                 """, (create_random_versus(), challenge_id))
                 conn.commit()
                 status = "accepted"  # Update status on success
+        return status
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
         return "database error"
-    return status
 
 #-----------------------------------------------------------------------
 
 # Decline a challenge
 def decline_challenge(challenge_id):
     status = "database error"  # Default status in case of error
-    conn = None
     try:
-       with psycopg2.connect(DATABASE_URL) as conn:
+        with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
                 # Update the status of the challenge to 'declined'
                 cur.execute("UPDATE challenges SET status = 'declined' WHERE id = %s;", (challenge_id,))
                 conn.commit()
                 status = "declined"
+        return status
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
         return "database error"
-    return status
 
 #-----------------------------------------------------------------------
 
 # Retrieve all challenges that a user is involved in
 def get_user_challenges(user_id):
-    conn = None
     try:
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
@@ -213,16 +207,15 @@ def get_user_challenges(user_id):
                         user_challenges['initiated'].append(challenge_dict)
                     else:  # User is the challengee
                         user_challenges['received'].append(challenge_dict)
+        return user_challenges
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error getting user challenges: {error}")
         return "database error"
-    return user_challenges
 
 #-----------------------------------------------------------------------
 
 # Update if a given user has finished a given challenge
 def update_finish_status(challenge_id, user_id):
-    conn = None
     try:
        with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
@@ -235,8 +228,8 @@ def update_finish_status(challenge_id, user_id):
                 
                 result = cur.fetchone()
                 if result is None:
-                    print("Challenge not found.")
-                    return 
+                    # Challenge not found
+                    return
                 
                 challenger_id, challengee_id = result
                 
@@ -255,12 +248,11 @@ def update_finish_status(challenge_id, user_id):
                         WHERE id = %s;
                     ''', (challenge_id,))
                 else:
-                    print("User is not part of this challenge.")
+                    # User is not part of this challenge
                     return
                 
                 conn.commit()
-                print("Finish status updated successfully.")
-                return "success"    
+                return "success"
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
         return "database error"
@@ -269,10 +261,9 @@ def update_finish_status(challenge_id, user_id):
 
 # Check if both users have finished a given challenge
 def check_finish_status(challenge_id):
-    conn = None
     status = {"status": "unfinished"}  # Default status
     try:
-       with psycopg2.connect(DATABASE_URL) as conn:
+        with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
                 
                 # Query to check the finish status for both challenger and challengee
@@ -289,16 +280,15 @@ def check_finish_status(challenge_id):
                         status = {"status": "finished"}
                 else:
                     print("No match found with the given challenge_id.")
+        return status
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error checking finish status: {error}")
-        return "database error"  
-    return status
+        return "database error"
 
 #-----------------------------------------------------------------------
 
 # Get the participants of a given challenge
 def get_challenge_participants(challenge_id):
-    conn = None
     try:
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
@@ -320,7 +310,7 @@ def get_challenge_participants(challenge_id):
                     }
                     return participants
                 else:
-                    print("No challenge found with the given ID.")
+                    # No challenge found with the given ID 
                     return None    
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Database error: {error}")
@@ -330,7 +320,6 @@ def get_challenge_participants(challenge_id):
 
 # Get the results of a given challenge and return a dictionary of related result information
 def get_challenge_results(challenge_id):
-    conn = None
     try:
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
@@ -345,7 +334,7 @@ def get_challenge_results(challenge_id):
                 result = cur.fetchone()
                 if result is None:
                     print("Challenge not found.")
-                    return 
+                    return
 
                 challenger_id, challengee_id, challenger_points, challengee_points, challenger_pic_points, challengee_pic_points = result
                 
@@ -388,7 +377,6 @@ def create_random_versus():
 
 # Return the versusList for a given challenge ID
 def get_random_versus(challenge_id):
-    conn = None
     try:
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
@@ -402,11 +390,11 @@ def get_random_versus(challenge_id):
                 
                 result = cur.fetchone()
                 if result is None:
-                    print("Challenge not found.")
-                    return 
+                    # Challenge not found
+                    return
                 
                 versusList = result[0]
-                return versusList
+        return versusList
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
         return "database error"
@@ -415,7 +403,6 @@ def get_random_versus(challenge_id):
 
 # Update if a player has started a given challenge or not
 def update_playbutton_status(challenge_id, user_id):
-    conn = None
     try:
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
@@ -429,7 +416,7 @@ def update_playbutton_status(challenge_id, user_id):
                 
                 result = cur.fetchone()
                 if result is None:
-                    print("Challenge not found.")
+                    # Challenge not found
                     return
                 
                 challenger_id, challengee_id = result
@@ -449,11 +436,10 @@ def update_playbutton_status(challenge_id, user_id):
                         WHERE id = %s;
                     ''', (challenge_id,))
                 else:
-                    print("User is not part of this challenge.")
+                    # User is not part of this challenge
                     return
                 
                 conn.commit()
-                print("Play button status updated successfully.")
                 return "success"
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
@@ -463,7 +449,6 @@ def update_playbutton_status(challenge_id, user_id):
 
 # Get the play button status for a given user in a given challenge
 def get_playbutton_status(challenge_id, user_id):
-    conn = None
     try:
         with psycopg2.connect(DATABASE_URL) as conn:
             with conn.cursor() as cur:
@@ -497,14 +482,14 @@ def get_playbutton_status(challenge_id, user_id):
                         WHERE id = %s;
                     ''', (challenge_id,))
                 else:
-                    print("User is not part of this challenge.")
+                    # User is not part of this challenge
                     return
                 
                 result = cur.fetchone()
                 if result is not None:
                     return result[0]
                 else:
-                    print("No results found.")
+                    # No results found
                     return None
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
@@ -513,9 +498,7 @@ def get_playbutton_status(challenge_id, user_id):
 #-----------------------------------------------------------------------
 
 def main():
-    #clear_challenges_table()
-    #reset_challenges_id_sequence()
-    print()
+
     create_challenge('asdf', 'jy3107')
     create_challenge('c', 'cl7359')
     update_finish_status(1, 'c')

@@ -49,6 +49,8 @@ def main():
 
   print("TigerSpot's image data saved to picturedata.txt")
 
+#-----------------------------------------------------------------------
+
 if __name__=="__main__":
   main()
 
