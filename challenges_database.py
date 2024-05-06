@@ -499,9 +499,24 @@ def get_playbutton_status(challenge_id, user_id):
 
 def main():
 
-    create_challenge('asdf', 'jy3107')
-    create_challenge('c', 'cl7359')
-    update_finish_status(1, 'c')
+    # Testing
+    print('Testing')
+    #print(create_challenge('123', '456'))
+    #print(create_challenge('abc', 'def'))
+    #print(accept_challenge('1'))
+    #print(decline_challenge('2'))
+    #print(get_user_challenges('abc'))
+    #print(update_finish_status('1', '123'))
+    #print(check_finish_status('1'))
+    #print(get_challenge_participants('1'))
+    #print(get_challenge_results('1'))
+    #print(create_random_versus())
+    #print(get_random_versus('1'))
+    #print(update_playbutton_status('1', '123'))
+    #print(get_playbutton_status('1', '123'))
+    #print(clear_user_challenges('123'))
+    #print(clear_user_challenges('abc'))
+    #print(clear_challenges_table())
 
 #-----------------------------------------------------------------------
     
