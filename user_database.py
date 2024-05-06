@@ -73,6 +73,25 @@ def reset_player_total_points(username):
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
         return "database error"
+    
+#-----------------------------------------------------------------------
+
+# Resets all players to 0 points.
+
+def reset_all_players_total_points():
+
+    try:
+        with psycopg2.connect(DATABASE_URL) as conn:
+            with conn.cursor() as cur:
+
+                cur.execute("UPDATE users SET points=%s;", (0,))
+                conn.commit()
+                
+        return "success"
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return "database error"
 
 
 #-----------------------------------------------------------------------
@@ -218,6 +237,8 @@ def get_top_player():
 #-----------------------------------------------------------------------
 
 def main():
+    
+    #reset_all_players_total_points()
     print(get_top_players())
     print(get_top_player())
     print(get_players())
