@@ -237,7 +237,16 @@ def store_versus_pic_points(challenge_id, user_id, index, points):
 #-----------------------------------------------------------------------
 
 def main():
-    print()
+    
+    # Testing
+    print('Testing')
+    #print(update_versus_points('1', '123', 100))
+    #print(calculate_versus(2, 1))
+    #print(get_winner('1'))
+    #print(update_versus_pic_status('1', '123', 2))
+    #print(get_versus_pic_status('1', '123', 2))
+    #print(store_versus_pic_points('1', '123', 2, 100))
+    
 
 #-----------------------------------------------------------------------
     
