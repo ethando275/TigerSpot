@@ -25,7 +25,7 @@ def create_matches_table():
     conn.close()
     
 #-----------------------------------------------------------------------
-
+# Clear the matches table
 def clear_matches_table():
     conn = None
     try:
@@ -52,6 +52,7 @@ def complete_match(challenge_id, winner_id, challenger_score, challengee_score):
                 match_id = cur.fetchone()[0]
                 conn.commit()
                 print(f"Match completed with ID: {match_id}")
+                return "success"
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
         return "database error"
