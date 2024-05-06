@@ -82,7 +82,6 @@
     </main>
   </body>
 </html>
-    <!-- Add any scripts here -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers/js/leaflet-color-markers.js"></script>
     <script>
@@ -134,7 +133,6 @@
     shadowSize: [41, 41]
     })}).addTo(markersGroup);
     marker1.bindPopup("Image Location: "+ "{{ coor }}").openPopup()
-    // marker1.bindPopup("Image Location: "+ "[40.34805, -74.65570]").openPopup()
     var marker2 = L.marker([lat, lon]).addTo(markersGroup);
     marker2.bindPopup("Your Guess: " + "[" + lat + ", " + lon + "]").openPopup();
     var latlngs = [
