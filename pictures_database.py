@@ -9,7 +9,6 @@ import cloudinary.api
 import cloud
 import database
 import pytz
-import daily_user_database
 
 #-----------------------------------------------------------------------
 
