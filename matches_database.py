@@ -57,8 +57,11 @@ def complete_match(challenge_id, winner_id, challenger_score, challengee_score):
 #-----------------------------------------------------------------------
 
 def main():
+    
+    # Testing
+    print('Testing')
+    #complete_match('1', '123', 1000, 500)
     #clear_matches_table()
-    print()
 
 #-----------------------------------------------------------------------
 
