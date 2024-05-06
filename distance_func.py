@@ -29,6 +29,14 @@ def testing():
     if(abs(expected_distance - calculated_distance) > 2):
         print("Error with distance calculation")
 
+    expected_distance = 474
+    calculated_distance = calc_distance(40.340709282911774, -74.66445011628363, (40.34184596123739,-74.65906424092816))
+    print("Expected distance:", expected_distance)
+    print("Calculated distance:", calculated_distance)
+
+    if(abs(expected_distance - calculated_distance) > 2):
+        print("Error with distance calculation")
+
 #-----------------------------------------------------------------------
 
 def main():
