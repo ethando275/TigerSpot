@@ -10,7 +10,7 @@
    <style>
         /* Set the size of the carousel */
         .carousel.slide {
-            width: 100%;  /* Full width */
+            width: 100%;
             max-width: 50vw; 
             height: 75vh; 
             margin: 0vh 2vw;
@@ -93,8 +93,6 @@
               <th valign="top">Picture #<br> </th>
               <th valign="top">Challenger Points <br>({{results.challenger_id}})</th>
               <th valign="top">Challengee Points <br>({{results.challengee_id}})</th>
-              <!-- <th>Challenger Distance {{results.challenger_id}}</th>
-              <th>Challengee Distance {{results.challengee_id}}</th> -->
             </tr>
             {% for index in range(1,6) %}
             <tr>
@@ -148,15 +146,6 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
-    
-        <!-- Text on the right side -->
-        <!-- <div class="side-text right-text">
-            <div class="row">Challengee: </div>
-            {% for points in results.challengee_pic_points %}
-            <div class="row">Picture {{loop.index}}: {{points}} Points</div>
-            {% endfor %}
-            <div class="row">Total: {{results.challengee_points}} Points</div>
-        </div> -->
     </main>
     
     <script>

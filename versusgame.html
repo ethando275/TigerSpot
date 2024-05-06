@@ -106,9 +106,6 @@
           marker = L.marker(e.latlng).addTo(markersGroup);
           document.getElementById('currLat').value = marker.getLatLng().lat.toFixed(5);
           document.getElementById('currLon').value = marker.getLatLng().lng.toFixed(5);
-          //var dis_num = haversineDistance(marker.getLatLng().lat, marker.getLatLng().lng, 40.34805, -74.65570)
-         // distance = document.getElementById('distance').innerHTML = "Distance: " + dis_num + " meters";
-        //  document.getElementById('distance').value = dis_num;
           return;
           
       });
