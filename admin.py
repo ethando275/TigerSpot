@@ -11,7 +11,6 @@ import dotenv
 import random
 
 #Tiger Spot files
-import database
 import challenges_database
 import matches_database
 import versus_database
