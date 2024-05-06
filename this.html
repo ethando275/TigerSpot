@@ -41,10 +41,10 @@
                             <div class="name output">{{ challenge.status }}</div>
                             <div class="winner-vs">
                                 {% if challenge.winner_id != None %}
-                                <a href="{{ url_for('versus_stats', challenge_id=challenge.id) }}" class="score link-style">
+                                <a href="{{ url_for('versus_stats') }}" data-challenge-id="{{ challenge.id }}" class="score link-style">
                                 {{ challenge.winner_id }}
                                 </a>
-                                {% endif %}
+                                {% endif %}                                
                                 {% if challenge.status == 'accepted' and not challenge.challenger_finished %}
                                     <form method="post" action="/play_button">
                                         <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
@@ -77,7 +77,7 @@
                                 <div class="name output">{{ challenge.status }}</div>
                                 <div class="winner-vs">
                                     {% if challenge.winner_id != None %}
-                                    <a href="{{ url_for('versus_stats', challenge_id=challenge.id) }}" class="score link-style">
+                                    <a href="{{ url_for('versus_stats')}}" data-challenge-id="{{ challenge.id }}" class="score link-style">
                                     {{ challenge.winner_id }}
                                     </a>
                                     {% endif %}
@@ -112,16 +112,32 @@
 </body>
 </html>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Select all elements with the class 'score' and add a click event listener to each
-    document.querySelectorAll('.score').forEach(function(element) {
-        element.addEventListener('click', function() {
-            // Redirect to the URL stored in the 'data-url' attribute
-            var url = element.getAttribute('data-url');
-            window.location.href = url;
+            document.addEventListener('DOMContentLoaded', function() {
+            // Select all links with the class 'score' inside the 'winner-vs' container and add a click event listener to each
+            document.querySelectorAll('.winner-vs .score').forEach(function(element) {
+                element.addEventListener('click', function(event) {
+                    event.preventDefault();  // Prevent the default link behavior
+
+                    // Create a form element
+                    var form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = this.getAttribute('href');  // Set the form action to the URL in the href attribute of the link
+
+                    // Create hidden input to hold any necessary data, for example, challenge_id
+                    var challengeIdInput = document.createElement('input');
+                    challengeIdInput.type = 'hidden';
+                    challengeIdInput.name = 'challenge_id';
+                    challengeIdInput.value = this.dataset.challengeId; // Assuming each link has a 'data-challenge-id' attribute
+
+                    form.appendChild(challengeIdInput);  // Append the hidden input to the form
+
+                    document.body.appendChild(form);  // Append the form to the document
+                    form.submit();  // Submit the form
+                });
+            });
         });
-    });
-});
+
+
 
 
             var users = JSON.parse('{{ users | safe }}');

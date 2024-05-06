@@ -27,7 +27,7 @@ def create_challenges_table():
     conn.close()
     
 #-----------------------------------------------------------------------
-
+# Reset challenges tables
 def clear_challenges_table():
     conn = None
     try:
@@ -46,12 +46,13 @@ def clear_challenges_table():
                 cur.execute("ALTER SEQUENCE matches_id_seq RESTART WITH 1;")
                 conn.commit()  # Commit the change to make it permanent
                 print("Matches id sequence reset.")
+                return "success"
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error clearing challenges table: {error}")
         return "database error"
  
 #-----------------------------------------------------------------------
-
+# Reset challenges pertaining to a certain user
 def clear_user_challenges(user_id):
     conn = None
     try:
@@ -81,12 +82,14 @@ def clear_user_challenges(user_id):
 
                 conn.commit()  # Commit the transaction to make changes permanent
                 print(f"Entries related to user_id {user_id} cleared from challenges and matches tables.")
+                return "success"
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error clearing entries for user_id {user_id}: {error}")
         return "database error"
 
 #-----------------------------------------------------------------------
 
+# Create a new challenge row between new users
 def create_challenge(challenger_id, challengee_id):
     conn = None
     try:
@@ -165,25 +168,7 @@ def decline_challenge(challenge_id):
 
 #-----------------------------------------------------------------------
 
-def reset_challenges_id_sequence():
-    conn = None
-    try:
-       with psycopg2.connect(DATABASE_URL) as conn:
-            with conn.cursor() as cur:
-
-                # Assuming the sequence name is 'challenges_id_seq'
-                cur.execute("ALTER SEQUENCE challenges_id_seq RESTART WITH 1;")
-                conn.commit()  # Commit the change to make it permanent
-                print("Challenges id sequence reset.")
-                cur.execute("ALTER SEQUENCE matches_id_seq RESTART WITH 1;")
-                conn.commit()  # Commit the change to make it permanent
-                print("Matches id sequence reset.")
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(f"Error resetting challenges id sequence: {error}")
-        return "database error"
-
-#-----------------------------------------------------------------------
-
+# Retrieve all challenges that a user is involved in
 def get_user_challenges(user_id):
     conn = None
     try:
@@ -235,6 +220,7 @@ def get_user_challenges(user_id):
 
 #-----------------------------------------------------------------------
 
+# Update if a given user has finished a given challenge
 def update_finish_status(challenge_id, user_id):
     conn = None
     try:
@@ -274,13 +260,14 @@ def update_finish_status(challenge_id, user_id):
                 
                 conn.commit()
                 print("Finish status updated successfully.")
-                return {"status": "success"}     
+                return "success"    
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
         return "database error"
 
 #-----------------------------------------------------------------------
 
+# Check if both users have finished a given challenge
 def check_finish_status(challenge_id):
     conn = None
     status = {"status": "unfinished"}  # Default status
@@ -309,6 +296,7 @@ def check_finish_status(challenge_id):
 
 #-----------------------------------------------------------------------
 
+# Get the participants of a given challenge
 def get_challenge_participants(challenge_id):
     conn = None
     try:
@@ -340,6 +328,7 @@ def get_challenge_participants(challenge_id):
 
 #-----------------------------------------------------------------------
 
+# Get the results of a given challenge and return a dictionary of related result information
 def get_challenge_results(challenge_id):
     conn = None
     try:
@@ -385,8 +374,9 @@ def get_challenge_results(challenge_id):
     
 #-----------------------------------------------------------------------
 
+# pseudo randomly create a list of 5 picture IDs for a challenge
 def create_random_versus():
-    
+    random.seed()
     row_count = database.get_table_size('pictures')
     
     # Generate 5 unique pseudo-random integers from 1 to row_count
@@ -395,7 +385,8 @@ def create_random_versus():
     return random_indices
 
 #-----------------------------------------------------------------------
-        
+
+# Return the versusList for a given challenge ID
 def get_random_versus(challenge_id):
     conn = None
     try:
@@ -422,6 +413,7 @@ def get_random_versus(challenge_id):
 
 #-----------------------------------------------------------------------
 
+# Update if a player has started a given challenge or not
 def update_playbutton_status(challenge_id, user_id):
     conn = None
     try:
@@ -462,12 +454,14 @@ def update_playbutton_status(challenge_id, user_id):
                 
                 conn.commit()
                 print("Play button status updated successfully.")
+                return "success"
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
         return "database error"
     
 #-----------------------------------------------------------------------
 
+# Get the play button status for a given user in a given challenge
 def get_playbutton_status(challenge_id, user_id):
     conn = None
     try:
