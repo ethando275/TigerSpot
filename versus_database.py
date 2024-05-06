@@ -10,6 +10,7 @@ DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-c
 
 #-----------------------------------------------------------------------
 
+# Update cumulative points for a user in a given challenge
 def update_versus_points(challenge_id, user_id, additional_points):
     conn = None
     try:
@@ -50,14 +51,14 @@ def update_versus_points(challenge_id, user_id, additional_points):
                 
                 conn.commit()
                 print("User points incremented successfully.")
-                return {"status": "success"}
+                return "success"
                 
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
         return "database error"
 
 #-----------------------------------------------------------------------
-
+# Calculate the points for a versus challenge
 def calculate_versus(distance, time):
     if time < 10 and distance < 10:
         return 1000
@@ -72,7 +73,7 @@ def calculate_versus(distance, time):
         return dis_points + time_points
 
 #-----------------------------------------------------------------------
-
+# Return winner of a given challenge
 def get_winner(challenge_id):
     conn = None
     try:
@@ -91,6 +92,7 @@ def get_winner(challenge_id):
 
 #-----------------------------------------------------------------------
 
+# Update the status of a versus challenge picture
 def update_versus_pic_status(challenge_id, user_id, index):
     conn = None
     try:
@@ -131,7 +133,7 @@ def update_versus_pic_status(challenge_id, user_id, index):
                 
                 conn.commit()
                 print("Finish status updated successfully.")
-                return {"status": "success"}
+                return "success"
         
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
@@ -139,6 +141,7 @@ def update_versus_pic_status(challenge_id, user_id, index):
 
 #-----------------------------------------------------------------------
 
+# Get the status of a versus challenge picture
 def get_versus_pic_status(challenge_id, user_id, index):
     conn = None
     try:
@@ -189,6 +192,7 @@ def get_versus_pic_status(challenge_id, user_id, index):
 
 #-----------------------------------------------------------------------
 
+# Store the points for a versus challenge picture
 def store_versus_pic_points(challenge_id, user_id, index, points):
     conn = None
     try:
@@ -231,7 +235,7 @@ def store_versus_pic_points(challenge_id, user_id, index, points):
                 
                 conn.commit()
                 print("Points updated successfully.")
-                return {"status": "success"}
+                return "success"
                 
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
