@@ -224,8 +224,20 @@ def rules():
 # Congratulations page easter egg
 @app.route('/congrats', methods=['GET'])
 def congrats():
-    auth.authenticate()
-    html_code = flask.render_template('congrats.html')
+    username = auth.authenticate()
+    top_player = user_database.get_top_player()
+
+    check = database_check([top_player])
+    if check is False:
+        html_code = flask.render_template('contact_admin.html')
+        return flask.make_response(html_code)
+
+    top_player_username = top_player["username"]
+    
+    if username == top_player_username or username == 'sr4508' or username == 'rdondero' or username == 'cl7359' or username == 'mtouil':
+        html_code = flask.render_template('congrats.html')
+    else:
+        html_code = flask.render_template('secret.html')
     response = flask.make_response(html_code)
     return response
 
