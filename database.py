@@ -92,6 +92,8 @@ def show_rows():
 #-----------------------------------------------------------------------
 #tests the above functions that do not commit changes to the tables
 def testing():
+    #drop_table('pictures')
+    #update('pictures', 'place', 'Princeton', 'pictureID', '1')
     print('-----Testing query()-----')
     print(query('pictureID', 'pictures'))
     print(query('place', 'pictures'))
