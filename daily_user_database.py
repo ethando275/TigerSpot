@@ -3,7 +3,6 @@
 #-----------------------------------------------------------------------
 
 import psycopg2
-import database
 
 #-----------------------------------------------------------------------
 
@@ -57,7 +56,6 @@ def insert_player_daily(username):
         print(error)
         return "database error"
 
-    
 #-----------------------------------------------------------------------
 
 # Updates username's daily stats with new points and distance.
