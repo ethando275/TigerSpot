@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-   <header>
+    <header>
     {% include "navbar.html" %}
     </header>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Congrats</title>
-    <link rel="stylesheet" href="{{url_for('static', filename = 'styles/styles.css')}}" />
+    <title>Congrats!</title>
+    <link rel="stylesheet" href="{{url_for('static', filename = '/styles/styles.css')}}" />
   </head>
-  <body>
-    <main class="main-content">
-      <div> <br> <br> <img class="game-image" src="/static/styles/dondero.jpeg"></div>
-    </main>
+  <body class="error">
+    <div class="page">
+      <main>
+        <div class="home">
+          <img class="logo" src="/static/styles/dondero.jpeg" alt="congrats" />
+          <p>
+            <b class="text">
+            Thanks for being our #1 Player! We hope you are loving Tiger Spot! Keep up the good work! </b>
+          </p>
+        </div>
+      </main>
+    </div>
   </body>
 </html>
-  
-
-
