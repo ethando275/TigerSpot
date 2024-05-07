@@ -15,6 +15,10 @@ body {
   padding: 0vh 8vw;
 }
 
+button {
+  color: black;
+}
+
 .button {
   background-color: orange;
   border: 0.6vw solid black;
@@ -744,7 +748,7 @@ table {
   #map {
     width: 85vw;
   }
-  
+
   .versus-components {
     display: flex;
     flex-direction: column;
