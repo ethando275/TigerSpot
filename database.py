@@ -4,9 +4,7 @@
 # Tables in Tiger Spot: pictures, users, usersDaily, challenges, matches
 #-----------------------------------------------------------------------
 import psycopg2
-#-----------------------------------------------------------------------
-
-DATABASE_URL = 'postgres://tigerspot_user:9WtP1U9PRdh1VLlP4VdwnT0BFSdbrPWk@dpg-cnrjs7q1hbls73e04390-a.ohio-postgres.render.com/tigerspot'
+from db_config import DATABASE_URL
 
 #-----------------------------------------------------------------------
 #drops a specified table
