@@ -16,6 +16,9 @@ import dotenv
 
 #-----------------------------------------------------------------------
 
+# Allow HTTP for local development
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
 GOOGLE_DISCOVERY_URL = (
     'https://accounts.google.com/.well-known/openid-configuration')
 
@@ -38,7 +41,7 @@ def login():
     # to fetch the user's profile data.
     request_uri = client.prepare_request_uri(
         authorization_endpoint,
-        redirect_uri = flask.request.base_url + '/callback',
+        redirect_uri='http://localhost:5000/login/callback',
         scope=['openid', 'email', 'profile'],
     )
 
@@ -139,7 +142,7 @@ def callback():
     #    userinfo_response.json()['email_verified'])
     #flask.session['locale'] = userinfo_response.json()['locale']
 
-    return flask.redirect(flask.url_for('index'))
+    return flask.redirect(flask.url_for('menu'))
 
 #-----------------------------------------------------------------------
 
@@ -169,4 +172,7 @@ def authenticate():
     if 'email' not in flask.session:
         flask.abort(flask.redirect(flask.url_for('login')))
 
-    return flask.session.get('email')
+    email = flask.session.get('email')
+    # Extract username from email (everything before @)
+    username = email.split('@')[0]
+    return username

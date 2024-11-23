@@ -3,42 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Menu</title>
-    <link rel="stylesheet" href="{{url_for('static', filename = 'styles/styles.css')}}" />
+    <title>Menu Page</title>
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename = 'styles/styles.css')}}"
+    />
     <style>
       #username {
-            height: 50vh;
-            width: 50.5%; 
-            margin-left: auto;
-            margin-right: auto;
-            padding: 2vh 2vw;
-        }
-
+        height: 50vh;
+        width: 50.5%;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 2vh 2vw;
+      }
     </style>
   </head>
   <body>
     <div class="page">
-
-      <header class="mainmenu-header">
-        {% include "navbar.html" %}
-      </header>
-
-
-      <input type = "hidden" id="username" name = "username" value ="{{username}}">
-      <main class="mainmenu">
+      <header class="mainmenu-header">{% include "navbar.html" %}</header>
+      <input type="hidden" id="username" name="username" value="{{username}}" />
+      <main>
         <div class="home">
-          <img class="logo" src="static\styles\logo.png" alt="Logo" />
-          <p>
-            <b class="text">
-              Hello {{username}}. Think you have what it takes to “spot” where a Princeton landmark
-              is? Test your skills with Tiger Spot and land yourself at the top
-              of the leaderboard!
-            </b>
-          </p>
-          <a href="/game">
-          <button class="button">
-            <b>Play the Daily!</b>
-          </button>
+          <h1>Welcome, {{ username }}!</h1>
+          <a href="/logoutcas">
+            <button class="button">
+              <b>Logout</b>
+            </button>
           </a>
         </div>
       </main>
@@ -48,17 +38,16 @@
 <script>
   document.getElementById("username").value = "{{username}}";
 
-window.addEventListener('scroll', function() {
-    var navbar = document.getElementById('navbar');
+  window.addEventListener("scroll", function () {
+    var navbar = document.getElementById("navbar");
     var sticky = navbar.offsetTop;
 
     if (window.pageYOffset >= sticky) {
-        navbar.classList.add('sticky');
-        document.body.style.paddingTop = (navbar.offsetHeight - 70) + 'px'; // Add padding after scrolling past offset
+      navbar.classList.add("sticky");
+      document.body.style.paddingTop = navbar.offsetHeight - 70 + "px"; // Add padding after scrolling past offset
     } else {
-        navbar.classList.remove('sticky');
-        document.body.style.paddingTop = '0'; // Reset padding
+      navbar.classList.remove("sticky");
+      document.body.style.paddingTop = "0"; // Reset padding
     }
-});
-
+  });
 </script>
