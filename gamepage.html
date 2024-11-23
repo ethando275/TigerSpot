@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Page</title>
+    <link rel="stylesheet" href="{{url_for('static', filename = 'styles/styles.css')}}" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <style>
+       #map{
+            height: 60vh;
+            width: 90%; 
+            float: left; /* Make it align to the left */
+            padding: 2vh 2vw;
+        }
+        #coordinates {
+            font-size: 1em;
+            height: 4vh;
+            width: 80%; 
+            float: right; /* Align to the right */
+            padding: 2vh 2vw;
+        }
+        #distance {
+            height: 5vh;
+            width: 50%;
+            float: right;
+            padding: 2vh 2vw; 
+        }
+    </style>
+    
+  </head>
+  <body>
+    <header class="header-container">
+        <b><p class="game-text">Click anywhere on the map to drop a pin! Once you're ready to submit, 
+          click the "Submit" button to see how accurate you are!</p></b>
+    </header>
+    <main class="main-content game">
+      <img class="game-image" src="{{link}}">
+      <div class="map">
+        <!-- Add map ad-->
+        <div id="map"></div>
+        <div id="distance"></div>
+        <form id="disForm" method="post" action="/submit" onsubmit="return checkCoordinates()">
+          <input type = "hidden" id="currLat" name = "currLat" value ="">
+          <input type = "hidden" id="currLon" name = "currLon" value ="">
+          <input type = "hidden" id="id" name = "id" value ="">
+          <div class="game-btns">
+            <button type="submit" class="submit"><b>Submit</b></button>
+            <button type = "button" class="clear" onclick ="clearForm()"><b>Clear</b></button>
+          </div>
+        </form>
+        
+      </div>
+    </main>
+  </body>
+</html>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <script>
+      var markersCount = 2;
+      var map = L.map('map', {
+          center: [40.3509, -74.6528], // Example center point
+          zoom: 15, // Initial zoom level
+          minZoom: 13, // Minimum allowed zoom level
+          maxZoom: 20 // Maximum allowed zoom level
+      });
+      var southwest = L.latLng(40.339507, -74.662073),
+          northeast = L.latLng(40.352450, -74.650139),
+          bounds = L.latLngBounds(southwest, northeast);
+
+      L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+      maxZoom: 20,
+      subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+      }).addTo(map);
+      var coordinates;
+
+      // a layer group, used here like a container for markers
+      var markersGroup = L.layerGroup();
+      map.addLayer(markersGroup);
+      var marker;
+      var distance;
+      document.getElementById('id').value = "{{id}}";
+
+      map.on('click', function(e) {
+          // clears map on every click
+          markersGroup.clearLayers();
+          // add a marker to the map on click
+          marker = L.marker(e.latlng).addTo(markersGroup);
+          document.getElementById('currLat').value = marker.getLatLng().lat.toFixed(5);
+          document.getElementById('currLon').value = marker.getLatLng().lng.toFixed(5);
+          return;
+      });
+
+      function clearForm(){
+        markersGroup.clearLayers();
+        document.getElementById('currLat').value = "";
+        document.getElementById('currLon').value = "";
+      }
+
+      function checkCoordinates() {
+      var currLat = document.getElementById('currLat').value;
+      var currLon = document.getElementById('currLon').value;
+      if (!currLat || !currLon) {
+          alert('Please click on the map to select a location before submitting.');
+          return false; // Prevents form submission
+      }
+        return true; // Allows form submission
+    }
+
+    </script>
+

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Index Page</title>
+    <link rel="stylesheet" href="{{url_for('static', filename = 'styles/styles.css')}}" />
+    <style>
+      #username {
+            height: 50vh;
+            width: 50.5%; 
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2vh 2vw;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="game page">
+      <header class="played-header">
+      {% include "navbar.html" %}
+      </header>
+
+      <input type = "hidden" id="username" name = "username" value ="{{username}}">
+      <main class="main game">
+        <div class="home">
+          <img class="logo" src="static\styles\logo.png" alt="Logo" />
+          <p>
+            <b class="text">
+              Oops, looks like you've already made your daily guess! 
+              Please wait until tomorrow to play again. 
+              In the meantime, play a Versus game with a friend instead!
+            </b>
+          </p>
+          <p>
+            <b class="text">
+                Your Today's Score is: {{ today_points }}. 
+                <br>
+                Your distance from the actual point was {{ today_distance }} meters away.
+            </b>
+          </p>
+          <button id='share' onclick="copyTextToClipboard('Tiger Spot &#128047;&#128205;| {{today_points}} points | {{today_distance}} m away')"><b>Share</b></button>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
+<script>
+  document.getElementById("username").value = "{{username}}";
+
+  function copyTextToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        // Success feedback
+        alert('Copied results to clipboard');
+    }).catch(err => {
+        // Error handling
+        console.error('Failed to copy text: ', err);
+    });
+}
+
+    window.addEventListener('scroll', function() {
+        var navbar = document.getElementById('navbar');
+        var sticky = navbar.offsetTop;
+
+        if (window.pageYOffset >= sticky) {
+            navbar.classList.add('sticky');
+            document.body.style.paddingTop = (navbar.offsetHeight - 100) + 'px'; // Add padding if extends beyond offset for sticky navbar
+        } else {
+            navbar.classList.remove('sticky');
+            document.body.style.paddingTop = '0'; // Reset padding
+        }
+    });
+
+</script>
